@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Optimize configuration file -->
+
+<OptimizeMetricsConfiguration schemaLocation="optimizemetrics.xsd">
+
+    <Input TargetFile="examples/molecules/opt-nci1000.smiles" 
+            TestFile="examples/molecules/opt-beta2_adrenoceptor_antagonists-test.smiles"
+            QueryFile="examples/molecules/opt-beta2_adrenoceptor_antagonists-query.smiles"/>
+            
+    <Descriptors>
+        <Descriptor Type="CF" ConfigFile="examples/config/cfp.xml" 
+                OutputFile="examples/output/opt-CF-nci1000-beta2-adreno-antag.xml" >
+            <Metrics>
+                <Metric Name="AsymmetricTanimoto" BaseMetric="Tanimoto" 
+                        Asymmetric="true"/>
+                <Metric Name="AsymmetricEuclidean" BaseMetric="Euclidean" 
+                        Asymmetric="true"/>
+            </Metrics>
+        </Descriptor>
+        <Descriptor Type="PF" ConfigFile="examples/config/pharma-frag.xml" 
+                OutputFile="examples/output/opt-PF-nci1000-beta2-adreno-antag.xml">
+            <Metrics>
+                <Metric Name="AsymmetricTanimoto" BaseMetric="Tanimoto" 
+                        Asymmetric="true"/>
+                <Metric Name="ScaledTanimoto" BaseMetric="Tanimoto" 
+                        Scaled="true"/>
+                <Metric Name="BasicEuclidean" BaseMetric="Euclidean"/>
+                <Metric Name="WeightedEuclidean" BaseMetric="Euclidean" 
+                        Weighted="true"/>
+                <Metric Name="AsymmetricEuclidean" BaseMetric="Euclidean" 
+                        Asymmetric="true"/>
+                <Metric Name="NormalizedAsymmetricEuclidean" BaseMetric="Euclidean" 
+                        Normalized="true" Asymmetric="true"/>
+                <Metric Name="WeightedAsymmetricEuclidean" 
+                        BaseMetric="Euclidean" Weighted="true" Asymmetric="true"/>
+                <Metric Name="NormalizedWeightedAsymmetricEuclidean" 
+                        BaseMetric="Euclidean" Normalized="true"
+                        Weighted="true" Asymmetric="true"/>
+            </Metrics>
+        </Descriptor>
+        <Descriptor Type="PF" ConfigFile="examples/config/pharma-fuzzy.xml" 
+                OutputFile="examples/output/opt-fuzzy=0.7-PF-nci1000-beta2-adreno-antag.xml">
+            <Metrics>
+                <Metric Name="AsymmetricTanimoto" BaseMetric="Tanimoto" 
+                        Asymmetric="true"/>
+                <Metric Name="ScaledTanimoto" BaseMetric="Tanimoto" 
+                        Scaled="true"/>
+                <Metric Name="ScaledAsymmetricTanimoto" BaseMetric="Tanimoto" 
+                        Scaled="true" Asymmetric="true"/>
+                <Metric Name="BasicEuclidean" BaseMetric="Euclidean"/>
+                <Metric Name="WeightedEuclidean" BaseMetric="Euclidean" 
+                        Weighted="true"/>
+                <Metric Name="AsymmetricEuclidean" BaseMetric="Euclidean" 
+                        Asymmetric="true"/>
+                <Metric Name="NormalizedAsymmetricEuclidean" BaseMetric="Euclidean" 
+                        Normalized="true" Asymmetric="true"/>
+                <Metric Name="WeightedAsymmetricEuclidean" 
+                        BaseMetric="Euclidean" Weighted="true" Asymmetric="true"/>
+                <Metric Name="NormalizedWeightedAsymmetricEuclidean" 
+                        BaseMetric="Euclidean" Normalized="true"
+                        Weighted="true" Asymmetric="true"/>
+            </Metrics>
+        </Descriptor>
+    </Descriptors>
+    
+    <SimilarityOptions>
+        <Hypotheses>
+            <Hypothesis Type="Median"/>
+        </Hypotheses>
+    </SimilarityOptions>
+    <ParameterOptimizationOptions Percentage="80">
+        <EvaluatorFunction Name="Enrichment"/>
+    </ParameterOptimizationOptions>
+</OptimizeMetricsConfiguration>

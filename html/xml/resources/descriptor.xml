@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<root>
+
+   <parameter name="query_cd_formula" type="double" nullable="yes"/>
+   <parameter name="query_cd_id" type="long" nullable="yes"/>
+   <parameter name="query_cd_molweight" type="double" nullable="yes"/>
+   <parameter name="query_name" type="string" nullable="yes" />
+   <parameter name="query_stock" type="double" nullable="yes"/>
+
+   <parameter name="molfile" type="string" nullable="yes"/>
+
+   <parameter name="searchType" type="string"/>
+   <parameter name="similarityThreshold" type="double"/>
+   <parameter name="maxResultCount" type="long"/>
+
+   <constraint-set name="query">
+       <validate name="searchType"/>
+       <validate name="similarityThreshold"/>
+       <validate name="maxResultCount"/>
+       <validate name="molfile"/>
+       <validate name="query_cd_id"/>
+       <validate name="query_cd_formula"/>
+       <validate name="query_cd_molweight"/>
+       <validate name="query_name"/>
+       <validate name="query_stock"/>
+   </constraint-set>
+
+</root>

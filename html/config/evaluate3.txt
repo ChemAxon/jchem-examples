@@ -1,0 +1,1 @@
+minval("charge()", filter("pka() > 0"), 2)

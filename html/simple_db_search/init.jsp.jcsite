@@ -1,0 +1,9 @@
+<%
+String sessionVarPrefix="example.";
+String driver="org.gjt.mm.mysql.Driver";
+String url="jdbc:mysql://127.0.0.1/jchem";
+String username="scott";
+String password="tiger";
+String structureTableName="NCI3D";
+String propertyTableName = "JChemProperties2";
+%>

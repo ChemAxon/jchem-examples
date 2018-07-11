@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ScalarDescriptorConfiguration Version="" schemaLocation="">
+  
+    <ScalarDescriptors>
+        
+        <ScalarDescriptor Name="logD" pH="7.4" 
+            LowerBound="0" UpperBound="14" StepSize="1"
+            References="" />
+    </ScalarDescriptors>
+
+
+</ScalarDescriptorConfiguration>

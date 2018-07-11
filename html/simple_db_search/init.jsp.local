@@ -1,0 +1,9 @@
+<%
+String sessionVarPrefix="example.";
+String driver="oracle.jdbc.driver.OracleDriver";
+String url="jdbc:oracle:oci8:@localhost:cdexample";
+String username="cduser";
+String password="secret";
+String structureTableName="nci3d";
+String propertyTableName = "JChemProperties";
+%>

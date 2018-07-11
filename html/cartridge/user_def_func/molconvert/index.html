@@ -1,0 +1,115 @@
+<html>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../jchemmanuals.css">
+<TITLE>Developer's Guide - Cartridge, User defined function example</TITLE>
+</HEAD>
+<body>
+<center><h1>JChem Cartridge User defined function example</h1> 
+<b>molconvert</b></center>
+
+<p>The example can be found in the <code>&lt;JChem home&gt;/examples/cartridge/user_def_func/molconvert</code> directory.</p>
+
+<p>Consider the <code>MolConvert</code> Java class that converts  structures between various file types according to the parameters. We would like to covert structures comming from a database table into aromatized SMILES format using the <code>MolConvert</code> Java class.</p>
+
+<p>First of all we have to create a PL/SQL operator and function that can be used in SQL <code>select</code> statements. The operator gets the structure from a table as a parameter and gets the format also as a parameter. For example aromatize structures:
+
+<blockquote>
+<pre>SQL&gt; select <b>molconverter(cd_smiles, 'smiles:a')</b> from jchemtable;
+</blockquote>
+
+Now create the PL/SQL function and operator (<A href="molconvert_sql.sql">molconvert_sql.sql</a>): 
+
+<blockquote>
+<pre>SQL&gt; CREATE <b>FUNCTION molconverter_func</b>(query VARCHAR2, type VARCHAR2) RETURN VARCHAR2 AS
+  BEGIN
+    RETURN jchem_core_pkg.<b>send_user_func</b>('MolConvert', '{delim}', query || '{delim}' || type);
+  END;
+/
+show errors;
+
+SQL&gt; CREATE <b>OPERATOR molconverter</b> BINDING(VARCHAR2, VARCHAR2) RETURN VARCHAR2 
+  USING molconverter_func;</pre>
+</blockquote>
+</p>
+
+<p>The <code>molconverter_func</code> function sends its <code>query</code> and <code>type</code> parameters to the <code>MolConvert</code> external Java class using the <a href="../../../../doc/dev/cartridge/cartapi.html#send_user_func"><code>send_user_func</code></a> function. 
+
+<p>The <code>MolConvert</code> class has to implement the <a href="../../../../doc/dev/cartridge/cart_modul.html#JChemCartModul">JChemCartModul</a> interface. It's <code>doFunc</code> function gets the parameters sent by the <code>molconverter_func</code> PL/SQL function (<code>query</code> and <code>type</code>). </p>
+
+<p>ChemAxon's MolConvert tool is ideal to convert structures between various types thus we can use it. Let's see the <code>MolConvert</code> Java class (<a href="MolConvert.java">MolConvert.java</a>):
+
+<blockquote>
+<pre>import chemaxon.formats.MolConverter;
+import java.io.*;	
+
+public class MolConvert <b>implements JChemCartModul</b> {
+
+    <b>public Object doFunc(String[] args) throws Exception</b> {
+    	ByteArrayInputStream bis = new ByteArrayInputStream(args[0].getBytes());
+    	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    	MolConverter mc = new MolConverter(bis, bout, args[1], false);
+    	mc.convert();
+    	return new String(bout.toByteArray());
+    }
+}</pre>
+</blockquote>
+
+<p>Compile the java file and make sure that the JCART_XCLASSPATH variable includes the parent directory of the <code>MolConvert.class</code> file before starting JChem Server. Now our new function is ready to call from PL/SQL, for example: </p>
+
+<blockquote>
+<pre>SQL&gt; select <b>molconverter(cd_smiles, 'smiles:a')</b> from jchemtable;</pre>
+</blockquote>
+
+<!--
+<p>As every operator our newly created <code>molconverter</code> operator can be used also after the <code>where</code> clause of the <code>select</code> statement, eg: 
+
+<blockquote>
+<pre>SQL&gt; select count(*) from JchemTable where <b>molconverter</b>(cd_smiles) = 'Nc1ccc2C(=O)c3ccccc3C(=O)c2c1';</pre>
+</blockquote>
+
+<p>These queries where the user defined operator is after the <code>where</code> clause can be evaluated faster performing some extra work. First open the <code>reg_user_def_ops.sql</code> file from the <code>cartridge</code> directory of the JChem package with a text editor. Insert the name of the new operators as it is defined in the file. For example:</p>
+
+<blockquote>
+<pre>CREATE OR REPLACE INDEXTYPE jc_idxtype
+FOR
+-----------------------------------------
+-- START LISTING OPERATORS
+-----------------------------------------
+   <b>molconverter(VARCHAR2),</b>
+-----------------------------------------
+-- STOP LISTING OPERATORS
+-----------------------------------------
+   jc_contains(VARCHAR2, VARCHAR2),
+   jc_equals(VARCHAR2, VARCHAR2),
+   jc_matchcount(VARCHAR2, VARCHAR2),
+   jc_dissimilarity(VARCHAR2, VARCHAR2),
+   jc_tanimoto(VARCHAR2, VARCHAR2),
+   jc_logp(VARCHAR2),
+   jc_logd(VARCHAR2, NUMBER),
+   jc_pka(VARCHAR2, VARCHAR2, NUMBER),
+   jc_tpsa(VARCHAR2),
+   jc_molweight(VARCHAR2),
+   jc_formula(VARCHAR2),
+   jc_formula_eq(VARCHAR2, VARCHAR2)
+USING jc_idxtype_im;</pre>
+</blockquote>
+
+<p>Drop every indexes (<code>drop index idx_name</code>) you've created before with the <code>jc_idxtype</code> indextype. Open the <code>reg_user_def_ops.sql</code> file in a PL/SQL worksheet and execute it. Now create your indexes again. An index has to be created on the table on which you want to use the new operator. </p>
+
+<p>If you've created at least one index on a table execute the following insert statement:
+
+<blockquote>
+<pre>SQL&gt; insert into jc_idx_udop values('operator_name', 'java_class_name');
+</blockquote>
+
+<p>The <code>operator_name</code> parameter contains the name of the PL/SQL operator with capital letters. The <code>java_class_name</code> parameter contains the name of the Java class belongs to the operator (not only capital letters). For example:</p>
+
+<blockquote>
+<pre>SQL&gt; insert into jc_idx_udop values('<b>MOLCONVERTER</b>', '<b>MolConvert</b>');
+</blockquote>
+
+<p>Finally another Java class is needed to evaluate the expression after the <code>where</code> clause. <p> This class has to implement the <a href="JChemCartEvalModul.java"><code>JChemCartEvalModul</code></a> interface. This interface contains the <code>eval</code> function that performs the evaluation on the object was returned by the previously defined Java class (implements <code>JChemCartModul</code>) using the expression sent from PL/SQL. Then return <code>true</code> or <code>false</code>. The parent directory of the newly created Java class has to be included in the JCART_XCLASSPATH environment variable.
+
+</p-->
+</body>
+</html>

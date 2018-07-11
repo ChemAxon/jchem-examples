@@ -1,0 +1,1 @@
+match("C1CCNCC1") && match(6,"[N:1]C=O",1)

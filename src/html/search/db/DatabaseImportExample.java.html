@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>search.db.DatabaseImportExample (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">DatabaseImportExample.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1 </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> search.db;
+<FONT ID="LN">2 </FONT><A NAME="2"></A>
+<FONT ID="LN">3 </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> java.io.IOException;
+<FONT ID="LN">4 </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> java.sql.SQLException;
+<FONT ID="LN">5 </FONT><A NAME="5"></A>
+<FONT ID="LN">6 </FONT><A NAME="6"></A><FONT ID="Import">import</FONT> <A HREF="../../resource/ResourceLocator.java.html">resource.ResourceLocator</A>;
+<FONT ID="LN">7 </FONT><A NAME="7"></A><FONT ID="Import">import</FONT> <A HREF="../../util/ConnectionUtil.java.html">util.ConnectionUtil</A>;
+<FONT ID="LN">8 </FONT><A NAME="8"></A><FONT ID="Import">import</FONT> <A HREF="../../util/TableOperations.java.html">util.TableOperations</A>;
+<FONT ID="LN">9 </FONT><A NAME="9"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolExporter.html">chemaxon.formats.MolExporter</A>;
+<FONT ID="LN">10</FONT><A NAME="10"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">chemaxon.formats.MolFormatException</A>;
+<FONT ID="LN">11</FONT><A NAME="11"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">chemaxon.formats.MolImporter</A>;
+<FONT ID="LN">12</FONT><A NAME="12"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/Importer.html">chemaxon.jchem.db.Importer</A>;
+<FONT ID="LN">13</FONT><A NAME="13"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/TransferException.html">chemaxon.jchem.db.TransferException</A>;
+<FONT ID="LN">14</FONT><A NAME="14"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">chemaxon.struc.Molecule</A>;
+<FONT ID="LN">15</FONT><A NAME="15"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">chemaxon.util.ConnectionHandler</A>;
+<FONT ID="LN">16</FONT><A NAME="16"></A>
+<FONT ID="LN">17</FONT><A NAME="17"></A><FONT ID="FormalComment">/**
+<FONT ID="LN">18</FONT><A NAME="18"></A> * Example code for importing molecules into database.
+<FONT ID="LN">19</FONT><A NAME="19"></A> * 
+<FONT ID="LN">20</FONT><A NAME="20"></A> * @author JChem Base team, ChemAxon Ltd.
+<FONT ID="LN">21</FONT><A NAME="21"></A> */</FONT>
+<FONT ID="LN">22</FONT><A NAME="22"></A><FONT ID="Public">public</FONT> <FONT ID="Final">final</FONT> <FONT ID="Class">class</FONT> DatabaseImportExample {
+<FONT ID="LN">23</FONT><A NAME="23"></A>
+<FONT ID="LN">24</FONT><A NAME="24"></A>    <FONT ID="Private">private</FONT> <FONT ID="Static">static</FONT> <FONT ID="Final">final</FONT> String IMPORT_TABLE = <FONT ID="StringLiteral">"import_test"</FONT>;
+<FONT ID="LN">25</FONT><A NAME="25"></A>    <FONT ID="Private">private</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">ConnectionHandler</A> connHandler;
+<FONT ID="LN">26</FONT><A NAME="26"></A>
+<FONT ID="LN">27</FONT><A NAME="27"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> main(String[] args) {
+<FONT ID="LN">28</FONT><A NAME="28"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">29</FONT><A NAME="29"></A>            <FONT ID="New">new</FONT> <A HREF="../../search/db/DatabaseImportExample.java.html">DatabaseImportExample</A>().run();
+<FONT ID="LN">30</FONT><A NAME="30"></A>        } <FONT ID="Catch">catch</FONT> (Exception e) {
+<FONT ID="LN">31</FONT><A NAME="31"></A>            e.printStackTrace();
+<FONT ID="LN">32</FONT><A NAME="32"></A>        }
+<FONT ID="LN">33</FONT><A NAME="33"></A>    }
+<FONT ID="LN">34</FONT><A NAME="34"></A>
+<FONT ID="LN">35</FONT><A NAME="35"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> run() <FONT ID="Throws">throws</FONT> Exception {
+<FONT ID="LN">36</FONT><A NAME="36"></A>        connHandler = ConnectionUtil.connectToDB();
+<FONT ID="LN">37</FONT><A NAME="37"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">38</FONT><A NAME="38"></A>            createMoleculeTableInDB();
+<FONT ID="LN">39</FONT><A NAME="39"></A>            listMoleculesToConsole();
+<FONT ID="LN">40</FONT><A NAME="40"></A>            importMoleculesIntoDB();
+<FONT ID="LN">41</FONT><A NAME="41"></A>        } <FONT ID="Finally">finally</FONT> {
+<FONT ID="LN">42</FONT><A NAME="42"></A>            ConnectionUtil.closeConnection(connHandler);
+<FONT ID="LN">43</FONT><A NAME="43"></A>        }
+<FONT ID="LN">44</FONT><A NAME="44"></A>    }
+<FONT ID="LN">45</FONT><A NAME="45"></A>
+<FONT ID="LN">46</FONT><A NAME="46"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> createMoleculeTableInDB() <FONT ID="Throws">throws</FONT> SQLException {
+<FONT ID="LN">47</FONT><A NAME="47"></A>        TableOperations.createMoleculeTable(connHandler, IMPORT_TABLE);
+<FONT ID="LN">48</FONT><A NAME="48"></A>    }
+<FONT ID="LN">49</FONT><A NAME="49"></A>
+<FONT ID="LN">50</FONT><A NAME="50"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">51</FONT><A NAME="51"></A>     * Lists all molecules found in an input file.
+<FONT ID="LN">52</FONT><A NAME="52"></A>     */</FONT>
+<FONT ID="LN">53</FONT><A NAME="53"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> listMoleculesToConsole() <FONT ID="Throws">throws</FONT> IOException, <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">MolFormatException</A> {
+<FONT ID="LN">54</FONT><A NAME="54"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">MolImporter</A> mi = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">MolImporter</A>(ResourceLocator.getDefaultInputPath());
+<FONT ID="LN">55</FONT><A NAME="55"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">56</FONT><A NAME="56"></A>            <FONT ID="Int">int</FONT> molCount = <FONT ID="IntegerLiteral">0</FONT>;
+<FONT ID="LN">57</FONT><A NAME="57"></A>            <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A> mol = mi.read();
+<FONT ID="LN">58</FONT><A NAME="58"></A>            <FONT ID="While">while</FONT> (mol != <FONT ID="Null">null</FONT>) {
+<FONT ID="LN">59</FONT><A NAME="59"></A>                molCount++;
+<FONT ID="LN">60</FONT><A NAME="60"></A>                System.out.printf(<FONT ID="StringLiteral">"Molecule %4d: %s\n"</FONT>, molCount,
+<FONT ID="LN">61</FONT><A NAME="61"></A>                        MolExporter.exportToFormat(mol, <FONT ID="StringLiteral">"smiles"</FONT>));
+<FONT ID="LN">62</FONT><A NAME="62"></A>                mol = mi.read();
+<FONT ID="LN">63</FONT><A NAME="63"></A>            }
+<FONT ID="LN">64</FONT><A NAME="64"></A>        } <FONT ID="Finally">finally</FONT> {
+<FONT ID="LN">65</FONT><A NAME="65"></A>            mi.close();
+<FONT ID="LN">66</FONT><A NAME="66"></A>        }
+<FONT ID="LN">67</FONT><A NAME="67"></A>    }
+<FONT ID="LN">68</FONT><A NAME="68"></A>
+<FONT ID="LN">69</FONT><A NAME="69"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">70</FONT><A NAME="70"></A>     * Loads all molecules found in an input file
+<FONT ID="LN">71</FONT><A NAME="71"></A>     * 
+<FONT ID="LN">72</FONT><A NAME="72"></A>     * @param ch connection handler to use
+<FONT ID="LN">73</FONT><A NAME="73"></A>     */</FONT>
+<FONT ID="LN">74</FONT><A NAME="74"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> importMoleculesIntoDB() <FONT ID="Throws">throws</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/TransferException.html">TransferException</A> {
+<FONT ID="LN">75</FONT><A NAME="75"></A>        System.out.println(<FONT ID="StringLiteral">"\n\nDatabase import:"</FONT>);
+<FONT ID="LN">76</FONT><A NAME="76"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">Importer</A> importer = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">Importer</A>();
+<FONT ID="LN">77</FONT><A NAME="77"></A>
+<FONT ID="LN">78</FONT><A NAME="78"></A>        importer.setConnectionHandler(connHandler);
+<FONT ID="LN">79</FONT><A NAME="79"></A>        importer.setTableName(IMPORT_TABLE);
+<FONT ID="LN">80</FONT><A NAME="80"></A>        importer.setInput(ResourceLocator.getDefaultInputPath());
+<FONT ID="LN">81</FONT><A NAME="81"></A>        importer.init();
+<FONT ID="LN">82</FONT><A NAME="82"></A>        <FONT ID="Int">int</FONT> importedMoleculeCount = importer.importMols();
+<FONT ID="LN">83</FONT><A NAME="83"></A>
+<FONT ID="LN">84</FONT><A NAME="84"></A>        System.out.printf(<FONT ID="StringLiteral">"%d structures imported\n"</FONT>, importedMoleculeCount);
+<FONT ID="LN">85</FONT><A NAME="85"></A>    }
+<FONT ID="LN">86</FONT><A NAME="86"></A>
+<FONT ID="LN">87</FONT><A NAME="87"></A>}
+<FONT ID="LN">88</FONT><A NAME="88"></A></pre>
+</BODY>
+</HTML>

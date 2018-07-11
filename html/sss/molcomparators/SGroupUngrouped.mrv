@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<MDocument>
+  <MChemicalStruct>
+    <molecule molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12"
+          elementType="C C C C C C C C C C C C"
+          x2="-8.458333015441895 -9.792002356490153 -9.792002356490153 -8.458333015441895 -7.124663674393636 -7.124663674393636 -5.637137901908471 -5.238556572450585 -3.7510307999654193 -2.6620863569381337 -3.0606676863960187 -4.548193458881184"
+          y2="8.94836718266227 8.17835024210323 6.638316360985149 5.8682994204261085 6.638316360985149 8.17835024210323 8.576931571561111 10.064457344046279 10.463038673504158 9.374094230476874 7.886568457991709 7.487987128533829"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a1 a6" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="2" />
+        <bond atomRefs2="a7 a12" order="1" />
+        <bond atomRefs2="a8 a9" order="1" />
+        <bond atomRefs2="a9 a10" order="2" />
+        <bond atomRefs2="a10 a11" order="1" />
+        <bond atomRefs2="a11 a12" order="2" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>

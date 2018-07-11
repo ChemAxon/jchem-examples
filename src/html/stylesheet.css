@@ -1,0 +1,82 @@
+/* Java2HTML - Colour Definitions*/
+
+/* Define colors, fonts and other style attributes here to override the defaults  */
+
+/* Page background Colour */
+body { background-color: #FFFFFF; }
+
+/* Default Text Colour */
+body {  color: #000000}
+
+/* Header/Footer Colours */
+#Header  { font-family: Arial, Helvetica, sans-serif; color: #000000;  background-color:#EEEEFF }
+
+/* Line Number */
+#LN     { color: #BBBBBB;  background-color:#FFFFFF }
+
+/* Link Colours */
+#Classes A:link         { color: #000000; }
+#Classes A:visited      { color: #000000; }
+#Classes PRE            { color: #000000; }
+
+/* Token Colours */
+#CharacerLiteral        { color: #0000ff; }
+#StringLiteral          { color: #0000ff; }
+#SingleLineComment      { color: #3F7F5F; font-style: italic }
+#FormalComment          { color: #3F7F5F; font-style: italic }
+#MultiLineComment       { color: #3F7F5F; font-style: italic }
+#Abstract               { color: #7F0055 ; font-weight: bold }
+#Boolean                { color: #7F0055 ; font-weight: bold }
+#Break                  { color: #7F0055 ; font-weight: bold }
+#Byte                   { color: #7F0055 ; font-weight: bold }
+#Case                   { color: #7F0055 ; font-weight: bold }
+#Catch                  { color: #7F0055 ; font-weight: bold }
+#Char                   { color: #7F0055 ; font-weight: bold }
+#Class                  { color: #7F0055 ; font-weight: bold }
+#Const                  { color: #7F0055 ; font-weight: bold }
+#Continue               { color: #7F0055 ; font-weight: bold }
+#Default                { color: #7F0055 ; font-weight: bold }
+#Do                     { color: #7F0055 ; font-weight: bold }
+#Double                 { color: #7F0055 ; font-weight: bold }
+#Else                   { color: #7F0055 ; font-weight: bold }
+#Extends                { color: #7F0055 ; font-weight: bold }
+#False                  { color: #7F0055 ; font-weight: bold }
+#Final                  { color: #7F0055 ; font-weight: bold }
+#Finally                { color: #7F0055 ; font-weight: bold }
+#Float                  { color: #7F0055 ; font-weight: bold }
+#For                    { color: #7F0055 ; font-weight: bold }
+#Goto                   { color: #7F0055 ; font-weight: bold }
+#If                     { color: #7F0055 ; font-weight: bold }
+#Implements             { color: #7F0055 ; font-weight: bold }
+#Import                 { color: #7F0055 ; font-weight: bold }
+#InstanceOf             { color: #7F0055 ; font-weight: bold }
+#Int                    { color: #7F0055 ; font-weight: bold }
+#Interface              { color: #7F0055 ; font-weight: bold }
+#Long                   { color: #7F0055 ; font-weight: bold }
+#Native                 { color: #7F0055 ; font-weight: bold }
+#New                    { color: #7F0055 ; font-weight: bold }
+#Package                { color: #7F0055 ; font-weight: bold }
+#Private                { color: #7F0055 ; font-weight: bold }
+#Protected              { color: #7F0055 ; font-weight: bold }
+#Public                 { color: #7F0055 ; font-weight: bold }
+#Return                 { color: #7F0055 ; font-weight: bold }
+#Short                  { color: #7F0055 ; font-weight: bold }
+#Static                 { color: #7F0055 ; font-weight: bold }
+#Super                  { color: #7F0055 ; font-weight: bold }
+#Switch                 { color: #7F0055 ; font-weight: bold }
+#Synchronized           { color: #7F0055 ; font-weight: bold }
+#This                   { color: #7F0055 ; font-weight: bold }
+#Throw                  { color: #7F0055 ; font-weight: bold }
+#Throws                 { color: #7F0055 ; font-weight: bold }
+#Transient              { color: #7F0055 ; font-weight: bold }
+#True                   { color: #7F0055 ; font-weight: bold }
+#Try                    { color: #7F0055 ; font-weight: bold }
+#Void                   { color: #7F0055 ; font-weight: bold }
+#Volatile               { color: #7F0055 ; font-weight: bold }
+#While                  { color: #7F0055 ; font-weight: bold }
+#StrictFP               { color: #7F0055 ; font-weight: bold }
+#IntegerLiteral         { color: #000000 }
+#DecimalLiteral         { color: #000000 }
+#HexLiteral             { color: #000000 }
+#OctalLiteral           { color: #000000 }
+#FloatPointLiteral      { color: #000000 }

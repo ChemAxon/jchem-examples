@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Combinator configuration file -->
+
+<EvaluatorConfiguration Version ="0.1">
+
+    <Params Cached="true"/>
+
+    <Matching ID="match" Class="chemaxon.jep.function.Match">
+	<Search StereoSearch="true" StereoCareChecking="true"/>
+    </Matching>
+
+    <Functions>
+	<Function ID="filter" Class="chemaxon.jep.function.Filter"/>
+	<Function ID="min" Class="chemaxon.jep.function.Min"/>
+	<Function ID="minatom" Class="chemaxon.jep.function.MinAtom"/>
+	<Function ID="maxatom" Class="chemaxon.jep.function.MaxAtom"/>
+	<Function ID="minval" Class="chemaxon.jep.function.MinValue"/>
+	<Function ID="maxval" Class="chemaxon.jep.function.MaxValue"/>
+	<Function ID="sortasc" Class="chemaxon.jep.function.SortAsc"/>
+	<Function ID="sortdesc" Class="chemaxon.jep.function.SortDesc"/>
+	<Function ID="eval" Class="chemaxon.jep.function.AtomEvaluatorFunction"/>
+	<Function ID="count" Class="chemaxon.jep.function.Count"/>
+	<Function ID="sum" Class="chemaxon.jep.function.Sum"/>
+	<Function ID="atomprop" Class="chemaxon.jep.function.AtomProperties"/>
+    </Functions>
+
+    <Plugins>
+	<Plugin ID="charge" Class="chemaxon.marvin.calculations.ChargePlugin"/>
+	<Plugin ID="pol" Class="chemaxon.marvin.calculations.PolarizabilityPlugin"/>
+	<Plugin ID="pka" Class="chemaxon.marvin.calculations.pKaPlugin">
+	    <Param Name="min" Value="-18"/>
+	    <Param Name="max" Value="30"/>
+	</Plugin>
+	<Plugin ID="logd" Class="chemaxon.marvin.calculations.logDPlugin"/>
+	<Plugin ID="logp" Class="chemaxon.marvin.calculations.logPPlugin">
+	    <Param Name="type" Value="logPTrue"/>
+	</Plugin>
+	<Plugin ID="logpi" Class="chemaxon.marvin.calculations.logPPlugin">
+	    <Param Name="type" Value="increments"/>
+	</Plugin>
+	<Plugin ID="mass" Class="chemaxon.marvin.calculations.ElementalAnalyserPlugin">
+	    <Param Name="type" Value="mass"/>
+	</Plugin>
+	<Plugin ID="formula" Class="chemaxon.marvin.calculations.ElementalAnalyserPlugin">
+	    <Param Name="type" Value="formula"/>
+	</Plugin>
+    </Plugins>
+
+    <Standardizer>
+	<Actions>
+	    <Aromatize/>
+	</Actions>
+    </Standardizer>
+
+</EvaluatorConfiguration>

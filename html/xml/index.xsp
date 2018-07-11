@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsp:page create-session="true"
+   language="java"
+   xmlns:xsp="http://apache.org/xsp"
+   xmlns:session="http://apache.org/xsp/session/2.0" 
+   xmlns:xsp-formval="http://apache.org/xsp/form-validator/2.0"
+   xmlns:xsp-request="http://apache.org/xsp/request/2.0"
+>
+  <page>
+  <xsp:logic>
+
+    String sessionVarPrefix = "session1." ;
+
+    String molfile = (String)<xsp-request:get-parameter name="molfile"/>;
+
+    if(molfile != null) {
+	session.setAttribute(sessionVarPrefix+"query.molfile", molfile);
+    	session.setAttribute(sessionVarPrefix+"query.type", 
+	    <xsp-request:get-parameter name="searchType"/>);
+    	session.setAttribute(sessionVarPrefix+"query.similarityThreshold", 
+	    <xsp-request:get-parameter name="similarityThreshold"/>);
+    	session.setAttribute(sessionVarPrefix+"query.maxResultCount", 
+	    <xsp-request:get-parameter name="maxResultCount"/>);
+
+	java.util.Enumeration params = request.getParameterNames();
+	int paramsNumber = 0;
+	while(params.hasMoreElements()) {
+	    String paramName = (String)params.nextElement();
+	    if(paramName.startsWith("query_") &amp;&amp; 
+		    (paramName.indexOf("relation") == -1 ) ) {
+		String paramValue = request.getParameter(paramName);
+		if(!paramValue.equals("")) {
+		    paramName = paramName.substring(6,paramName.length());
+</xsp:logic>
+<xsp:expr>paramsNumber</xsp:expr> , 
+<xsp:expr>paramName</xsp:expr>
+<xsp:expr>request.getParameter("query_"+paramName+"_relation")</xsp:expr>
+<xsp:expr>request.getParameter("query_"+paramName)</xsp:expr><br></br>
+<xsp:logic>
+	    	    session.setAttribute(sessionVarPrefix+"qureyParam"+
+				+paramsNumber+"name", paramName);
+		    session.setAttribute(sessionVarPrefix+"qureyParam"+
+				+paramsNumber+"relation", request.getParameter(
+				"query_"+paramName+"_relation"));
+		    session.setAttribute(sessionVarPrefix+"qureyParam"+
+				+paramsNumber+"value", paramValue);
+	    	    paramsNumber++;
+		}
+	    }
+	}
+
+	session.setAttribute(sessionVarPrefix+"queryParamsNumber",
+		new Integer(paramsNumber));
+	
+    } else {
+	session.removeAttribute(sessionVarPrefix+"query.molfile");
+	
+	Object pn = (Object)session.getAttribute(sessionVarPrefix+
+			"queryParamsNumber");
+
+	if(pn != null) {
+	    int paramsNumber = ((Integer)session.getAttribute(sessionVarPrefix+
+	    	    	       "queryParamsNumber")).intValue();
+
+	    for(int i=0;i&lt;paramsNumber;i++) {
+	        session.removeAttribute(sessionVarPrefix+"qureyParam"+i+"name");
+	        session.removeAttribute(sessionVarPrefix+"qureyParam"+i+
+			"relation");
+	        session.removeAttribute(sessionVarPrefix+"qureyParam"+i+
+			"value");
+	    }
+	}
+	session.removeAttribute(sessionVarPrefix+"queryParamsNumber");
+
+    	session.setAttribute(sessionVarPrefix+"query.type", "");
+    	session.setAttribute(sessionVarPrefix+"query.similarityThreshold","0"); 
+    	session.setAttribute(sessionVarPrefix+"query.maxResultCount", "0");
+    }
+    session.setAttribute(sessionVarPrefix+"search.action", "starting_search");
+  </xsp:logic>
+  <headscript language="JavaScript">
+    <![CDATA[
+	<!--
+
+	var contentLoaded=false
+	var buttonsLoaded=false
+
+	var idSearchResults=1;
+
+	function selectAPage()
+	{
+	    var searchResults=frames[idSearchResults];
+	    var form=searchResults.document.navigationForm;
+	    if(form==null || form["pageNumber"]==null)
+		    return;
+	    var value=prompt("Enter page number:", form.pageNumber.value);
+	    if((value!=null) &amp;&amp; !isNaN(parseInt(value))) {
+		form.pageNumber.value=value;
+		buttonAction("pageNumber");
+	    }
+	}
+	
+	function buttonAction(event)
+	{	
+	    if(buttonsLoaded &amp;&amp; contentLoaded) {
+		var searchResults=frames[idSearchResults];
+		var form=searchResults.document.navigationForm;
+		if(form!=null) { // null if no structures found
+		    form.nextState.value=event;
+		    contentLoaded=false;
+		    form.action="searchresults.jsp"+location.search;
+			    form.submit();
+		}
+	    } else
+		alert("Page loading. Please wait.");
+	}
+	
+	function openEditWindow(mode)
+	{
+	    var searchResults=frames[idSearchResults];
+	    isInsertion = (mode=='insert');
+	    if(!buttonsLoaded || !contentLoaded) {
+		alert("Page loading. Please wait.");
+		return;
+	    }
+	    var mview = searchResults.document["mview"];
+	    var index = (mview==null? -1 : mview.getSelectedIndex());
+	    var labelCountInACell=6;
+	    var idIndexInACell=1;
+	    var conf = "true";
+	    if(mode=="delete") { 
+		conf=confirm("Warning: " + 
+			mview.getL(index*labelCountInACell+idIndexInACell)+ 
+			" will be deleted.")
+	    }
+	    if(mode=="insert" || 
+		    (index &gt;=0 &amp;&amp; (mode=="update" ||  conf))) {
+		var width = 810;
+		var height = 600;
+		if(mode=="delete") {
+		    width = 300;
+		    height = 100;
+		}
+		var w = window.open("", "", "resizable=yes,width="+width+
+			",height="+height+",scrollbars=yes,menubar=yes,location=yes");
+		w.document.writeln("&lt;html&gt;&lt;body bgcolor='#e1e1e1'&gt;&lt;font size=+2 face=helvetica&gt;");
+		w.document.writeln((mode=="delete"? "Deleting" : "Page loading")
+			+"... Please wait.");
+		w.document.writeln("&lt;form method=post&gt;");
+		w.document.writeln("&lt;input type=hidden name=mode&gt;");
+		w.document.writeln("&lt;input type=hidden name=cellIndex&gt;");
+		w.document.writeln("&lt;input type=hidden name=id&gt;");
+		w.document.writeln("&lt;/form&gt;");
+		w.document.writeln("&lt;/font&gt;&lt;/body&gt;&lt;/html&gt;");
+		w.document.close();
+		var form=w.document.forms[0];
+		form.mode.value = mode;
+		if(!isInsertion) {
+	
+		    var ida = mview.getL(index*labelCountInACell+idIndexInACell)+''; 
+		    //+'' is needed for converting to a JavaScript String
+		    ida = ida.substr(4,ida.length-4);	    
+		    form.id.value = ida
+		    form.cellIndex.value = index;
+		    //id = ida;
+		}
+		if(mode=="delete") {
+		    form.action = "update.jsp"+location.search;	   
+		} else {  
+		    form.action = "edit.jsp"+location.search; 
+		}
+		form.submit();
+		
+	    } else if(indexlt;0) {
+		alert("Nothing has been selected.");
+	    }
+	}
+
+	function importMols() {
+	    var searchResults=frames[idSearchResults];
+	    if(!buttonsLoaded || !contentLoaded) {
+		alert("Page loading. Please wait.");
+		return;
+	    }
+	    var w = window.open("transfer/uploader.jsp", "uploadWindow", "resizable=yes,width=500,height=320,scrollbars=no,menubar=no,location=no");
+	}
+
+	function exportMols() {
+	    var searchResults=frames[idSearchResults];
+	    if(!buttonsLoaded || !contentLoaded) {
+		alert("Page loading. Please wait.");
+		return;
+	    }
+	    var w = window.open("transfer/exporter.jsp", "uploadWindow", "resizable=yes,width=340,height=470,scrollbars=yes,menubar=no,location=no");
+
+	}
+
+	// -->
+    ]]>
+    </headscript>
+<input type="button" value="ok" onClick="selectAPage()"/>
+    <aframescript language="JavaScript">
+        <![CDATA[
+	<!--
+	document.writeln('<frameset cols="210,*" border=0 framespacing=0>');
+	document.write('<frame src="searchbuttons.html' + location.search);
+	document.write('" frameborder="0" marginheight="0" marginwidth="0">');
+
+	document.write('<frame src="searching.html' + location.search);
+	document.writeln('" frameborder=0 marginheight=0 marginwidth=0>"');
+	document.writeln('</frameset>');
+	// -->
+	]]>
+    </aframescript>
+  </page>
+</xsp:page>

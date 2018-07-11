@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PharmacophoreFingerprintConfiguration Version="" schemaLocation="pharmacophores.xsd">
+  <PharmacophoreDefinition>
+    <Search StereoCareChecking="false"/>
+    <Functions>
+      <Function ID="formalcharge" Class="chemaxon.util.expression.function.AtomProperties">
+          <Param Name="property" Value="charge"/>
+          <Param Name="pH" Value="7"/>          
+      </Function>            
+    </Functions>
+    <Plugins>
+      <Plugin ID="acceptor" Class="chemaxon.marvin.calculations.HBDAPlugin">
+        <Param Name="type" Value="acc"/>
+        <Param Name="pH" Value="7"/>
+      </Plugin>
+      <Plugin ID="donor" Class="chemaxon.marvin.calculations.HBDAPlugin">
+        <Param Name="type" Value="don"/>
+        <Param Name="pH" Value="7"/>
+      </Plugin>
+      <Plugin ID="ioncharge" Class="chemaxon.marvin.calculations.IonChargePlugin">
+        <Param Name="pH" Value="7"/>
+      </Plugin>    
+    </Plugins>
+    <Mols>
+      <Mol ID="arom" Structure="[*;a]"/>
+      <Mol ID="cx" Structure="[C,F,Cl,Br,I,At]"/>
+    </Mols>
+    <Pharmacophores>
+      <AtomSet ID="Aromatic" Symbol="r">arom</AtomSet>
+      <AtomSet ID="Cationic" Symbol="+"><![CDATA[ (formalcharge() > 0) || (ioncharge() > 0.4) ]]></AtomSet>
+      <AtomSet ID="Anionic" Symbol="-"><![CDATA[ (formalcharge() < 0) || (ioncharge() < -0.4)]]></AtomSet>
+      <AtomSet ID="HydrogenBondDonor" Symbol="d"><![CDATA[ donor() ]]></AtomSet>
+      <AtomSet ID="HydrogenBondAcceptor" Symbol="a"><![CDATA[ acceptor() ]]></AtomSet>
+      <AtomSet ID="Hydrophobic" Symbol="h"><![CDATA[ cx && !{Aromatic} && !{Cationic} && !{Anionic} && !{HydrogenBondDonor} && !{HydrogenBondAcceptor} ]]></AtomSet>
+    </Pharmacophores>
+    <PharmacophoreFingerprintParameters MinimalDistance="1" MaximalDistance="10"/>
+  </PharmacophoreDefinition>
+  <StandardizerConfiguration>
+    <Actions>
+      <Removal ID="keepOne" Method="keepLargest" Measure="molMass"/>
+      <Action ID="aromatize" Act="aromatize"/>
+    </Actions>
+  </StandardizerConfiguration>
+
+    <ScreeningConfiguration>
+        <PharmacophorePointColors>
+            <Color Symbol="+" Value="red"/>
+            <Color Symbol="-" Value="blue"/>
+            <Color Symbol="r" Value="green"/>
+            <Color Symbol="h" Value="black"/>
+            <Color Symbol="d" Value="navy"/>
+            <Color Symbol="a" Value="maroon"/>
+            <Color Symbol="a/d" Value="purple"/>
+            <Color Symbol="+/d" Value="lime"/>
+            <Color Symbol="-/a" Value="aqua"/>
+            <Color Symbol="empty" Value="gray"/>
+            <Color Symbol="other" Value="fuchsia"/>
+        </PharmacophorePointColors>
+
+        <ParametrizedMetrics>
+            <ParametrizedMetric Name="Tanimoto" ActiveFamily="Generic"
+                Metric="Tanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="Euclidean" ActiveFamily="Generic"
+                Metric="Euclidean" Threshold="100" />
+        </ParametrizedMetrics>
+    </ScreeningConfiguration>
+
+
+</PharmacophoreFingerprintConfiguration>

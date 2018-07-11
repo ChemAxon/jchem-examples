@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsp:page 
+   language="java"
+   xmlns:xsp="http://apache.org/xsp"
+   xmlns:xsp-formval="http://apache.org/xsp/form-validator/2.0"
+   xmlns:xsp-request="http://apache.org/xsp/request/2.0"
+   xmlns:cinclude="http://apache.org/cocoon/include/1.0"
+>
+  <page onload="parent.sketcherLoaded=true">
+    <title>Generated from query.xsp</title>
+      <jscript file="query.js"/>
+      <content>
+        <para>
+         Informal validation results <xsp:expr><xsp-formval:results/></xsp:expr>
+        </para>
+        <table border="0" cellpadding="0" cellspacing="0">
+	  <tr>
+	    <td valign="top">
+    	      <form method="post" name="queryForm" action="">
+    		<input type="hidden" name="molfile"/>
+		<table border="0" cellpadding="0" cellspacing="0">
+   		  <tr>
+<!-- images -->
+		    <td rowspan="9" valign="top" >
+		    <img src="images/jchem.gif" width="56" height="234"/></td>
+		    <td><img src="images/top.gif" width="144" height="25" 
+			  border="0" alt=""/></td>
+		  </tr><tr>
+    		    <td><a href="javascript:parent.submitIfLoaded('search')" onMouseOut="swapImgRestore()" onMouseOver="swapImage('document.search','document.search','../../images/search_high.gif')"><img name="search" border="0" src="images/search_norm.gif" width="144" height="32" alt=""/></a></td>
+		  </tr><tr>
+		    <td><img src="images/space.gif" width="144" height="20" 
+			     border="0" alt=""/></td>
+    		  </tr><tr> 
+    		    <td><a href="javascript:parent.help()" onMouseOut="swapImgRestore()" onMouseOver="swapImage('document.help','document.help','../../images/help_high.gif')"><img name="help" border="0" src="images/help_norm.gif" width="144" height="32" alt=""/></a></td>
+    		  </tr><tr>
+		    <td><img src="images/bottom.gif" width="144" height="29" 
+			     border="0" alt=""/></td>
+		  </tr><tr> 
+		    <td><a href="http://www.chemaxon.com" target="_blank" onMouseOut="swapImgRestore()" onMouseOver="swapImage('document.chemaxon','document.chemaxon','../../images/chemaxon_high.gif')"><img name="chemaxon" border="0" src="images/chemaxon_norm.gif" width="144" height="43" alt=""/></a>
+		    </td>
+		  </tr><tr>
+		    <td height="40"></td>
+		  </tr><tr>
+		    <td colspan="2">
+		      <table border="0" cellpadding="0" cellspacing="5">
+        		<tr>
+        		  <td>
+			  <font face="helvetica" size="1">Search type:</font>
+			  </td><td>
+        		  <select name="searchType">
+			    <option>Substructure</option>
+			    <option>Similarity</option>
+			    <option>Full</option>
+			  </select> 
+			  </td>
+        		</tr><tr>
+		          <td>
+		          <font face="helvetica" size="1">
+		          Similarity<br></br>threshold:</font>
+		          </td><td>
+		          <select name="similarityThreshold">
+		            <option>0.4</option> 
+		            <option>0.5</option>
+		            <option>0.6</option>
+		            <option>0.7</option>
+			    <option>0.8</option>
+		            <option>0.85</option>
+		            <option>0.86</option>
+		            <option>0.87</option>
+		            <option>0.88</option>
+		            <option>0.89</option>
+		            <option selected="true">0.9</option>
+		            <option>0.91</option>
+		            <option>0.92</option>
+		            <option>0.93</option>
+		            <option>0.94</option>
+		            <option>0.95</option>
+		            <option>0.96</option>
+		            <option>0.97</option>
+		            <option>0.98</option>
+		            <option>0.99</option>
+		          </select>
+		          </td>
+		        </tr><tr>
+		          <td>
+		          <font face="helvetica" size="1">
+		          Max. hits:
+		          </font>
+		          </td><td>
+		          <select name="maxResultCount">
+		            <option value="1">1</option>
+		            <option value="2">2</option>
+		            <option value="3">3</option>
+		            <option value="4">4</option>
+		            <option value="5">5</option>
+		            <option value="10">10</option>
+		            <option value="50">50</option>
+		            <option value="100">100</option>
+		            <option value="200" selected="true">200</option>
+		            <option value="500">500</option>
+		            <option value="1000">1000</option>
+		            <option value="2000">2000</option>
+		            <option value="5000">5000</option>
+		            <option value="0">unlimited</option>
+		          </select>
+		          </td>
+		        </tr>
+		      </table>
+		    </td>
+		  </tr><tr>
+    		    <td colspan="2">
+        	    <p><font face="helvetica" size="-1">Conditions:</font></p>
+		    <br></br>
+    		    </td>
+    		  </tr><tr>
+		    <td colspan="2">
+        	      <table border="0" cellpadding="0" cellspacing="0">
+			<!--jscript function="writeConditions()"/-->
+			<query_parameters name="query">
+		        <cinclude:include src="descriptor.xml" 
+					  element="validate"/>
+			</query_parameters>	
+		      </table>
+		    </td>
+		  </tr>
+		</table>
+              </form>
+            </td><td valign="top">
+	    <msketch name="msketch">
+	      <begin codebase="marvin/" width="440" height="400"/>
+	      <param name="bgcolor" value="#b0b0b0"/>
+	      <param name="molbg" value="#F0F0F0"/>
+	      <param name="implicitH" value="off"/>
+	      <param name="extrabonds" value="arom,any,wedge,either,ctu"/>
+	      <param name="queryatoms" value="any,hetero,list,notlist,Rgroup"/>
+	      <param name="undo" value="50"/>
+	      <param name="mol" value=""/>
+	      <param name="preload" value="MolExport,GraphInvariants,Parity"/>
+	    </msketch>
+	    </td>
+          </tr>
+        </table>
+      </content>
+         <input type="hidden" name="visited" value="true"/>
+         <xsp:logic>
+           boolean userHasSeenForm = 
+			(<xsp-request:get-parameter name="visited"/>!=null);
+         </xsp:logic>
+
+  </page>
+</xsp:page>

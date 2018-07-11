@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<cml>
+<MDocument>
+  <propertyList>
+    <property dictRef="scale" title="scale">
+      <scalar dataType="xsd:double">27.999999999999996</scalar>
+    </property>
+  </propertyList>
+  <MChemicalStruct>
+    <molecule molID="m1">
+      <atomArray
+          atomID="a1 a2 a3"
+          elementType="C C Br"
+          x2="-3.8236634677820303 -2.875307343814387 -1.3503364875082013"
+          y2="-0.12055413893762798 1.0927968663914438 0.8781718738654537"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="A" />
+        <bond atomRefs2="a2 a3" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+</cml>

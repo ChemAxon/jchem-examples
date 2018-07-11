@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<MDocument>
+  <MChemicalStruct>
+    <molecule molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7"
+          elementType="C C C C C C R"
+          sgroupRef="0 0 0 0 0 0 sg1"
+          x2="-1.8666666746139526 -3.200336015662211 -3.200336015662211 -1.8666666746139526 -0.5329973335656943 -0.5329973335656943 1.18200261875059"
+          y2="4.223367278029702 3.4533503374706616 1.9133164563525806 1.1432995157935402 1.9133164563525806 3.4533503374706616 3.5700171312939037"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a1 a6" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+      </bondArray>
+      <molecule id="sg1" role="SuperatomSgroup" title="Ph" molID="m2">
+        <atomArray
+            atomID="a8 a9 a10 a11 a12 a13"
+            elementType="C C C C C C"
+            attachmentPoint="1 0 0 0 0 0"
+            x2="1.18200261875059 1.8597097398745674 3.3961587218888036 4.254900582779069 3.5771934616550913 2.040744479640855"
+            y2="3.5700171312939037 4.952881209205343 5.057401664942081 3.7790580427673826 2.396193964855943 2.291673509119205"
+            />
+        <bondArray>
+          <bond atomRefs2="a8 a9" order="2" />
+          <bond atomRefs2="a8 a13" order="1" />
+          <bond atomRefs2="a9 a10" order="1" />
+          <bond atomRefs2="a10 a11" order="2" />
+          <bond atomRefs2="a11 a12" order="1" />
+          <bond atomRefs2="a12 a13" order="2" />
+        </bondArray>
+      </molecule>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+

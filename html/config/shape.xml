@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeConfiguration Version="0.1" schemaLocation="">
+    <StandardizerConfiguration Version="0.1">
+        <Actions>
+            <Action ID="aromatize" Act="aromatize:b"/>
+            <RemoveExplicitH ID="RemoveExplicitH" Groups="target"/>
+        </Actions>
+    </StandardizerConfiguration>
+    <Generator>
+        <FlexibleRingSize Value="8"/>
+        <FlexibleRingRotatableBondCount Value="4"/>
+        <Coloring Value="EXTENDED_ATOMTYPES"/>
+    </Generator>
+    <ScreeningConfiguration>
+       <ParametrizedMetrics>
+            <ParametrizedMetric Name="Tanimoto" ActiveFamily="Generic" Metric="Tanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="Euclidean" ActiveFamily="Generic" Metric="Euclidean" Threshold="10"/>
+       </ParametrizedMetrics>
+    </ScreeningConfiguration>
+</ShapeConfiguration>

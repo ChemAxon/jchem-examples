@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ChemicalFingerprintConfiguration Version ="0.3" schemaLocation="cfp.xsd">
+
+    <Parameters Length="1024" BondCount="7" BitCount="2"/>
+
+    <ScreeningConfiguration>
+        <ParametrizedMetrics>
+            <ParametrizedMetric Name="Tanimoto" ActiveFamily="Generic"
+                Metric="Tanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="Euclidean" ActiveFamily="Generic"
+                Metric="Euclidean" Threshold="10"/>
+            <ParametrizedMetric Name="Tversky" ActiveFamily="Generic"
+                Metric="Tversky" Threshold="0.5" TverskyAlpha="1" TverskyBeta="1"/>
+        </ParametrizedMetrics>
+    </ScreeningConfiguration>
+
+</ChemicalFingerprintConfiguration>

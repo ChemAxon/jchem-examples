@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<jchemsite>
+  <sessionVarPrefix>jspexample.</sessionVarPrefix>
+  <driver>oracle.jdbc.OracleDriver</driver>
+  <url>jdbc:oracle:thin:@192.168.0.115:1521:OEMREP</url>
+  <username>scott</username>
+  <password>tiger</password>
+  <propertyTableName>JChemProperties</propertyTableName>
+  <structureTableName>SCOTT.JSPEXAMPLE</structureTableName>
+</jchemsite>

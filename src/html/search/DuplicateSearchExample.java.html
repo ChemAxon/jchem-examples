@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>search.DuplicateSearchExample (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">DuplicateSearchExample.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1 </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> search;
+<FONT ID="LN">2 </FONT><A NAME="2"></A>
+<FONT ID="LN">3 </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> java.io.FileNotFoundException;
+<FONT ID="LN">4 </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> java.io.IOException;
+<FONT ID="LN">5 </FONT><A NAME="5"></A><FONT ID="Import">import</FONT> java.util.HashSet;
+<FONT ID="LN">6 </FONT><A NAME="6"></A><FONT ID="Import">import</FONT> java.util.List;
+<FONT ID="LN">7 </FONT><A NAME="7"></A><FONT ID="Import">import</FONT> java.util.Set;
+<FONT ID="LN">8 </FONT><A NAME="8"></A>
+<FONT ID="LN">9 </FONT><A NAME="9"></A><FONT ID="Import">import</FONT> <A HREF="../resource/ResourceLocator.java.html">resource.ResourceLocator</A>;
+<FONT ID="LN">10</FONT><A NAME="10"></A><FONT ID="Import">import</FONT> <A HREF="../util/MolImportUtil.java.html">util.MolImportUtil</A>;
+<FONT ID="LN">11</FONT><A NAME="11"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolExporter.html">chemaxon.formats.MolExporter</A>;
+<FONT ID="LN">12</FONT><A NAME="12"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">chemaxon.formats.MolFormatException</A>;
+<FONT ID="LN">13</FONT><A NAME="13"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/SearchConstants.html">chemaxon.sss.SearchConstants</A>;
+<FONT ID="LN">14</FONT><A NAME="14"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/screen/HashCode.html">chemaxon.sss.screen.HashCode</A>;
+<FONT ID="LN">15</FONT><A NAME="15"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/MolSearch.html">chemaxon.sss.search.MolSearch</A>;
+<FONT ID="LN">16</FONT><A NAME="16"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/MolSearchOptions.html">chemaxon.sss.search.MolSearchOptions</A>;
+<FONT ID="LN">17</FONT><A NAME="17"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/SearchException.html">chemaxon.sss.search.SearchException</A>;
+<FONT ID="LN">18</FONT><A NAME="18"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/StandardizedMolSearch.html">chemaxon.sss.search.StandardizedMolSearch</A>;
+<FONT ID="LN">19</FONT><A NAME="19"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">chemaxon.struc.Molecule</A>;
+<FONT ID="LN">20</FONT><A NAME="20"></A>
+<FONT ID="LN">21</FONT><A NAME="21"></A><FONT ID="FormalComment">/**
+<FONT ID="LN">22</FONT><A NAME="22"></A> * Running various types of duplicate search:
+<FONT ID="LN">23</FONT><A NAME="23"></A> * &lt;ul&gt;
+<FONT ID="LN">24</FONT><A NAME="24"></A> * &lt;li&gt;comparing every pair of molecules&lt;/li&gt;
+<FONT ID="LN">25</FONT><A NAME="25"></A> * &lt;li&gt;comparing smiles format of molecules&lt;/li&gt;
+<FONT ID="LN">26</FONT><A NAME="26"></A> * &lt;li&gt;comparing based on hash-code comparison&lt;/li&gt;
+<FONT ID="LN">27</FONT><A NAME="27"></A> * &lt;/ul&gt;
+<FONT ID="LN">28</FONT><A NAME="28"></A> * 
+<FONT ID="LN">29</FONT><A NAME="29"></A> * @author JChem Base team, ChemAxon Ltd.
+<FONT ID="LN">30</FONT><A NAME="30"></A> */</FONT>
+<FONT ID="LN">31</FONT><A NAME="31"></A><FONT ID="Public">public</FONT> <FONT ID="Final">final</FONT> <FONT ID="Class">class</FONT> DuplicateSearchExample {
+<FONT ID="LN">32</FONT><A NAME="32"></A>
+<FONT ID="LN">33</FONT><A NAME="33"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">34</FONT><A NAME="34"></A>     * Imports molecules from the default input file (1000 structures from NCI data set) and
+<FONT ID="LN">35</FONT><A NAME="35"></A>     * carries out three solution methods of duplicate search on it.
+<FONT ID="LN">36</FONT><A NAME="36"></A>     */</FONT>
+<FONT ID="LN">37</FONT><A NAME="37"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> main(String[] args) {
+<FONT ID="LN">38</FONT><A NAME="38"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">39</FONT><A NAME="39"></A>            <FONT ID="New">new</FONT> <A HREF="../search/DuplicateSearchExample.java.html">DuplicateSearchExample</A>().run();
+<FONT ID="LN">40</FONT><A NAME="40"></A>        } <FONT ID="Catch">catch</FONT> (<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/SearchException.html">SearchException</A> e) {
+<FONT ID="LN">41</FONT><A NAME="41"></A>            System.out.println(<FONT ID="StringLiteral">"Error during duplicate searching."</FONT>);
+<FONT ID="LN">42</FONT><A NAME="42"></A>            e.printStackTrace();
+<FONT ID="LN">43</FONT><A NAME="43"></A>        } <FONT ID="Catch">catch</FONT> (<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">MolFormatException</A> e) {
+<FONT ID="LN">44</FONT><A NAME="44"></A>            System.out.println(<FONT ID="StringLiteral">"Bad structures in input file."</FONT>);
+<FONT ID="LN">45</FONT><A NAME="45"></A>            e.printStackTrace();
+<FONT ID="LN">46</FONT><A NAME="46"></A>        } <FONT ID="Catch">catch</FONT> (FileNotFoundException e) {
+<FONT ID="LN">47</FONT><A NAME="47"></A>            System.out.println(<FONT ID="StringLiteral">"Input file couldn't be found"</FONT>);
+<FONT ID="LN">48</FONT><A NAME="48"></A>            e.printStackTrace();
+<FONT ID="LN">49</FONT><A NAME="49"></A>        } <FONT ID="Catch">catch</FONT> (IOException e) {
+<FONT ID="LN">50</FONT><A NAME="50"></A>            System.out.println(<FONT ID="StringLiteral">"I/O error during molecule import."</FONT>);
+<FONT ID="LN">51</FONT><A NAME="51"></A>            e.printStackTrace();
+<FONT ID="LN">52</FONT><A NAME="52"></A>        }
+<FONT ID="LN">53</FONT><A NAME="53"></A>    }
+<FONT ID="LN">54</FONT><A NAME="54"></A>
+<FONT ID="LN">55</FONT><A NAME="55"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> run() <FONT ID="Throws">throws</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">MolFormatException</A>, FileNotFoundException, IOException,
+<FONT ID="LN">56</FONT><A NAME="56"></A>            <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/SearchException.html">SearchException</A> {
+<FONT ID="LN">57</FONT><A NAME="57"></A>
+<FONT ID="LN">58</FONT><A NAME="58"></A>        System.out.println(<FONT ID="StringLiteral">"Reading molecules."</FONT>);
+<FONT ID="LN">59</FONT><A NAME="59"></A>        String path = ResourceLocator.getDefaultInputPath();
+<FONT ID="LN">60</FONT><A NAME="60"></A>        List&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt; mols = MolImportUtil.moleculeListImport(path);
+<FONT ID="LN">61</FONT><A NAME="61"></A>        <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> i = <FONT ID="IntegerLiteral">0</FONT>; i &lt; mols.size(); i++) {
+<FONT ID="LN">62</FONT><A NAME="62"></A>            mols.get(i).aromatize();    <FONT ID="SingleLineComment">// aromatization is needed for search!
+<FONT ID="LN">63</FONT><A NAME="63"></A></FONT>        }
+<FONT ID="LN">64</FONT><A NAME="64"></A>
+<FONT ID="LN">65</FONT><A NAME="65"></A>        <FONT ID="SingleLineComment">// Various duplicate search methods
+<FONT ID="LN">66</FONT><A NAME="66"></A></FONT>        searchForDuplicates(mols);
+<FONT ID="LN">67</FONT><A NAME="67"></A>        searchForDuplicatesUniqueSmiles(mols);
+<FONT ID="LN">68</FONT><A NAME="68"></A>        searchForDuplicatesHash(mols);
+<FONT ID="LN">69</FONT><A NAME="69"></A>    }
+<FONT ID="LN">70</FONT><A NAME="70"></A>
+<FONT ID="LN">71</FONT><A NAME="71"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">72</FONT><A NAME="72"></A>     * Performs duplicate search with {@link MolSearch} to compare every pairs of molecules.
+<FONT ID="LN">73</FONT><A NAME="73"></A>     * 
+<FONT ID="LN">74</FONT><A NAME="74"></A>     * @param mols molecules to search
+<FONT ID="LN">75</FONT><A NAME="75"></A>     * @throws SearchException if error occurs during duplicate searching
+<FONT ID="LN">76</FONT><A NAME="76"></A>     */</FONT>
+<FONT ID="LN">77</FONT><A NAME="77"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> searchForDuplicates(List&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt; mols) <FONT ID="Throws">throws</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/SearchException.html">SearchException</A> {
+<FONT ID="LN">78</FONT><A NAME="78"></A>
+<FONT ID="LN">79</FONT><A NAME="79"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/MolSearchOptions.html">MolSearchOptions</A> searchOptions = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/MolSearchOptions.html">MolSearchOptions</A>(SearchConstants.DUPLICATE);
+<FONT ID="LN">80</FONT><A NAME="80"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/StandardizedMolSearch.html">StandardizedMolSearch</A> searcher = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/StandardizedMolSearch.html">StandardizedMolSearch</A>();
+<FONT ID="LN">81</FONT><A NAME="81"></A>        searcher.setSearchOptions(searchOptions);
+<FONT ID="LN">82</FONT><A NAME="82"></A>
+<FONT ID="LN">83</FONT><A NAME="83"></A>        <FONT ID="Long">long</FONT> start = System.currentTimeMillis();
+<FONT ID="LN">84</FONT><A NAME="84"></A>        System.out.println();
+<FONT ID="LN">85</FONT><A NAME="85"></A>        System.out.println(<FONT ID="StringLiteral">"Searching for duplicates."</FONT>);
+<FONT ID="LN">86</FONT><A NAME="86"></A>        System.out.println(<FONT ID="StringLiteral">"\tMatching IDs"</FONT>);
+<FONT ID="LN">87</FONT><A NAME="87"></A>
+<FONT ID="LN">88</FONT><A NAME="88"></A>        <FONT ID="Int">int</FONT> num = <FONT ID="IntegerLiteral">0</FONT>;
+<FONT ID="LN">89</FONT><A NAME="89"></A>        <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> q = <FONT ID="IntegerLiteral">0</FONT>; q &lt; mols.size(); q++) {
+<FONT ID="LN">90</FONT><A NAME="90"></A>            searcher.setQuery(mols.get(q));
+<FONT ID="LN">91</FONT><A NAME="91"></A>            <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> t = <FONT ID="IntegerLiteral">0</FONT>; t &lt; q; t++) {
+<FONT ID="LN">92</FONT><A NAME="92"></A>                searcher.setTarget(mols.get(t));
+<FONT ID="LN">93</FONT><A NAME="93"></A>                <FONT ID="If">if</FONT> (searcher.isMatching()) {
+<FONT ID="LN">94</FONT><A NAME="94"></A>                    System.out.printf(<FONT ID="StringLiteral">"\t%d is duplicate of %d\n"</FONT>, q + <FONT ID="IntegerLiteral">1</FONT>, t + <FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">95</FONT><A NAME="95"></A>                    num++;
+<FONT ID="LN">96</FONT><A NAME="96"></A>                    <FONT ID="Break">break</FONT>;
+<FONT ID="LN">97</FONT><A NAME="97"></A>                }
+<FONT ID="LN">98</FONT><A NAME="98"></A>            }
+<FONT ID="LN">99</FONT><A NAME="99"></A>        }
+<FONT ID="LN">00</FONT><A NAME="100"></A>        System.out.printf(<FONT ID="StringLiteral">"Found %d duplicates in %d milliseconds\n"</FONT>, num,
+<FONT ID="LN">01</FONT><A NAME="101"></A>                System.currentTimeMillis() - start);
+<FONT ID="LN">02</FONT><A NAME="102"></A>    }
+<FONT ID="LN">03</FONT><A NAME="103"></A>
+<FONT ID="LN">04</FONT><A NAME="104"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">05</FONT><A NAME="105"></A>     * Searches for duplicates based on comparison of the molecules' unique SMILES
+<FONT ID="LN">06</FONT><A NAME="106"></A>     * representation.
+<FONT ID="LN">07</FONT><A NAME="107"></A>     * 
+<FONT ID="LN">08</FONT><A NAME="108"></A>     * @param mols molecules to search
+<FONT ID="LN">09</FONT><A NAME="109"></A>     * @throws IOException if error occurs during unique SMILES conversion
+<FONT ID="LN">10</FONT><A NAME="110"></A>     */</FONT>
+<FONT ID="LN">11</FONT><A NAME="111"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> searchForDuplicatesUniqueSmiles(List&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt; mols) <FONT ID="Throws">throws</FONT> IOException {
+<FONT ID="LN">12</FONT><A NAME="112"></A>
+<FONT ID="LN">13</FONT><A NAME="113"></A>        <FONT ID="Long">long</FONT> start = System.currentTimeMillis();
+<FONT ID="LN">14</FONT><A NAME="114"></A>
+<FONT ID="LN">15</FONT><A NAME="115"></A>        System.out.println();
+<FONT ID="LN">16</FONT><A NAME="116"></A>        System.out.println(<FONT ID="StringLiteral">"Searching for duplicates based on "</FONT>
+<FONT ID="LN">17</FONT><A NAME="117"></A>                + <FONT ID="StringLiteral">"unique SMILES string comparison."</FONT>);
+<FONT ID="LN">18</FONT><A NAME="118"></A>        System.out.println(<FONT ID="StringLiteral">"\tMatching IDs"</FONT>);
+<FONT ID="LN">19</FONT><A NAME="119"></A>
+<FONT ID="LN">20</FONT><A NAME="120"></A>        Set&lt;String&gt; smilesSet = <FONT ID="New">new</FONT> HashSet&lt;String&gt;();
+<FONT ID="LN">21</FONT><A NAME="121"></A>        <FONT ID="Int">int</FONT> num = <FONT ID="IntegerLiteral">0</FONT>;
+<FONT ID="LN">22</FONT><A NAME="122"></A>        <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> i = <FONT ID="IntegerLiteral">0</FONT>; i &lt; mols.size(); i++) {
+<FONT ID="LN">23</FONT><A NAME="123"></A>            <FONT ID="SingleLineComment">// Create unique SMILES representation
+<FONT ID="LN">24</FONT><A NAME="124"></A></FONT>            String smiles = MolExporter.exportToFormat(mols.get(i), <FONT ID="StringLiteral">"smiles:u"</FONT>);
+<FONT ID="LN">25</FONT><A NAME="125"></A>            <FONT ID="SingleLineComment">// Check if the same unique SMILES has already been found
+<FONT ID="LN">26</FONT><A NAME="126"></A></FONT>            <FONT ID="If">if</FONT> (!smilesSet.contains(smiles)) {
+<FONT ID="LN">27</FONT><A NAME="127"></A>                smilesSet.add(smiles);
+<FONT ID="LN">28</FONT><A NAME="128"></A>            } <FONT ID="Else">else</FONT> {
+<FONT ID="LN">29</FONT><A NAME="129"></A>                <FONT ID="SingleLineComment">// Duplicate found: structure is already contained
+<FONT ID="LN">30</FONT><A NAME="130"></A></FONT>                System.out.println(<FONT ID="StringLiteral">"\t"</FONT> + (i + <FONT ID="IntegerLiteral">1</FONT>) + <FONT ID="StringLiteral">" is duplicate."</FONT>);
+<FONT ID="LN">31</FONT><A NAME="131"></A>                num++;
+<FONT ID="LN">32</FONT><A NAME="132"></A>            }
+<FONT ID="LN">33</FONT><A NAME="133"></A>        }
+<FONT ID="LN">34</FONT><A NAME="134"></A>        System.out.printf(<FONT ID="StringLiteral">"Found %d duplicates in %d milliseconds\n"</FONT>, num,
+<FONT ID="LN">35</FONT><A NAME="135"></A>                System.currentTimeMillis() - start);
+<FONT ID="LN">36</FONT><A NAME="136"></A>    }
+<FONT ID="LN">37</FONT><A NAME="137"></A>
+<FONT ID="LN">38</FONT><A NAME="138"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">39</FONT><A NAME="139"></A>     * Searches for duplicates based on the comparison of the molecules' hash code. The
+<FONT ID="LN">40</FONT><A NAME="140"></A>     * equivalence of the hash codes doesn't imply a structural equivalence, so molecules with
+<FONT ID="LN">41</FONT><A NAME="141"></A>     * similar hash code should still be matched in structure.
+<FONT ID="LN">42</FONT><A NAME="142"></A>     * 
+<FONT ID="LN">43</FONT><A NAME="143"></A>     * @param mols molecules to search
+<FONT ID="LN">44</FONT><A NAME="144"></A>     * @throws SearchException if error occurs during duplicate searching
+<FONT ID="LN">45</FONT><A NAME="145"></A>     */</FONT>
+<FONT ID="LN">46</FONT><A NAME="146"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> searchForDuplicatesHash(List&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt; mols) <FONT ID="Throws">throws</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/SearchException.html">SearchException</A> {
+<FONT ID="LN">47</FONT><A NAME="147"></A>
+<FONT ID="LN">48</FONT><A NAME="148"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/StandardizedMolSearch.html">StandardizedMolSearch</A> searcher = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/StandardizedMolSearch.html">StandardizedMolSearch</A>();
+<FONT ID="LN">49</FONT><A NAME="149"></A>        <FONT ID="Long">long</FONT> start = System.currentTimeMillis();
+<FONT ID="LN">50</FONT><A NAME="150"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/screen/HashCode.html">HashCode</A> hc = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/screen/HashCode.html">HashCode</A>();
+<FONT ID="LN">51</FONT><A NAME="151"></A>
+<FONT ID="LN">52</FONT><A NAME="152"></A>        <FONT ID="SingleLineComment">// Generate hash codes
+<FONT ID="LN">53</FONT><A NAME="153"></A></FONT>        <FONT ID="Int">int</FONT>[] codes = <FONT ID="New">new</FONT> <FONT ID="Int">int</FONT>[mols.size()];
+<FONT ID="LN">54</FONT><A NAME="154"></A>        <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> i = <FONT ID="IntegerLiteral">0</FONT>; i &lt; mols.size(); i++) {
+<FONT ID="LN">55</FONT><A NAME="155"></A>            codes[i] = hc.getHashCode(mols.get(i));
+<FONT ID="LN">56</FONT><A NAME="156"></A>        }
+<FONT ID="LN">57</FONT><A NAME="157"></A>
+<FONT ID="LN">58</FONT><A NAME="158"></A>        System.out.println(<FONT ID="StringLiteral">"\nSearching for duplicates based on "</FONT>
+<FONT ID="LN">59</FONT><A NAME="159"></A>                + <FONT ID="StringLiteral">"hash code comparison and subsequent searching"</FONT>);
+<FONT ID="LN">60</FONT><A NAME="160"></A>        System.out.println(<FONT ID="StringLiteral">"\tMatching IDs"</FONT>);
+<FONT ID="LN">61</FONT><A NAME="161"></A>        <FONT ID="Int">int</FONT> num = <FONT ID="IntegerLiteral">0</FONT>;
+<FONT ID="LN">62</FONT><A NAME="162"></A>        <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> q = <FONT ID="IntegerLiteral">0</FONT>; q &lt; mols.size(); q++) {
+<FONT ID="LN">63</FONT><A NAME="163"></A>            <FONT ID="For">for</FONT> (<FONT ID="Int">int</FONT> t = <FONT ID="IntegerLiteral">0</FONT>; t &lt; q; t++) {
+<FONT ID="LN">64</FONT><A NAME="164"></A>                <FONT ID="If">if</FONT> (codes[q] == codes[t]) {
+<FONT ID="LN">65</FONT><A NAME="165"></A>                    <FONT ID="SingleLineComment">// If hash-codes are equal, check with MolSearch
+<FONT ID="LN">66</FONT><A NAME="166"></A></FONT>                    searcher.setQuery(mols.get(q));
+<FONT ID="LN">67</FONT><A NAME="167"></A>                    searcher.setTarget(mols.get(t));
+<FONT ID="LN">68</FONT><A NAME="168"></A>                    <FONT ID="If">if</FONT> (searcher.isMatching()) {
+<FONT ID="LN">69</FONT><A NAME="169"></A>                        System.out.printf(<FONT ID="StringLiteral">"\t%d is duplicate of %d\n"</FONT>, q + <FONT ID="IntegerLiteral">1</FONT>, t + <FONT ID="IntegerLiteral">1</FONT>);
+<FONT ID="LN">70</FONT><A NAME="170"></A>                        num++;
+<FONT ID="LN">71</FONT><A NAME="171"></A>                        <FONT ID="Break">break</FONT>;
+<FONT ID="LN">72</FONT><A NAME="172"></A>                    }
+<FONT ID="LN">73</FONT><A NAME="173"></A>                }
+<FONT ID="LN">74</FONT><A NAME="174"></A>            }
+<FONT ID="LN">75</FONT><A NAME="175"></A>        }
+<FONT ID="LN">76</FONT><A NAME="176"></A>        System.out.printf(<FONT ID="StringLiteral">"Found %d duplicates in %d milliseconds\n"</FONT>, num,
+<FONT ID="LN">77</FONT><A NAME="177"></A>                System.currentTimeMillis() - start);
+<FONT ID="LN">78</FONT><A NAME="178"></A>    }
+<FONT ID="LN">79</FONT><A NAME="179"></A>
+<FONT ID="LN">80</FONT><A NAME="180"></A>}
+<FONT ID="LN">81</FONT><A NAME="181"></A></pre>
+</BODY>
+</HTML>

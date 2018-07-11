@@ -1,0 +1,173 @@
+<html>
+<head><title>Help on Defining a Query</title></head>
+<body bgcolor=white>
+<font face="Arial, Helvetica, sans-serif" size=2>
+<a name="tips"><font size="4">Help on Defining a Query</font></a>
+
+<p align="left">Please <font color="#992f2d">draw a query 
+structure</font>. 
+Click on the <font size="+1"><b>?</b></font> sign in the drawing 
+applet for a help on drawing.
+
+<p>For more details of the query features JChem offers, read the
+<a href="../../doc/user/Query.html">JChem Query Guide</a>.
+
+<p><FONT size=3><STRONG>Input Parameters</STRONG></FONT></p>   
+   
+<p><font color="#992f2d">Search type</font> defines the way compounds are searched. Options:
+<dl>
+<dt><i>Substructure</i>
+<dd>Finds all molecules containing the given substructure.
+<dt><i>Superstructure</i>
+<dd>Finds all molecules that can be found in the given superstructure.
+<dt><i>Full</i>
+<dd>Locates the molecule that is matching the full query structure.
+    (no additional fragments are allowed).
+Molecular features (stereochemistry, isotopes, charges, etc.) are by default evaluated the same
+way as for substructure queries. See also Duplicate search type and Advanced search options.</dd>
+<dt><i>Full fragment</i>
+<dd>Finds molecules where the query fully matches
+a fragment of the target. 
+Other fragments may be present in the target, they are ignored.
+Useful to perform a Full search that ignores salts or solvents beside
+    the main structure in the target. For a description of the differences of
+    these search types, see
+    <a href="../../doc/user/query_searchtypes.html#otherSearchTypes">the relevant section
+    of the Query Guide</a> or the
+    <a href="../../doc/user/QueryMatchExamples.html">examples page</a>.</dd>
+<dt><i>Similarity</i>
+    <dd>Finds molecules that are similar to the query structure.
+        <ul>
+        <li> The default similarity calculation uses the Tanimoto coefficient
+            of the chemical hashed fingerprints of the query structure and the
+            molecule in the database. <br>
+            (Dissimilarity_value = 1.0 - Tanimoto_similarity)
+        </li>
+        <li> Molecular Descriptor dissimilarity may also be present if
+            descriptors are generated for the table. The descriptors can
+            implement various calculation methods and distance metrics.
+            For more information about the available descriptors and metrics,
+            see the
+            <a href="http://www.chemaxon.com/jchem/doc/user/Screen.html">Screen
+            documentation</a>
+        </li>
+        </ul>
+        </dd>
+<dt><i>Duplicate</i></dt>
+<dd>Duplication search. All molecular features (stereochemistry, charges, isotopes,
+etc) equality is needed.</dd>
+</dl>
+
+<p><font color="#992f2d">Dissimilarity threshold</font> is a parameter of
+<i>Similarity</i> search. It specifies
+the higher limit of dissimilarity between the query and the database molecule. 
+If the dissimilarity value is lower or equal
+to the threshold, then the query structure and the given
+database structure are considered similar.
+
+<p><font color="#992f2d">Max. hits</font> 
+specifies an upper limit for the number of molecules the search engine is 
+allowed to find.</p> 
+
+<p><font color="#992f2d">Max. time</font> 
+specifies an upper limit for the length of time the search may take.</p>
+
+<p><font color="#992f2d">Search prev. results</font> 
+allows to perform a search on the hits of previous searches.</p>
+
+<p>Use <font color="#992f2d">Substructure hit coloring</font>
+to highlight the matching substructure part of the target structures. 
+</p>
+
+<p>Use <font color="#992f2d">Hit alignment</font> to rotate the hits relative
+to the contained query substructure.  </p> 
+
+<p>Use <font color="#992f2d">Return non-hits (inverse result set)</font> to
+display structures that do not match the query conditions.</p>
+
+<p>The fields under <font color="#992f2d">Conditions</font> can be used to
+    add extra conditions referring to non-structural data in the database
+    table.</p>
+
+<p>The <font color="#992f2d">Chemical Terms Filter</font> can be used to
+add a complex set of rules to the search criteria. You can choose a few 
+example filters with the help of the combo box. Please see the <a href="../../doc/user/ChemicalTerms.html">
+Chemical Terms Language Reference</a>
+for more details. Note that the <font color="#992f2d">Chemical Terms filter</font>
+    is not available for similarity search and in case of Markush tables. 
+</p> 
+
+<p><STRONG><FONT size=2>Advanced search options</FONT></STRONG></p> 
+<p>Advanced search options are not available for similarity search, and for
+    duplicate search only the stereochemistry  and tautomer options are available.
+<br>You can find a summary of all search
+    options <a href="../../doc/user/query_searchoptions.html#optionsSummary">here</a>
+</p>
+Description of the options:
+<p>
+<dl>
+    <dt><i>Stereochemistry</i></dt>
+    <dd>This option controls the evaluation of stereochemistry:
+        <ul>
+            <li><i>On</i>: The default stereochemistry evaluation option:
+            non-stereo query matches all configurations and stereo query matches
+            only the specified stereo configuration. See
+            <a href="../../doc/user/query_stereochemistry.html">examples in query
+                guide</a>.</li>
+            <li><i>Exact</i>: The stereochemistry evaluation option used by
+                duplicate search by default: equality is needed in all stereo
+                features (eg. non-stereo query only matches non-stereo targets).</li>
+            <li><i>Off</i>: All stereochemistry is ignored.</li>
+        </ul>
+    </dd>
+    <dt><i> Double bond stereo check</i></dt>
+    <dd>This option controls the evaluation of E/Z (cis/trans) isomerism of
+        double bonds in case of the Stereochemistry "On" setting. For examples,
+        see <a href="../../doc/user/query_stereochemistry.html#doubleBondEZ">the query guide</a>.
+        <ul>
+            <li><i>All</i>: All query double bonds are evaluated for stereochemistry.</li>
+            <li><i>Marked</i>: Only query double bonds marked with the "stereo
+                search flag" (visualized by a rectangle) are evaluated. </li>
+            <li><i>Off</i>: E/Z stereochemistry is ignored.</li>
+        </ul>
+    </dd>
+    <dt><i>Atom matching</i></dt>
+    <dd> These options control the evaluation of the corresponding chemical
+        atom properties. (Charges, Isotopes, Radicals, Valences.) For examples,
+        see the <a href="../../doc/user/query_features.html#iso_charge_rad">query guide</a>.
+        If the valence on the target is not specified, it is calculated from the
+        atom type and bonds.
+        <ul>
+            <li><i>On</i>: The default matching. If the query does not hold
+                the property, it matches everything. (Eg. uncharged query
+                matches both uncharged and charged targets.) Otherwise, the
+                specified chemical property value must be equal.</li>
+            <li><i>Exact</i>: The property must be equal in the query and the
+            target. (Eg. uncharged query only matches uncharged target.)</li>
+            <li><i>Ignore</i>: The property is ignored.</li>
+        </ul>
+    </dd>
+    <dt><i>Tautomer</i></dt>
+    <dd>This search option can instruct the search engine to look for all
+        tautomer forms the query, as generated by the Marvin plugin Tautomers.</dd>
+    <dt><i>Vague bond</i></dt>
+    <dd>
+        These search options allow to choose between several levels of
+        strictness in matching bond types, especially regarding aromaticity.
+        See <a href="../../doc/user/query_searchoptions.html#vaguebond">more information about
+        vague bond options.</a></dd>
+</dl>
+
+<p><STRONG><FONT size=3>Comments</FONT></STRONG></p>
+
+<p> Automatically displayed (implicit) <font color="#992f2d">Hydrogen atoms</font>
+    will not be used in the query.
+
+<p><font color="#992f2d">Searching common structures</font> that occur frequently
+in the database or using vague bond options might take considerable time.</p>      
+      
+</font>
+
+</body>
+</html>
+

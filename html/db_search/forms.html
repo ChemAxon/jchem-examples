@@ -1,0 +1,84 @@
+<html>
+<head>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../jchemmanuals.css">
+<title>Forms</title>
+</head>
+<body>
+<center>
+    <h2>Marvin View Form</h2>
+</center>
+<p>The appearance of the marvin view applet can be specified by forms. Forms are defined in the <code>&lt;user home&gt;/.jchemsite</code> property file, can be edited on <code><a href="setup.jsp">setup.jsp</a></code></p>
+A form is specified by its <a href="#name">name</a> and properties:<pre>
+    name.rows=value
+    name.cols=value
+    name.celldim=value
+    name.layout=value
+    name.param=value
+    name.cell=value</pre></p>
+<table border="0" cellspacing="0" cellpadding="5">
+  <tr valign="top">
+      <td><i><a name="name"></a>name</i></td>
+    <td><code>TABLE_NAME.form.FORM_NAME</code> (eg: <code>jspexample.form.jchemform</code>)<br>
+	<blockquote><table border="0" cellspacing="0" cellpadding="5">
+	  <tr valign="top">
+	      <td width="50"><code>TABLE_NAME:</code></td>
+	    <td>A form has to be assigned to a table created by JChemManager. The result of a query can appear only in those forms which are assigned to the table that the query was performed on. </td>
+	  </tr><tr>
+	    <td><code>FORM_NAME:</code></td>
+	    <td>A form can be selected by this name in the example.</td>
+	  </tr>
+	</table>
+    </td>
+  </tr><tr>
+    <td><i><a name="rows"></a>rows</i></td>
+    <td>number of rows of the applet.</td>
+  </tr><tr>
+    <td><i><a name="cols"></a>cols</i></td>
+    <td>number of columns of the applet.</td> 
+  </tr><tr valign="top">
+    <td><i><a name="celldim"></a>celldim</i></td>
+    <td><code>CELL_WIDTH:CELL_HEIGHT</code>
+	<p>Dimension of one cell of the applet.</p></td>    
+  </tr><tr>
+    <td><i><a name="layout"></a>layout</i></td>
+    <td>The <code>layout</code> parameter of the applet. See details <a href="http://www.chemaxon.com/marvin/help/developer/viewman.html#advanced.layout">here</a>.</td>
+  </tr><tr>
+    <td><i><a name="param"></a>param</i></td>
+    <td>The <code>param</code> parameter of the applet. See details <a href="http://www.chemaxon.com/marvin/help/developer/viewman.html#advanced.param">here</a>.</td>
+    </tr><tr valign="top">
+    <td><i><a name="cell"></a>cell</i></td>
+    <td><code>prefix&lt;FIELD_NAME&gt;postfix#default[;prefix&lt;DB_FIELD_NAME&gt;postfix#default;...]</code>
+	<p>Defines the kind of data appear in a cell.</p>
+	<table border="0" cellspacing="0" cellpadding="5">
+	  <tr>
+	      <td><code>prefix</code></td>
+	      <td>Text prompts before the value.</td>
+	  </tr><tr valign="top">
+	    <td><code>FIELD_NAME</code></td>
+	    <td>This can be the name of the <code>structure table</code>'s field which <b>value</b> appears, or one of these: <ul>
+		    <li><code>$cd_structure</code> - structure is shown
+		    <li><code>$dissimilarity</code> - in case of similiraty search the value of dissimiliraty ratio is shown
+	    </ul></td>
+	  </tr><tr>
+	    <td><code>postfix</code></td>
+	    <td>Text appears after the value.</td>
+	  </tr><tr>
+	    <td><code>default</code></td>
+	    <td>In case of <code>null</code> value this text appears.
+	    </td>
+	  </tr>
+	</table><br>
+	The <code>prefix</code>, <code>postfix</code>, and <code>default</code> values are optional. The simpliest formula: <code>&lt;FIELD_NAME&gt;</code>
+    </td>
+  </tr>
+</table>
+<p>Example:</p>
+<p><code>scott.jspexample.form.jchemform.rows=6<br>
+    scott.jspexample.form.jchemform.cols=3<br>
+scott.jspexample.form.jchemform.celldim=240:180<br>
+scott.jspexample.form.jchemform.layout=:3:2:L:0:0:1:2:w:n:0:10:M:1:0:2:1:c:n:1:10:L:1:1:1:1:w:n:L:2:1:1:1:nw:n<br>
+scott.jspexample.form.jchemform.param=:L:10:M:150:150:L:11b:L:10<br>
+scott.jspexample.form.jchemform.cell=ID: &lt;cd_id&gt;;&lt;$cd_structure&gt;;&lt;cd_formula&gt;;MW: &lt;cd_molweight&gt;#no weight</code>
+</p>
+</body>
+</html>

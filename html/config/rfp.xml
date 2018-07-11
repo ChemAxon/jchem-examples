@@ -1,0 +1,22 @@
+<ReactionFingerprintConfiguration Version ="0.1" schemaLocation="rfp.xsd">
+
+    <Parameters Length="2048" BondCount="6" BitCount="2"/>
+    
+    <ScreeningConfiguration>
+    
+    	<ParametrizedMetrics>
+            <ParametrizedMetric Name="ReactantTanimoto" ActiveFamily="Generic"
+            	Metric="ReactantTanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="ProductTanimoto" ActiveFamily="Generic"
+            	Metric="ProductTanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="CoarseReactionTanimoto" ActiveFamily="Generic"
+            	Metric="CoarseReactionTanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="MediumReactionTanimoto" ActiveFamily="Generic"
+            	Metric="MediumReactionTanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="StrictReactionTanimoto" ActiveFamily="Generic"
+            	Metric="StrictReactionTanimoto" Threshold="0.2"/>
+        </ParametrizedMetrics>
+        
+    </ScreeningConfiguration>
+    
+</ReactionFingerprintConfiguration>

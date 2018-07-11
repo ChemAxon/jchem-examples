@@ -1,0 +1,40 @@
+$RDFILE 1
+$DATM    09/03/03 16:32
+$RFMT
+$RXN
+
+  Marvin       090301031640
+
+  1  1
+$MOL
+
+  Marvin  09030316402D
+
+  2  1  0  0  0  0            999 V2000
+   -5.2500    3.7813    0.0000 C   0  0  0  0  0  0  0  0  0  1  0  0
+   -4.4250    3.7813    0.0000 H   0  0  0  0  0  0  0  0  0  2  0  0
+  1  2  1  0  0  0  0
+M  MRV SMA   1 [C;a:1]
+M  END
+$MOL
+
+  Marvin  09030316402D
+
+  2  1  0  0  0  0            999 V2000
+   -0.2500    3.8125    0.0000 C   0  0  0  0  0  0  0  0  0  1  0  0
+    0.5750    3.8125    0.0000 Br  0  0  0  0  0  0  0  0  0  3  0  0
+  1  2  1  0  0  0  0
+M  MRV SMA   1 [C;a:1]
+M  END
+$DTYPE RULES
+$DATUM 
+<Rules>
+	<Evaluator>
+	    <Plugins>
+			<Plugin ID="charge" Class="chemaxon.marvin.calculations.ChargePlugin"/>
+	    </Plugins>
+	</Evaluator>
+	<Rules>
+		<Rule><![CDATA[ -charge(ratom(1)) ]]></Rule>
+	</Rules>
+</Rules>

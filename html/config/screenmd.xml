@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ScreenMD configuration file -->
+
+<ScreenMDConfiguration schemaLocation="screenmd.xsd">
+
+    <Input>
+        <Target>
+            <File Name="examples/molecules/nci1000.smiles" GenerateID="true"/>
+        </Target>
+        <Query Name="examples/molecules/beta2_antagonists.smiles" />
+    </Input>
+    
+    <Output Precision="2">
+        <Files>
+            <File Type="table" Name="examples/output/nci1000.table"/>
+        </Files>
+    </Output>
+                    
+    <Descriptors>
+        <Descriptor>
+            <New Type="CF" ConfigFile="examples/config/cfp.xml">
+	        <Options>
+        	    <Metrics>
+                	<Metric Name="Tanimoto"/>
+                    </Metrics>
+                </Options>
+            </New>
+            
+            <New Type="PF" ConfigFile="examples/config/pharma-frag.xml">
+                <Options>
+                    <Metrics>
+                        <Metric Name="Euclidean"/>
+                    </Metrics>
+                </Options>
+	    </New>
+        </Descriptor>
+    </Descriptors>
+    
+    <SimilarityOptions CompareQueries="true">
+        <Hypotheses>
+            <Hypothesis Type="Minimum"/>
+        </Hypotheses>
+    </SimilarityOptions>
+
+</ScreenMDConfiguration>

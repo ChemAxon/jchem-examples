@@ -1,0 +1,11 @@
++=red
+-=blue
+r=green
+h=black
+d=navy
+a=maroon
+a/d=purple
++/d=lime
+-/a=aqua
+empty=gray
+other=fuchsia

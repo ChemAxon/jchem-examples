@@ -1,0 +1,160 @@
+<html>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../jchemmanuals.css">
+<TITLE>Developer's Guide - Cartridge, User defined function example</TITLE>
+</HEAD>
+<body>
+<center><h1>JChem Cartridge User defined function example</h1> 
+<b>getatomcount</b></center>
+
+<p>The example can be found in the &lt;JChem home&gt;/examples/cartridge/user_def_func/getatomcount directory.</p>
+
+<p>Consider the <code>GetAtomCount</code> Java class that returns the atom count of a structure.  We would like to calculate the atom count of structures comming from a database table using the <code>GetAtomCount</code> Java class.</p>
+
+<p>First of all we have to create a PL/SQL operator and function that can be used in SQL <code>select</code> statements. The operator gets the structure from a table as a parameter. For example:
+
+<blockquote>
+<pre>SQL&gt; select <b>getatomcount(cd_smiles)</b> from jchemtable;
+</blockquote>
+
+Now create the PL/SQL function and operator (<A href="getatomcount_sql.sql">getatomcount_sql.sql</a>): 
+
+<blockquote>
+<pre>SQL&gt; 
+CREATE <b>FUNCTION getatomcount_func</b>(query VARCHAR2) RETURN NUMBER AS
+  BEGIN
+    return to_number(jchem_core_pkg.<b>send_user_func</b>('GetAtomCount', '', query));
+  END;
+/
+show errors;
+
+CREATE <b>OPERATOR getatomcount</b> BINDING(VARCHAR2) RETURN NUMBER
+  USING getatomcount_func;</pre>
+</blockquote>
+</p>
+
+<p>The <code>getatomcount_func</code> function sends the <code>query</code> parameter to the <code>GetAtomCount</code> external Java class using the <a href="../../../../doc/dev/cartridge/cartapi.html#send_user_func"><code>send_user_func</code></a> function. 
+
+<p>The <code>GetAtomCount</code> class has to implement the <a href="../../../../doc/dev/cartridge/cart_modul.html#JChemCartModul">JChemCartModul</a> interface. It's <code>doFunc</code> function gets the parameters sent by the <code>getatomcount_func</code> PL/SQL function (<code>query</code>).</p>
+
+<p>Using ChemAxon's Molecule and MolHandler classes we can count the number of atoms in a structure. Let's see the <code>GetAtomCount</code> Java class (<a href="GetAtomCount.java">GetAtomCount.java</a>):
+
+<blockquote>
+<pre>import chemaxon.util.MolHandler;
+import chemaxon.struc.Molecule;
+import chemaxon.jchem.cartridge.JChemCartModule;
+
+public class GetAtomCount implements JChemCartModule {
+
+    public Object doFunc(String[] args) throws Exception {
+	MolHandler mh = new MolHandler(args[0]);
+	return new Integer(mh.getMolecule().getAtomCount());
+    }
+}
+</pre>
+</blockquote>
+
+<p>Compile the java file and include the parent directory of the the <code>GetAtomCount.class</code> file in the JCART_XCLASSPATH environment variable before starting JChem Server. Now our new function is ready to call from PL/SQL, for example: </p>
+
+<blockquote>
+<pre>SQL&gt; select <b>getatomcount(cd_smiles)</b> from jchemtable;</pre>
+</blockquote>
+
+<p>Now makes the evaluation of the operator appearing in the <code>where</code> cluse faster.</p>
+
+<p>Open the <a href="../../../../cartridge/reg_user_def_ops.sql"><code>reg_user_def_ops.sql</code></a> file from the <code>cartridge</code> directory of the JChem package with a text editor. Insert the name of the <code>getatomcount</code> operator:</p>
+
+<blockquote>
+<pre>CREATE OR REPLACE INDEXTYPE jc_idxtype
+FOR
+-----------------------------------------
+-- START LISTING OPERATORS
+-----------------------------------------
+   <b>getatomcount(VARCHAR2),</b>
+-----------------------------------------
+-- STOP LISTING OPERATORS
+-----------------------------------------
+   jc_contains(VARCHAR2, VARCHAR2),
+   jc_equals(VARCHAR2, VARCHAR2),
+   jc_matchcount(VARCHAR2, VARCHAR2),
+   jc_dissimilarity(VARCHAR2, VARCHAR2),
+   jc_tanimoto(VARCHAR2, VARCHAR2),
+   jc_logp(VARCHAR2),
+   jc_logd(VARCHAR2, NUMBER),
+   jc_pka(VARCHAR2, VARCHAR2, NUMBER),
+   jc_tpsa(VARCHAR2),
+   jc_molweight(VARCHAR2),
+   jc_formula(VARCHAR2),
+   jc_formula_eq(VARCHAR2, VARCHAR2)
+USING jc_idxtype_im;</pre>
+</blockquote>
+
+<p>Save the file and close it. Drop all indexes (<code>drop index idx_name</code>) you've created before with the <a href="../../../../doc/dev/cartridge/index.html#index"><code>jc_idxtype</code></a> indextype. Open the edited <code>reg_user_def_ops.sql</code> file in a PL/SQL worksheet and execute it. Now create your indexes again. An index has to be created on the table on which you want to use the getatomcount operator.</p>
+
+<blockquote>
+<pre>SQL&gt; create index my_ind on jchemtable(cd_smiles) indextype is jc_idxtype;
+</blockquote>
+
+
+<p>If you've created the index on the table execute the following insert statement:
+
+<blockquote>
+<pre>SQL&gt; insert into jc_idx_udop values('<b>getatomcount</b>', '<b>GetAtomCount</b>', '', '<b>$1</b>');
+</blockquote>
+
+<p>Finally another Java class is needed to evaluate the relational operator in the <code>where</code> clause. This class has to implement the <a href="../../../../doc/dev/cartridge/cart_modul.html#JChemCartEvalModul"><code>JChemCartEvalModul</code></a> interface. The name of this class has to be: <code>GetAtomCount_eval</code>.</p>
+
+<p>The <code>eval</code> function of the class gets the value calculated by <code>GetAtomCount</code> and gets the parameters of the relational condition in the "<code>opStr</code>" String. The function has to decide whether the calculated value is appropiate to the relational condition or not. The <a href="GetAtomCount_eval.java">GetAtomCount_eval</a> class: </p>
+
+<blockquote>
+<pre>import java.util.StringTokenizer;
+import chemaxon.jchem.cartridge.JChemCartEvalModule;
+
+public class GetAtomCount_eval implements JChemCartEvalModule {
+
+    public boolean eval(Object o, String opStr) throws Exception {
+	int result = ((Integer)o).intValue();
+	boolean isOk = false; 
+
+	StringTokenizer st = new StringTokenizer(opStr, "/");
+	String start = st.nextToken();
+	String stop = st.nextToken();
+	int op = Integer.parseInt(st.nextToken());
+
+	if(stop.equals("null")) {
+	    isOk = op == 4 ? result &gt;= Integer.parseInt(start) : 
+			     result &gt; Integer.parseInt(start);
+	} else if(start.equals("null")) {
+	    isOk = op == 8 ? result &lt;= Integer.parseInt(stop) : 
+			     result &lt; Integer.parseInt(stop);
+	} else {
+	    isOk = op == 13 ? result == Integer.parseInt(start) :
+		   op == 12 ? result &lt;= Integer.parseInt(stop) &amp;&amp;
+			      result &gt;= Integer.parseInt(start) :
+		   op == 8  ? result &lt;= Integer.parseInt(stop) &amp;&amp; 
+			      result &gt; Integer.parseInt(start) :
+		   op == 4  ? result &lt; Integer.parseInt(stop) &amp;&amp; 
+			      result &gt;= Integer.parseInt(start) :
+		   result &lt; Integer.parseInt(stop) &amp;&amp; 
+		   result &gt; Integer.parseInt(start);
+	}
+	return isOk;
+    }
+}</pre>
+</blockquote>
+
+<p>
+Compile the java file and include the parent directory of the
+<code>GetAtomCount.class</code> file in the JCART_XCLASSPATH environment
+variable before starting JChem Server. The <code>getatomcount</code> operator
+is ready to evaluate faster then before if it is in the <code>where</code>
+clause.
+</p>
+
+<blockquote>
+<pre>SQL&gt; select count(*) from jchemtable where <b>getatomcount(cd_smiles)</b> &lt; 14;</pre>
+</blockquote>
+
+</body>
+</html>
+

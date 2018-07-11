@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsp:page create-session="true"
+   language="java"
+   xmlns:xsp="http://apache.org/xsp"
+   xmlns:session="http://apache.org/xsp/session/2.0" 
+   xmlns:esql="http://apache.org/cocoon/SQL/v2"
+   xmlns:xsp-formval="http://apache.org/xsp/form-validator/2.0"
+   xmlns:xsp-request="http://apache.org/xsp/request/2.0"
+>
+<xsp:structure>
+  <xsp:include>chemaxon.util.*</xsp:include>
+  <xsp:include>chemaxon.jchem.db.*</xsp:include>
+  <xsp:include>java.sql.*</xsp:include>
+</xsp:structure>
+
+  <page>
+  <xsp:logic>
+
+		        /** ------  Get from another XML ------- **/
+		    String driver = "oracle.jdbc.OracleDriver";
+		    String url = "jdbc:oracle:thin:@localhost:1521:OEMREP";
+		    String username = "scott";
+		    String password = "tiger";
+		    String sessionVarPrefix = "session1.";
+		    String structureTableName = "SCOTT.JSPEXAMPLE";
+		    String propertyTableName = "SCOTT.JCHEMPROPERTIES";
+
+    // Applet size parameters
+    int maxCols = 3;	    // Maximum number of columns 
+    int maxRows = 6;            // Maximum number of rows
+    int maxCells = maxCols*maxRows;
+    int structureWidth = 150;
+    int structureHeight = 150;
+    int cellWidth = structureWidth+110;
+    int cellHeight = structureHeight+30;
+
+    String typeString = 
+		(String)session.getAttribute(sessionVarPrefix+"query.type");
+
+    if(session.getAttribute(sessionVarPrefix+"search.action") == null) {
+	<para>Sorry, your session has expired. Please reload the page 
+    	      by selecting Reload (or Refresh), or run a new query.</para>
+    }
+
+    int pageNumber;         // the number of the page to be shown
+
+    JChemSearch searcher = (JChemSearch)
+		session.getAttribute(sessionVarPrefix+"search.searcher");
+    String action = (String)
+	session.getAttribute(sessionVarPrefix+"search.action");
+    if(action.equals("searching")) {
+    	/*
+     	 * Searching has finished. Let's
+     	 * see the first page
+     	 */
+	try {
+    	    searcher.checkException();
+	} catch(Exception e) {
+	    <error><xsp:expr>e.getMessage()</xsp:expr></error>
+	}
+    	session.setAttribute(sessionVarPrefix+"search.action","paging");
+    	pageNumber = 0;
+    } else {
+	/*
+    	 * It seems we have already visited the first page
+    	 * of the results.
+    	 * Retrieving search results from session variables.
+    	 */
+    	if(request.getParameter("pageNumber")==null)
+    	    pageNumber = 0;
+    	else
+    	    pageNumber = Integer.parseInt(request.getParameter("pageNumber"))-1;
+    	String event = (String)request.getParameter("nextState");
+    	if(event==null || event.equals("first"))
+    	    pageNumber = 0;
+    	else if(event.equals("last"))
+    	    pageNumber = 1000000;
+    	else if(event.equals("left"))
+    	    pageNumber--;
+    	else if(event.equals("right"))
+    	    pageNumber++;
+    }
+
+    int start = pageNumber * maxCells;    //the row in the result set that
+                                          //belongs to the first cell
+    int pages = (int)Math.ceil(((double)searcher.getResultCount())/maxCells);
+
+    if(start&gt;searcher.getResultCount()) {
+        pageNumber = pages-1;
+        start = pageNumber * maxCells;
+    } else if(start&lt;0) {
+	    pageNumber=0;
+	    start=0;
+    }
+    int cells = searcher.getResultCount() - start&lt;maxCells ? 
+    			    searcher.getResultCount() - start : maxCells;
+    int rows = maxCols*(cells/maxCols) == cells?
+    	    cells/maxCols : cells/maxCols + 1; 
+    int cols = cells&lt;maxCols ? cells : maxCols;
+    if(searcher.getResultCount() == 0) {
+        <para>No structures found</para>
+    } else { // There are items to display
+    	ConnectionHandler ch = (ConnectionHandler)
+			session.getAttribute(sessionVarPrefix+"ch");
+	if((ch==null)||(!ch.isConnected())) {
+    	    ch = new ConnectionHandler();
+    	    ch.setDriver(driver);
+    	    ch.setUrl(url);
+    	    ch.setLoginName(username);
+    	    ch.setPassword(password);
+    	    ch.setPropertyTable(propertyTableName);
+ 	    try {
+            	ch.connectToDatabase();
+	    } catch(Exception e) {
+		<error><xsp:expr>e.getMessage()</xsp:expr></error>
+	    }
+	    session.setAttribute(sessionVarPrefix+"ch",ch);
+        }
+        Connection con = ch.getConnection();
+	</xsp:logic>
+	<table width="100%"><tr>
+    	  <td><font face="helvetica">
+    	      Hits: <xsp:expr>searcher.getResultCount()</xsp:expr>
+	      <font size="1">
+	      <xsp:expr>searcher.isMaxResultCountReached() ? " (maximum hits reached) " : ""</xsp:expr>
+	      <xsp:expr>searcher.isMaxTimeReached()? " (maximum time reached)" : "" </xsp:expr>
+	      </font>
+	      </font>
+	    </td>
+	    <td align="right"><font face="helvetica">
+    	      Page: <xsp:expr>pageNumber+1 </xsp:expr>/<xsp:expr>pages</xsp:expr> 
+    	      </font>
+	    </td>
+    	  </tr>
+	</table>
+	<mview name="mview" align="center">
+	  <begin codebase="./marvin">
+	    <width><xsp:expr>cols*cellWidth+cols-1</xsp:expr></width>
+	    <height><xsp:expr>rows*cellHeight+rows-1</xsp:expr></height>
+	  </begin>
+	  <param>
+	    <name>rows</name>
+	    <value><xsp:expr>rows</xsp:expr></value>
+	  </param>	
+	  <param>
+	    <name>cols</name>
+	    <value><xsp:expr>cols</xsp:expr></value>
+	  </param>
+	  <param name="molbg" value="#ffffff"/>
+	  <param name="bgcolor" value="#e0e0e0"/>
+	  <param name="border" value="1"/>
+	  <param name="layout0" value=":6:2:L:0:0:1:2:w:n:0:10:M:1:0:5:1:c:n:1:10:L:1:1:1:1:nw:n:0:10:L:2:1:1:1:nw:n:0:10:L:3:1:1:1:nw:n:0:10:L:4:1:1:1:nw:n:0:10:L:5:1:1:1:nw:n:0:10"/>
+	  <param>
+	    <name>param0</name>
+	    <value>:L:10:M:<xsp:expr>structureWidth</xsp:expr>:<xsp:expr>structureHeight</xsp:expr>:L:11b:L:10:L:10:L:11b:L:10</value>
+	  </param>
+	<xsp:logic>
+	  int cellIndex = 0;
+    	  DecimalFormat form = new DecimalFormat("##.##");
+	  String name = null;
+	  String dbMolfile = "c1cccc1";
+	  String formula = null;
+	  float molWeight = 0;
+	  int stock = 0;
+	  for(int i=start;i&lt;start+cells;i++) {
+	    int id = searcher.getResult(i);
+	    </xsp:logic>
+    	    <esql:connection>
+	    <esql:driver transactions="no"><xsp:expr>driver</xsp:expr></esql:driver>
+	    <esql:dburl><xsp:expr>url</xsp:expr></esql:dburl>
+	    <esql:username><xsp:expr>username</xsp:expr></esql:username>
+	    <esql:password><xsp:expr>password</xsp:expr></esql:password>
+	    <esql:execute-query>
+              <esql:query>select <xsp:expr>structureTableName</xsp:expr>.cd_id, 
+			<xsp:expr>structureTableName</xsp:expr>.cd_structure, 
+			<xsp:expr>structureTableName</xsp:expr>.cd_formula, 
+			<xsp:expr>structureTableName</xsp:expr>.cd_molweight, 
+			     <xsp:expr>structureTableName</xsp:expr>.name, 
+			     <xsp:expr>structureTableName</xsp:expr>.stock  
+			     from <xsp:expr>structureTableName</xsp:expr> 
+			     where 
+			     <xsp:expr>structureTableName</xsp:expr>.cd_id = 
+			     <xsp:expr>id</xsp:expr></esql:query>
+	      <esql:results>
+	        <esql:row-results>
+	      	  <xsp:logic>
+	   	      dbMolfile = <esql:get-ascii column="cd_structure"/>;
+	              formula = <esql:get-string column="cd_formula"/>;
+                      molWeight = <esql:get-float column="cd_molweight"/>;
+                      name = <esql:get-string column="name"/>;
+                      stock = <esql:get-int column="stock"/>;
+	          </xsp:logic>
+	        </esql:row-results>
+	      </esql:results>
+	        <esql:error-results>
+            	    <error><esql:get-message/></error>
+            	</esql:error-results>
+            </esql:execute-query>
+            </esql:connection>
+	      <param>
+	        <name>cell<xsp:expr>cellIndex</xsp:expr></name>
+	        <value>|<xsp:expr>name==null? "" : name</xsp:expr>|<xsp:expr>HTMLTools.convertForJavaScript(dbMolfile)</xsp:expr>|ID: <xsp:expr>id</xsp:expr>|<xsp:expr>formula</xsp:expr>|MW: <xsp:expr>form.format(molWeight)</xsp:expr>|<xsp:expr>stock</xsp:expr> mg|<xsp:expr>(typeString.equals("Similarity")? ("SIM: " + form.format(searcher.getSimilarity(i))) : "") </xsp:expr></value>
+	      </param>
+	    <xsp:logic>
+	    cellIndex++;
+          }
+        </xsp:logic>
+      </mview>
+    <xsp:logic>
+      }
+    </xsp:logic>
+  </page>
+</xsp:page>

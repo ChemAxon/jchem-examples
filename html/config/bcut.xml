@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BCUTConfiguration Version="" schemaLocation="">
+  
+    <BCUTDescriptors>
+        
+        <BCUT Type="Burden" Lowest="0" Highest="2" />
+
+    </BCUTDescriptors>
+
+    <ScreeningConfiguration>
+        <ParametrizedMetrics>
+            <ParametrizedMetric Name="Euclidean" ActiveFamily="Generic"
+                Metric="Euclidean" Threshold="1500" />
+        </ParametrizedMetrics>
+    </ScreeningConfiguration>
+
+
+</BCUTConfiguration>

@@ -1,0 +1,15 @@
+CN(C)c1ccc(C=O):cc1
+Oc1cccc(C=O):c1
+Fc1ccc2OCC(C=O)=C(Cl)c2c1
+CCN(CCC#N)c1ccc(C=O):c(C):c1
+FC(F)(F)c1cc(C=O):ccc1Cl
+Oc1ccc(F):cc1C=O
+O=C[C@H]1[C@@H](C[C@@H]2OC(=O)C[C@H]12)OC(=O)c3ccccc3
+Clc1ccc2OC=C(C=O)C(=O)c2c1
+CN1N(c2ccccc2)C(=O)C(C=O)=C1C
+CC(=C/CO)\C=C\C=C(C)\C=C\C1=C(C)CCCC1(C)C
+CC(=O)c1cc(Br):cc(Br):c1O
+CC(C)(C)c1ccc(O):c(c1)N(=O)=O
+CC1(C)Cc2cccc(O):c2O1
+CCCCC(CC)COC(=O)c1ccccc1O
+C[C@H](O)c1ccccc1Br

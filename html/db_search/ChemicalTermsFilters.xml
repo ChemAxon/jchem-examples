@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ChemicalTermsFilterConfiguration>
+
+	<Filter name="Lipinski's rule of five">
+		<![CDATA[						
+		(mass() <= 500) &&
+		(logP() <= 5) &&
+		(donorCount() <= 5) &&
+		(acceptorCount() <= 10);
+		]]>
+	</Filter>
+	<Filter name="Veber filter">
+		<![CDATA[						
+		(rotatableBondCount() <= 10) &&
+		(PSA() <= 140);
+		]]>
+	</Filter>	
+	<Filter name="Lead-likeness">
+		<![CDATA[
+		(mass() <= 450) &&
+		(logD("7.4") >= -4) && (logD("7.4") <= 4) &&
+		(ringCount() <= 4) &&
+		(rotatableBondCount() <= 10) &&
+		(donorCount() <= 5) &&
+		(acceptorCount() <= 8);
+		]]>
+	</Filter>	
+	<Filter name="Bioavailability">
+		<![CDATA[
+		((mass() <= 500) +
+		(logP() <= 5) +
+		(donorCount() <= 5) +
+		(acceptorCount() <= 10) +
+		(rotatableBondCount() <= 10) +
+		(PSA() <= 200) +
+		(fusedAromaticRingCount() <= 5)) >= 6;
+		]]>
+	</Filter>
+	<Filter name="Ghose filter">
+		<![CDATA[
+		((mass() >= 160) && (mass() <= 480) &&
+		(atomCount() >= 20) && (atomCount() <= 70) &&
+		(logP() >= -0.4) && (logP() <= 5.6) &&
+		(refractivity() >= 40) && (refractivity() <= 130));
+		]]>
+	</Filter>
+	<Filter name="Muegge filter">
+		<![CDATA[
+		(mass() >= 200) && (mass() <= 600) &&
+		(ringCount() <= 7) &&
+		(atomCount("6") >= 5) && ((atomCount() - atomCount("6") - atomCount("1")) >= 2) &&
+		(rotatableBondCount() <= 15)  &&
+		(donorCount() <= 5) &&
+		(acceptorCount() <= 10) &&
+		(logP() >= -2) && (logP() <= 5) &&
+		(PSA() <= 150);
+		]]>
+	</Filter>
+	<Filter name="Rule of 3">
+                <![CDATA[
+                (mass() <= 300) &&
+                (logP() <= 3) &&
+                (donorCount() <= 3) &&
+                (acceptorCount() <= 3) &&
+                (rotatableBondCount() <= 3) &&
+                (topologicalPolarSurfaceArea() <= 60);
+                ]]>
+        </Filter>
+</ChemicalTermsFilterConfiguration>   
+

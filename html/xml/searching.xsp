@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!-- -*- sgml -*- -->
+
+<xsp:page
+   language="java"
+   xmlns:xsp="http://apache.org/xsp"
+   xmlns:session="http://apache.org/xsp/session/2.0" 
+   xmlns:xsp-formval="http://apache.org/xsp/form-validator/2.0"
+   xmlns:xsp-request="http://apache.org/xsp/request/2.0"
+   xmlns:esql="http://apache.org/cocoon/SQL/v2"
+   xmlns:xsp-search="http://www.jchem.com/xsp/searching/2.0"
+>
+
+<xsp:structure>
+  <xsp:include>chemaxon.util.*</xsp:include>
+  <xsp:include>chemaxon.jchem.db.*</xsp:include>
+  <xsp:include>java.sql.*</xsp:include>
+</xsp:structure>
+
+<xsp:logic>
+private String createFilterTable(Session session, String sessionVarPrefix, 
+        ConnectionHandler ch, String structureTableName) 
+        throws SQLException, NumberFormatException, org.xml.sax.SAXException
+{
+    int rnd = (new java.util.Random()).nextInt();
+    rnd = rnd&lt;0 ? -rnd : rnd;
+    String filterTableName = "tmp" + rnd;
+    String sql = "create table "+filterTableName+
+		 " (cd_id int not null primary key)";
+    <esql:connection>
+	<esql:driver transactions="no">oracle.jdbc.OracleDriver</esql:driver>
+	<esql:dburl>jdbc:oracle:thin:@localhost:1521:OEMREP</esql:dburl>
+	<esql:username>SCOTT</esql:username>
+	<esql:password>TIGER</esql:password>
+	<esql:execute-query>
+                <esql:query><xsp:expr>sql</xsp:expr></esql:query>
+	        <!--esql:result ...>
+		<esql:error-results>
+            	    <error><esql:get-message/></error>
+            	</esql:error-results-->
+        </esql:execute-query>
+    </esql:connection>
+
+    StringBuffer sqlBuff = new StringBuffer("INSERT INTO " +
+                filterTableName + " (cd_id) " +
+                "SELECT cd_id FROM " + structureTableName +
+                " WHERE ");
+
+    int paramsNumber = ((Integer)session.getAttribute(
+		    sessionVarPrefix+"queryParamsNumber")).intValue();
+
+    for(int i=0;i&lt;paramsNumber;i++) {
+	String paramName = (String)session.getAttribute(
+		    sessionVarPrefix+"qureyParam"+i+"name");
+	String relation = (String)session.getAttribute(
+		    sessionVarPrefix+"qureyParam"+i+"relation");
+	String value = (String)session.getAttribute(
+		    sessionVarPrefix+"qureyParam"+i+"value");
+	sqlBuff.append(paramName+relation+value);
+	if(i&lt;paramsNumber-1) {
+	    sqlBuff.append(" AND ");
+	}
+    }
+
+    <esql:connection>
+	<esql:driver transactions="no">oracle.jdbc.OracleDriver</esql:driver>
+	<esql:dburl>jdbc:oracle:thin:@localhost:1521:OEMREP</esql:dburl>
+	<esql:username>SCOTT</esql:username>
+	<esql:password>TIGER</esql:password>
+	<esql:execute-query>
+                <esql:query><xsp:expr>sqlBuff.toString()</xsp:expr></esql:query>
+	        <!--esql:result ...>
+		<esql:error-results>
+            	    <error><esql:get-message/></error>
+            	</esql:error-results-->
+        </esql:execute-query>
+    </esql:connection>
+	
+    return filterTableName;
+}
+</xsp:logic>
+
+<!--xsp:logicsheet location="logicsheets/searching.xsl"/-->
+  
+  <page>
+    <title>Searching</title>
+    <xsp:logic>
+	int visit = 0;
+
+	        /** ------  Get from another xml  -----  **/
+		    String driver = "oracle.jdbc.OracleDriver";
+		    String url = "jdbc:oracle:thin:@localhost:1521:OEMREP";
+		    String username = "scott";
+		    String password = "tiger";
+		    String sessionVarPrefix = "session1.";
+		    String structureTableName = "SCOTT.JSPEXAMPLE";
+		    String propertyTableName = "SCOTT.JCHEMPROPERTIES";
+	    	
+	JChemSearch searcher = (JChemSearch)session.getAttribute(
+		sessionVarPrefix+"search.searcher");
+        String action = (String)session.getAttribute(sessionVarPrefix+
+		"search.action");
+        if (action.equals("starting_search")) {
+
+	    session.setAttribute(sessionVarPrefix+"search.action", "searching");
+	    session.setAttribute(sessionVarPrefix+"search.visit", 
+		    new Integer(0));
+
+    	    <!-- ** Searching molecules ** -->
+	    
+	    ConnectionHandler ch = 
+		(ConnectionHandler)session.getAttribute(sessionVarPrefix+"ch");
+	    if(ch == null) {
+    	    	ch = new ConnectionHandler();
+    	    	ch.setDriver(driver);
+    	    	ch.setUrl(url);
+    	    	ch.setLoginName(username);
+    	    	ch.setPassword(password);
+    	    	ch.setPropertyTable(propertyTableName);
+		try{
+            	    ch.connectToDatabase();
+		} catch(Exception e) {
+		    <error><xsp:expr>"error1:"+e.getMessage()</xsp:expr></error>
+		}
+		session.setAttribute(sessionVarPrefix+"ch",ch);
+	    } else if(!ch.isConnected()) {
+		try {
+	    	    ch.connectToDatabase();
+	  	} catch(Exception e) {
+
+		    <error><xsp:expr>"error2 "+e.getMessage()</xsp:expr></error>
+		}
+   	    }
+
+	    int paramsNumber = ((Integer)session.getAttribute(
+		    sessionVarPrefix+"queryParamsNumber")).intValue();
+
+<!--/xsp:logic>pn: <xsp:expr>paramsNumber</xsp:expr> , <xsp:logic>
+String paramNam1e = (String)session.getAttribute(
+		    sessionVarPrefix+"qureyParam0name");
+</xsp:logic>pn: <xsp:expr>paramNam1e</xsp:expr><xsp:logic-->
+
+	    String filterTableName = null;
+
+	    try {
+	        filterTableName = (paramsNumber != 0 ? 
+	    	    createFilterTable(session, sessionVarPrefix, 
+                    ch, structureTableName)
+        	    : null);
+	    }catch(Exception e){
+		<error><xsp:expr>"error3 "+e.getMessage()</xsp:expr></error>
+	    }
+
+	    String molfile = 
+		(String)session.getAttribute(sessionVarPrefix+"query.molfile");
+	    String typeString = 
+		(String)session.getAttribute(sessionVarPrefix+"query.type");
+  	    int maxResultCount = Integer.parseInt(
+		(String)session.getAttribute(sessionVarPrefix+"query.maxResultCount"));
+	    float similarityThreshold = Float.valueOf(
+		(String)session.getAttribute(sessionVarPrefix+"query.similarityThreshold")).floatValue();
+	    int searchType=JChemSearch.SUBSTRUCTURE;
+	    if(typeString.equals("Screening"))
+	       	searchType = JChemSearch.NO_ABAS;
+	    else if(typeString.equals("Similarity"))
+	      	searchType = JChemSearch.SIMILARITY;
+	    else if(typeString.equals("Full"))
+	      	searchType = JChemSearch.FULL;
+
+<!--/xsp:logic>
+<xsp:expr>ch.getDriver()</xsp:expr><br></br>
+<xsp:expr>ch.getUrl()</xsp:expr><br></br>
+<xsp:expr>ch.getLoginName()</xsp:expr><br></br>
+<xsp:expr>ch.getPassword()</xsp:expr><br></br>
+<xsp:expr>ch.getPropertyTable()</xsp:expr><br></br><br></br>
+<xsp:expr>molfile</xsp:expr><br></br>
+<xsp:expr>searchType</xsp:expr><br></br>
+<xsp:expr>structureTableName</xsp:expr><br></br>
+<xsp:expr>maxResultCount</xsp:expr><br></br>
+<xsp:expr>similarityThreshold</xsp:expr><br></br>
+<xsp:expr>filterTableName</xsp:expr>
+<xsp:logic-->
+	    try {
+	   	searcher = new JChemSearch();
+    	   	searcher.setConnectionHandler(ch); 
+    	   	searcher.setQueryStructure(molfile==null? "" : molfile); 
+    	   	searcher.setSearchType(searchType);
+    	   	searcher.setStructureTable(structureTableName); 
+    	   	searcher.setMaxResultCount(maxResultCount); 
+    	   	searcher.setRunMode(JChemSearch.RUN_MODE_ASYNCH_COMPLETE);
+    	   	searcher.setSimilarityThreshold(similarityThreshold);
+    	   	searcher.setFilterTable(filterTableName);
+    	   	searcher.setDeleteFilterTableWhenReady(true); 
+    	   	searcher.setStructureCaching(true);
+    	   	searcher.setInfoToStdError(true);
+    	   	searcher.run(); // starts searching thread
+	    } catch(Exception e) {
+	        <error><xsp:expr>"error4 "+e.toString()</xsp:expr></error>
+	    }
+    	    session.setAttribute(sessionVarPrefix+"search.searcher", searcher);
+
+	}
+	if(searcher.isRunning()) {
+	    visit = ((Integer)session.getAttribute(
+		    sessionVarPrefix+"search.visit")).intValue()+1;
+    	    session.setAttribute(
+		    sessionVarPrefix+"search.visit", new Integer(visit));
+
+	    <para>Please wait. Searching.....</para>
+	    <para><xsp:expr>searcher.getProgressMessage()</xsp:expr></para>
+	    <para>Hits: <xsp:expr>searcher.getResultCount()</xsp:expr></para>
+	    <para>Checking: <xsp:expr>visit</xsp:expr></para>
+	    	   
+	    </xsp:logic>
+	    <script LANGUAGE="JavaScript">
+	    <![CDATA[
+    		<!--
+    		window.setTimeout(
+            		'window.location.reload(false)', 
+            		1000*]]><xsp:expr>visit&lt;10? 5*(1+(visit-1)*0.5) : 30</xsp:expr><![CDATA[);
+    		//-->
+	    ]]>
+	    </script>
+	    <xsp:logic>
+	} else {
+	    // structure searching has stopped
+	    </xsp:logic>
+	    <script LANGUAGE="JavaScript">
+	    <![CDATA[
+    		<!--
+            	    window.location.replace("searchresults.html");
+    		//-->
+	    ]]>
+	    </script>
+	    <xsp:logic>
+	}
+    </xsp:logic>
+   </page>
+</xsp:page>

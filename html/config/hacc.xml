@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ScalarDescriptorConfiguration Version="" schemaLocation="">
+  
+    <ScalarDescriptors>
+        
+        <ScalarDescriptor Name="HBond" pH="7.4" AtomType='Acceptor'/>
+    </ScalarDescriptors>
+
+    <StandardizerConfiguration Version ="0.1">
+	<Actions>
+  	    <Removal ID="k" Method="keepLargest" Measure="molMass"/>
+            <Action ID="aromatize" Act="aromatize"/>
+            <Reaction ID="enamine" Structure="[H:4][N:3][C:1]=[C:2]>>[H:4][C:2][CH:1]=[N:3]"/>
+            <Reaction ID="counter" Structure="[Cl-]>>" Exact="true"/>
+	</Actions>
+    </StandardizerConfiguration>
+
+    <ScreeningConfiguration>
+        <ParametrizedMetrics>
+            <ParametrizedMetric Name="Tanimoto" ActiveFamily="Generic"
+                Metric="Tanimoto" Threshold="0.2"/>
+            <ParametrizedMetric Name="Euclidean" ActiveFamily="Generic"
+                Metric="Euclidean" Threshold="15" />
+        </ParametrizedMetrics>
+    </ScreeningConfiguration>
+
+
+</ScalarDescriptorConfiguration>

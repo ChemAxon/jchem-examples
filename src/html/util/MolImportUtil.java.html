@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>util.MolImportUtil (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">MolImportUtil.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1 </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> util;
+<FONT ID="LN">2 </FONT><A NAME="2"></A>
+<FONT ID="LN">3 </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> java.io.IOException;
+<FONT ID="LN">4 </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> java.util.ArrayList;
+<FONT ID="LN">5 </FONT><A NAME="5"></A><FONT ID="Import">import</FONT> java.util.List;
+<FONT ID="LN">6 </FONT><A NAME="6"></A>
+<FONT ID="LN">7 </FONT><A NAME="7"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolExporter.html">chemaxon.formats.MolExporter</A>;
+<FONT ID="LN">8 </FONT><A NAME="8"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">chemaxon.formats.MolFormatException</A>;
+<FONT ID="LN">9 </FONT><A NAME="9"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">chemaxon.formats.MolImporter</A>;
+<FONT ID="LN">10</FONT><A NAME="10"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/Importer.html">chemaxon.jchem.db.Importer</A>;
+<FONT ID="LN">11</FONT><A NAME="11"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/TransferException.html">chemaxon.jchem.db.TransferException</A>;
+<FONT ID="LN">12</FONT><A NAME="12"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/UpdateHandler.html">chemaxon.jchem.db.UpdateHandler</A>;
+<FONT ID="LN">13</FONT><A NAME="13"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">chemaxon.struc.Molecule</A>;
+<FONT ID="LN">14</FONT><A NAME="14"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">chemaxon.util.ConnectionHandler</A>;
+<FONT ID="LN">15</FONT><A NAME="15"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/MolHandler.html">chemaxon.util.MolHandler</A>;
+<FONT ID="LN">16</FONT><A NAME="16"></A>
+<FONT ID="LN">17</FONT><A NAME="17"></A><FONT ID="FormalComment">/**
+<FONT ID="LN">18</FONT><A NAME="18"></A> * Example codes for importing molecules from molecule files or strings into {@link Molecule}
+<FONT ID="LN">19</FONT><A NAME="19"></A> * objects or database tables.
+<FONT ID="LN">20</FONT><A NAME="20"></A> * &lt;p&gt;
+<FONT ID="LN">21</FONT><A NAME="21"></A> * When structures are stored in a file, we can import them into Molecule objects using
+<FONT ID="LN">22</FONT><A NAME="22"></A> * {@link MolImporter} (e.g. see importMol(), method) or into database using {@link Importer}
+<FONT ID="LN">23</FONT><A NAME="23"></A> * (see databaseImport() method).
+<FONT ID="LN">24</FONT><A NAME="24"></A> * &lt;p&gt;
+<FONT ID="LN">25</FONT><A NAME="25"></A> * If we know only string representation of a structure (SMILES, MDL Molfile, ...), we can
+<FONT ID="LN">26</FONT><A NAME="26"></A> * import it into a Molecule object using {@link MolImporter} (see importMolFromString()
+<FONT ID="LN">27</FONT><A NAME="27"></A> * method). importMolFromStringAsQuery() method is useful to import molecules from SMARTS string
+<FONT ID="LN">28</FONT><A NAME="28"></A> * representation (instead of SMILES).
+<FONT ID="LN">29</FONT><A NAME="29"></A> * 
+<FONT ID="LN">30</FONT><A NAME="30"></A> * @author JChem Base team, ChemAxon Ltd.
+<FONT ID="LN">31</FONT><A NAME="31"></A> */</FONT>
+<FONT ID="LN">32</FONT><A NAME="32"></A><FONT ID="Public">public</FONT> <FONT ID="Final">final</FONT> <FONT ID="Class">class</FONT> MolImportUtil {
+<FONT ID="LN">33</FONT><A NAME="33"></A>
+<FONT ID="LN">34</FONT><A NAME="34"></A>    <FONT ID="FormalComment">/***
+<FONT ID="LN">35</FONT><A NAME="35"></A>     * Imports a molecule from a file given by full path.
+<FONT ID="LN">36</FONT><A NAME="36"></A>     * 
+<FONT ID="LN">37</FONT><A NAME="37"></A>     * @param fullPath full path name of file
+<FONT ID="LN">38</FONT><A NAME="38"></A>     * @return first molecule stored in the given file
+<FONT ID="LN">39</FONT><A NAME="39"></A>     * @throws IllegalArgumentException if an error occurs during import
+<FONT ID="LN">40</FONT><A NAME="40"></A>     */</FONT>
+<FONT ID="LN">41</FONT><A NAME="41"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A> importMol(String fullPath) {
+<FONT ID="LN">42</FONT><A NAME="42"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">43</FONT><A NAME="43"></A>            <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">MolImporter</A> mi = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">MolImporter</A>(fullPath);
+<FONT ID="LN">44</FONT><A NAME="44"></A>            <FONT ID="Try">try</FONT> {
+<FONT ID="LN">45</FONT><A NAME="45"></A>                <FONT ID="Return">return</FONT> mi.read();
+<FONT ID="LN">46</FONT><A NAME="46"></A>            } <FONT ID="Finally">finally</FONT> {
+<FONT ID="LN">47</FONT><A NAME="47"></A>                mi.close();
+<FONT ID="LN">48</FONT><A NAME="48"></A>            }
+<FONT ID="LN">49</FONT><A NAME="49"></A>        } <FONT ID="Catch">catch</FONT> (<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">MolFormatException</A> e) {
+<FONT ID="LN">50</FONT><A NAME="50"></A>            <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> IllegalArgumentException(<FONT ID="StringLiteral">"Invalid molecule format"</FONT>, e);
+<FONT ID="LN">51</FONT><A NAME="51"></A>        } <FONT ID="Catch">catch</FONT> (IOException e) {
+<FONT ID="LN">52</FONT><A NAME="52"></A>            <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> IllegalArgumentException(<FONT ID="StringLiteral">"Error reading input file"</FONT>, e);
+<FONT ID="LN">53</FONT><A NAME="53"></A>        }
+<FONT ID="LN">54</FONT><A NAME="54"></A>    }
+<FONT ID="LN">55</FONT><A NAME="55"></A>
+<FONT ID="LN">56</FONT><A NAME="56"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">57</FONT><A NAME="57"></A>     * Imports a molecule given by its SMARTS representation.
+<FONT ID="LN">58</FONT><A NAME="58"></A>     * 
+<FONT ID="LN">59</FONT><A NAME="59"></A>     * @param molString molecule string (SMARTS)
+<FONT ID="LN">60</FONT><A NAME="60"></A>     * @return the molecule object
+<FONT ID="LN">61</FONT><A NAME="61"></A>     * @throws IllegalArgumentException if an error occurs during import
+<FONT ID="LN">62</FONT><A NAME="62"></A>     */</FONT>
+<FONT ID="LN">63</FONT><A NAME="63"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A> importMolFromStringAsQuery(String molString) {
+<FONT ID="LN">64</FONT><A NAME="64"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">65</FONT><A NAME="65"></A>            <FONT ID="SingleLineComment">// If queryMode (second parameter) is set true, the input will be interpreted
+<FONT ID="LN">66</FONT><A NAME="66"></A></FONT>            <FONT ID="SingleLineComment">// as SMARTS. If SMILES import is needed, set queryMode to false (default).
+<FONT ID="LN">67</FONT><A NAME="67"></A></FONT>            <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/MolHandler.html">MolHandler</A> mh = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/MolHandler.html">MolHandler</A>(molString, <FONT ID="True">true</FONT>);
+<FONT ID="LN">68</FONT><A NAME="68"></A>            <FONT ID="Return">return</FONT> mh.getMolecule();
+<FONT ID="LN">69</FONT><A NAME="69"></A>        } <FONT ID="Catch">catch</FONT> (<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">MolFormatException</A> e) {
+<FONT ID="LN">70</FONT><A NAME="70"></A>            <FONT ID="Throw">throw</FONT> <FONT ID="New">new</FONT> IllegalArgumentException(<FONT ID="StringLiteral">"Invalid molecule format"</FONT>, e);
+<FONT ID="LN">71</FONT><A NAME="71"></A>        }
+<FONT ID="LN">72</FONT><A NAME="72"></A>    }
+<FONT ID="LN">73</FONT><A NAME="73"></A>
+<FONT ID="LN">74</FONT><A NAME="74"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">75</FONT><A NAME="75"></A>     * Imports the content of an input molecule file to a specified structure table in a
+<FONT ID="LN">76</FONT><A NAME="76"></A>     * database.
+<FONT ID="LN">77</FONT><A NAME="77"></A>     * 
+<FONT ID="LN">78</FONT><A NAME="78"></A>     * @param inputFile full path of input file
+<FONT ID="LN">79</FONT><A NAME="79"></A>     * @param connHandler open connection handler
+<FONT ID="LN">80</FONT><A NAME="80"></A>     * @param tableName structure table name
+<FONT ID="LN">81</FONT><A NAME="81"></A>     * @throws TransferException if an error occurs during import
+<FONT ID="LN">82</FONT><A NAME="82"></A>     */</FONT>
+<FONT ID="LN">83</FONT><A NAME="83"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> databaseImport(String inputFile, <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">ConnectionHandler</A> connHandler,
+<FONT ID="LN">84</FONT><A NAME="84"></A>            String tableName) <FONT ID="Throws">throws</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/TransferException.html">TransferException</A> {
+<FONT ID="LN">85</FONT><A NAME="85"></A>
+<FONT ID="LN">86</FONT><A NAME="86"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">Importer</A> importer = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">Importer</A>();
+<FONT ID="LN">87</FONT><A NAME="87"></A>
+<FONT ID="LN">88</FONT><A NAME="88"></A>        importer.setInput(inputFile);
+<FONT ID="LN">89</FONT><A NAME="89"></A>        importer.setConnectionHandler(connHandler);
+<FONT ID="LN">90</FONT><A NAME="90"></A>        importer.setTableName(tableName);
+<FONT ID="LN">92</FONT><A NAME="92"></A>        importer.setHaltOnError(<FONT ID="False">false</FONT>);
+<FONT ID="LN">93</FONT><A NAME="93"></A>        <FONT ID="SingleLineComment">// Checking duplicates may slow down import!
+<FONT ID="LN">94</FONT><A NAME="94"></A></FONT>        importer.setDuplicateImportAllowed(UpdateHandler.DUPLICATE_FILTERING_OFF);
+<FONT ID="LN">95</FONT><A NAME="95"></A>
+<FONT ID="LN">96</FONT><A NAME="96"></A>        <FONT ID="SingleLineComment">// Gather information about file
+<FONT ID="LN">97</FONT><A NAME="97"></A></FONT>        importer.init();
+<FONT ID="LN">98</FONT><A NAME="98"></A>
+<FONT ID="LN">99</FONT><A NAME="99"></A>        <FONT ID="SingleLineComment">// Import molecules into database table
+<FONT ID="LN">00</FONT><A NAME="100"></A></FONT>        importer.importMols();
+<FONT ID="LN">01</FONT><A NAME="101"></A>    }
+<FONT ID="LN">02</FONT><A NAME="102"></A>
+<FONT ID="LN">03</FONT><A NAME="103"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">04</FONT><A NAME="104"></A>     * Imports a single input molecule object to a specified structure table in a database.
+<FONT ID="LN">05</FONT><A NAME="105"></A>     * 
+<FONT ID="LN">06</FONT><A NAME="106"></A>     * @param mol the molecule to import
+<FONT ID="LN">07</FONT><A NAME="107"></A>     * @param connHandler open connection handler
+<FONT ID="LN">08</FONT><A NAME="108"></A>     * @param tableName structure table name
+<FONT ID="LN">09</FONT><A NAME="109"></A>     * @throws Exception if an error occurs during import
+<FONT ID="LN">10</FONT><A NAME="110"></A>     */</FONT>
+<FONT ID="LN">11</FONT><A NAME="111"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> databaseImportFromMolObject(<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A> mol, <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">ConnectionHandler</A> connHandler,
+<FONT ID="LN">12</FONT><A NAME="112"></A>            String tableName) <FONT ID="Throws">throws</FONT> Exception {
+<FONT ID="LN">13</FONT><A NAME="113"></A>
+<FONT ID="LN">14</FONT><A NAME="114"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/UpdateHandler.html">UpdateHandler</A> uh =
+<FONT ID="LN">15</FONT><A NAME="115"></A>                <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/UpdateHandler.html">UpdateHandler</A>(connHandler, UpdateHandler.INSERT, tableName, <FONT ID="Null">null</FONT>);
+<FONT ID="LN">16</FONT><A NAME="116"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">17</FONT><A NAME="117"></A>            <FONT ID="SingleLineComment">// The molecule has to be converted to one of the available formats
+<FONT ID="LN">18</FONT><A NAME="118"></A></FONT>            uh.setStructure(MolExporter.exportToFormat(mol, <FONT ID="StringLiteral">"mrv"</FONT>));
+<FONT ID="LN">19</FONT><A NAME="119"></A>            uh.execute();
+<FONT ID="LN">20</FONT><A NAME="120"></A>        } <FONT ID="Finally">finally</FONT> {
+<FONT ID="LN">21</FONT><A NAME="121"></A>            uh.close();
+<FONT ID="LN">22</FONT><A NAME="122"></A>        }
+<FONT ID="LN">23</FONT><A NAME="123"></A>
+<FONT ID="LN">24</FONT><A NAME="124"></A>    }
+<FONT ID="LN">25</FONT><A NAME="125"></A>
+<FONT ID="LN">26</FONT><A NAME="126"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">27</FONT><A NAME="127"></A>     * Imports the content of an input molecule file to a list of Molecule objects.
+<FONT ID="LN">28</FONT><A NAME="128"></A>     * 
+<FONT ID="LN">29</FONT><A NAME="129"></A>     * @param inputFile full path of input file
+<FONT ID="LN">30</FONT><A NAME="130"></A>     * @throws IOException if I/O error occurs during import
+<FONT ID="LN">31</FONT><A NAME="131"></A>     * @throws MolFormatException if the input file contains erroneous structures
+<FONT ID="LN">32</FONT><A NAME="132"></A>     */</FONT>
+<FONT ID="LN">33</FONT><A NAME="133"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> List&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt; moleculeListImport(String inputFile)
+<FONT ID="LN">34</FONT><A NAME="134"></A>            <FONT ID="Throws">throws</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolFormatException.html">MolFormatException</A>, IOException {
+<FONT ID="LN">35</FONT><A NAME="135"></A>
+<FONT ID="LN">36</FONT><A NAME="136"></A>        List&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt; molList = <FONT ID="New">new</FONT> ArrayList&lt;<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A>&gt;();
+<FONT ID="LN">37</FONT><A NAME="137"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">MolImporter</A> imp = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/formats/MolImporter.html">MolImporter</A>(inputFile);
+<FONT ID="LN">38</FONT><A NAME="138"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">39</FONT><A NAME="139"></A>            <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/struc/Molecule.html">Molecule</A> mol;
+<FONT ID="LN">40</FONT><A NAME="140"></A>            <FONT ID="While">while</FONT> ((mol = imp.read()) != <FONT ID="Null">null</FONT>) {
+<FONT ID="LN">41</FONT><A NAME="141"></A>                molList.add(mol);
+<FONT ID="LN">42</FONT><A NAME="142"></A>            }
+<FONT ID="LN">43</FONT><A NAME="143"></A>        } <FONT ID="Finally">finally</FONT> {
+<FONT ID="LN">44</FONT><A NAME="144"></A>            imp.close();
+<FONT ID="LN">45</FONT><A NAME="145"></A>        }
+<FONT ID="LN">46</FONT><A NAME="146"></A>
+<FONT ID="LN">47</FONT><A NAME="147"></A>        <FONT ID="Return">return</FONT> molList;
+<FONT ID="LN">48</FONT><A NAME="148"></A>    }
+<FONT ID="LN">49</FONT><A NAME="149"></A>
+<FONT ID="LN">50</FONT><A NAME="150"></A>}
+<FONT ID="LN">51</FONT><A NAME="151"></A></pre>
+</BODY>
+</HTML>

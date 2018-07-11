@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../stylesheet.css" TITLE="Style">
+<META NAME="GENERATOR" CONTENT="Java2HTML Version 1.5">
+<TITLE>search.db.DatabaseSearchExample (Java2HTML)</TITLE>
+</HEAD>
+<BODY><TABLE id="Header" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2" width="33%">&nbsp;</td>
+<td align="center" colspan="2" width="33%">
+<font size="4">DatabaseSearchExample.java</font>
+</td>
+<td align="right" colspan="2" width="33%">&nbsp;</td>
+</tr>
+</TABLE>
+<pre ID="Classes">
+<FONT ID="LN">1 </FONT><A NAME="1"></A><FONT ID="Package">package</FONT> search.db;
+<FONT ID="LN">2 </FONT><A NAME="2"></A>
+<FONT ID="LN">3 </FONT><A NAME="3"></A><FONT ID="Import">import</FONT> <A HREF="../../util/ConnectionUtil.java.html">util.ConnectionUtil</A>;
+<FONT ID="LN">4 </FONT><A NAME="4"></A><FONT ID="Import">import</FONT> <A HREF="../../util/SearchUtil.java.html">util.SearchUtil</A>;
+<FONT ID="LN">5 </FONT><A NAME="5"></A><FONT ID="Import">import</FONT> <A HREF="../../util/TableOperations.java.html">util.TableOperations</A>;
+<FONT ID="LN">6 </FONT><A NAME="6"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/JChemSearch.html">chemaxon.jchem.db.JChemSearch</A>;
+<FONT ID="LN">7 </FONT><A NAME="7"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/SearchConstants.html">chemaxon.sss.SearchConstants</A>;
+<FONT ID="LN">8 </FONT><A NAME="8"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/formula/FormulaSearch.html">chemaxon.sss.formula.FormulaSearch</A>;
+<FONT ID="LN">9 </FONT><A NAME="9"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/JChemSearchOptions.html">chemaxon.sss.search.JChemSearchOptions</A>;
+<FONT ID="LN">10</FONT><A NAME="10"></A><FONT ID="Import">import</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">chemaxon.util.ConnectionHandler</A>;
+<FONT ID="LN">11</FONT><A NAME="11"></A>
+<FONT ID="LN">12</FONT><A NAME="12"></A><FONT ID="FormalComment">/**
+<FONT ID="LN">13</FONT><A NAME="13"></A> * Example code for searching in database.
+<FONT ID="LN">14</FONT><A NAME="14"></A> * 
+<FONT ID="LN">15</FONT><A NAME="15"></A> * @author JChem Base team, ChemAxon Ltd.
+<FONT ID="LN">16</FONT><A NAME="16"></A> */</FONT>
+<FONT ID="LN">17</FONT><A NAME="17"></A><FONT ID="Public">public</FONT> <FONT ID="Final">final</FONT> <FONT ID="Class">class</FONT> DatabaseSearchExample {
+<FONT ID="LN">18</FONT><A NAME="18"></A>
+<FONT ID="LN">19</FONT><A NAME="19"></A>    <FONT ID="Private">private</FONT> <FONT ID="Static">static</FONT> <FONT ID="Final">final</FONT> String TABLE_NAME = <FONT ID="StringLiteral">"demo"</FONT>;
+<FONT ID="LN">20</FONT><A NAME="20"></A>
+<FONT ID="LN">21</FONT><A NAME="21"></A>    <FONT ID="Private">private</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/util/ConnectionHandler.html">ConnectionHandler</A> connHandler;
+<FONT ID="LN">22</FONT><A NAME="22"></A>
+<FONT ID="LN">23</FONT><A NAME="23"></A>    <FONT ID="Public">public</FONT> <FONT ID="Static">static</FONT> <FONT ID="Void">void</FONT> main(String[] args) {
+<FONT ID="LN">24</FONT><A NAME="24"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">25</FONT><A NAME="25"></A>            <FONT ID="New">new</FONT> <A HREF="../../search/db/DatabaseSearchExample.java.html">DatabaseSearchExample</A>().run();
+<FONT ID="LN">26</FONT><A NAME="26"></A>        } <FONT ID="Catch">catch</FONT> (Exception e) {
+<FONT ID="LN">27</FONT><A NAME="27"></A>            e.printStackTrace();
+<FONT ID="LN">28</FONT><A NAME="28"></A>        }
+<FONT ID="LN">29</FONT><A NAME="29"></A>    }
+<FONT ID="LN">30</FONT><A NAME="30"></A>
+<FONT ID="LN">31</FONT><A NAME="31"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> run() <FONT ID="Throws">throws</FONT> Exception {
+<FONT ID="LN">32</FONT><A NAME="32"></A>        connHandler = ConnectionUtil.connectToDB();
+<FONT ID="LN">33</FONT><A NAME="33"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">34</FONT><A NAME="34"></A>            TableOperations.setupMoleculeTable(connHandler, TABLE_NAME);
+<FONT ID="LN">35</FONT><A NAME="35"></A>            runSearches();
+<FONT ID="LN">36</FONT><A NAME="36"></A>        } <FONT ID="Finally">finally</FONT> {
+<FONT ID="LN">37</FONT><A NAME="37"></A>            ConnectionUtil.closeConnection(connHandler);
+<FONT ID="LN">38</FONT><A NAME="38"></A>        }
+<FONT ID="LN">39</FONT><A NAME="39"></A>    }
+<FONT ID="LN">40</FONT><A NAME="40"></A>
+<FONT ID="LN">41</FONT><A NAME="41"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> runSearches() {
+<FONT ID="LN">42</FONT><A NAME="42"></A>
+<FONT ID="LN">43</FONT><A NAME="43"></A>        <FONT ID="SingleLineComment">// Initialize a JChemSearch object and search options
+<FONT ID="LN">44</FONT><A NAME="44"></A></FONT>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/JChemSearch.html">JChemSearch</A> jcs = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/JChemSearch.html">JChemSearch</A>();
+<FONT ID="LN">45</FONT><A NAME="45"></A>        jcs.setConnectionHandler(connHandler);
+<FONT ID="LN">46</FONT><A NAME="46"></A>        jcs.setStructureTable(TABLE_NAME);
+<FONT ID="LN">47</FONT><A NAME="47"></A>        String queryStructure = <FONT ID="StringLiteral">"CCNCC"</FONT>;
+<FONT ID="LN">48</FONT><A NAME="48"></A>        jcs.setQueryStructure(queryStructure);
+<FONT ID="LN">49</FONT><A NAME="49"></A>        <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/JChemSearchOptions.html">JChemSearchOptions</A> searchOpts = <FONT ID="New">new</FONT> <A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/JChemSearchOptions.html">JChemSearchOptions</A>(SearchConstants.SUBSTRUCTURE);
+<FONT ID="LN">50</FONT><A NAME="50"></A>        jcs.setSearchOptions(searchOpts);
+<FONT ID="LN">51</FONT><A NAME="51"></A>
+<FONT ID="LN">52</FONT><A NAME="52"></A>        System.out.println(<FONT ID="StringLiteral">"Searching: "</FONT> + queryStructure);
+<FONT ID="LN">53</FONT><A NAME="53"></A>        <FONT ID="SingleLineComment">// Execute search and print results
+<FONT ID="LN">54</FONT><A NAME="54"></A></FONT>        search(jcs);    <FONT ID="SingleLineComment">// --&gt; several hits
+<FONT ID="LN">55</FONT><A NAME="55"></A></FONT>
+<FONT ID="LN">56</FONT><A NAME="56"></A>        <FONT ID="SingleLineComment">// Change N to N+ in the query and re-run search
+<FONT ID="LN">57</FONT><A NAME="57"></A></FONT>        queryStructure = <FONT ID="StringLiteral">"CC[N+]CC"</FONT>;
+<FONT ID="LN">58</FONT><A NAME="58"></A>        jcs.setQueryStructure(queryStructure);
+<FONT ID="LN">59</FONT><A NAME="59"></A>        System.out.println(<FONT ID="StringLiteral">"Searching: "</FONT> + queryStructure);
+<FONT ID="LN">60</FONT><A NAME="60"></A>        search(jcs);    <FONT ID="SingleLineComment">// --&gt; only a few hits
+<FONT ID="LN">61</FONT><A NAME="61"></A></FONT>
+<FONT ID="LN">62</FONT><A NAME="62"></A>        <FONT ID="SingleLineComment">// Change search options to ignore charges
+<FONT ID="LN">63</FONT><A NAME="63"></A></FONT>        searchOpts.setChargeMatching(SearchConstants.CHARGE_MATCHING_IGNORE);
+<FONT ID="LN">64</FONT><A NAME="64"></A>        System.out.println(<FONT ID="StringLiteral">"Searching: "</FONT> + queryStructure + <FONT ID="StringLiteral">" with charge ignore"</FONT>);
+<FONT ID="LN">65</FONT><A NAME="65"></A>        jcs.setSearchOptions(searchOpts);
+<FONT ID="LN">66</FONT><A NAME="66"></A>        search(jcs);    <FONT ID="SingleLineComment">// --&gt; several hits again
+<FONT ID="LN">67</FONT><A NAME="67"></A></FONT>
+<FONT ID="LN">68</FONT><A NAME="68"></A>        <FONT ID="SingleLineComment">// Note: you can also use getSearchOptions():
+<FONT ID="LN">69</FONT><A NAME="69"></A></FONT>        <FONT ID="SingleLineComment">// jcs.getSearchOptions().setChargeMatching(...);
+<FONT ID="LN">70</FONT><A NAME="70"></A></FONT>
+<FONT ID="LN">71</FONT><A NAME="71"></A>        searchOpts.setFormulaSearchType(FormulaSearch.SUBFORMULA);
+<FONT ID="LN">72</FONT><A NAME="72"></A>        searchOpts.setFormulaSearchQuery(<FONT ID="StringLiteral">"C10N1"</FONT>);
+<FONT ID="LN">73</FONT><A NAME="73"></A>        System.out.println(<FONT ID="StringLiteral">"Searching: "</FONT> + queryStructure
+<FONT ID="LN">74</FONT><A NAME="74"></A>                + <FONT ID="StringLiteral">" with charge ignore and formula query"</FONT>);
+<FONT ID="LN">75</FONT><A NAME="75"></A>        jcs.setSearchOptions(searchOpts);
+<FONT ID="LN">76</FONT><A NAME="76"></A>        search(jcs);
+<FONT ID="LN">77</FONT><A NAME="77"></A>
+<FONT ID="LN">78</FONT><A NAME="78"></A>    }
+<FONT ID="LN">79</FONT><A NAME="79"></A>
+<FONT ID="LN">80</FONT><A NAME="80"></A>    <FONT ID="FormalComment">/**
+<FONT ID="LN">81</FONT><A NAME="81"></A>     * Runs the database search and lists results.
+<FONT ID="LN">82</FONT><A NAME="82"></A>     */</FONT>
+<FONT ID="LN">83</FONT><A NAME="83"></A>    <FONT ID="Private">private</FONT> <FONT ID="Void">void</FONT> search(<A HREF="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/jchem/db/JChemSearch.html">JChemSearch</A> jcs) {
+<FONT ID="LN">84</FONT><A NAME="84"></A>        <FONT ID="Try">try</FONT> {
+<FONT ID="LN">85</FONT><A NAME="85"></A>            jcs.run();
+<FONT ID="LN">86</FONT><A NAME="86"></A>            <FONT ID="Int">int</FONT>[] results = jcs.getResults();
+<FONT ID="LN">87</FONT><A NAME="87"></A>            SearchUtil.printSearchResults(results);
+<FONT ID="LN">88</FONT><A NAME="88"></A>        } <FONT ID="Catch">catch</FONT> (Exception e) {
+<FONT ID="LN">89</FONT><A NAME="89"></A>            System.err.println(<FONT ID="StringLiteral">"Unexpected error during DB search!"</FONT>);
+<FONT ID="LN">90</FONT><A NAME="90"></A>            e.printStackTrace();
+<FONT ID="LN">91</FONT><A NAME="91"></A>        }
+<FONT ID="LN">92</FONT><A NAME="92"></A>    }
+<FONT ID="LN">93</FONT><A NAME="93"></A>
+<FONT ID="LN">94</FONT><A NAME="94"></A>}
+<FONT ID="LN">95</FONT><A NAME="95"></A></pre>
+</BODY>
+</HTML>

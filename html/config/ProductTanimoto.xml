@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ScreeningConfiguration>
+    
+    <ParametrizedMetrics>
+        <ParametrizedMetric Name="ProductTanimoto" ActiveFamily="Generic"
+    	    Metric="ProductTanimoto" Threshold="0.2"/>
+    </ParametrizedMetrics>
+        
+</ScreeningConfiguration>

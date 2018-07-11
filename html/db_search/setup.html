@@ -1,0 +1,206 @@
+<html>
+<head>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../jchemmanuals.css">
+<title>Example</title>
+</head>
+<body>
+<h1>
+JChem db_search Example
+</h1>
+<p>The example can be found in the 
+<code>&lt;JChem home&gt;/examples/db_search</code> directory.
+</p>
+
+<p>Steps of installation:
+<ol>
+<li>Make sure that all 
+<a href="https://docs.chemaxon.com/display/jchembase/Introduction+for+Java+applications#IntroductionforJavaapplications-swreq">required software pieces</a>
+to run JSP scripts using
+JChem Class Library
+are installed. Check if JSP scripts can be run.
+<p>
+If you don not have an existing JSP capable web server, we recommend installing
+<a target="_blank" href="http://jakarta.apache.org/tomcat/">Apache Tomcat</a>.
+
+<br>
+
+<li>Include <i>all</i> jar files located in
+<code>&lt;JChem&nbsp;home&gt;\lib\</code>
+and the jar or zip file containing the JDBC driver
+in the classpath of the servlet server.<br>
+Note : This is <i>not</i> the same as the system classpath.<br>
+<a href="https://docs.chemaxon.com/display/jchembase/Tomcat+Configuration#TomcatConfiguration-jar" target="_blank">Tomcat instructions</a>
+<p><b>Don't forget to update these files whenever you install a
+new version of JChem.</b></p>
+</li>
+
+<li><p>Create a web application for JChem.<br>
+<a href="https://docs.chemaxon.com/display/jchembase/Tomcat+Configuration#TomcatConfiguration-webapp" target="_blank">Tomcat instructions</a>
+</p>
+</li>
+
+<li><p><a href="https://docs.chemaxon.com/display/jchembase/Introduction+for+Java+applications#IntroductionforJavaapplications-initdb">Initialize a database
+for structure handling</a> using
+<a href="https://docs.chemaxon.com/display/jchembase/Administration+Guide+-+JChem+Manager">JChemManager</a>.
+</p>
+</li>
+
+<li><p><a href="https://docs.chemaxon.com/display/jchembase/Administration+Guide+-+JChem+Manager#AdministrationGuide-JChemManager-create">Create a table</a>
+called <code>editexample</code> using
+<a href="https://docs.chemaxon.com/display/jchembase/Administration+Guide+-+JChem+Manager">JChemManager</a>.
+</p>
+</li>
+
+<li><p><a href="https://docs.chemaxon.com/display/jchembase/Administration+Guide+-+JChem+Manager#AdministrationGuide-JChemManager-import">Import an SD file</a>
+containing chemical structures into the new table.
+</p>
+</li>
+
+<li><p>When the example system is set up,
+try it by loading
+<b><code>&lt;JChem's&nbsp;URL&gt;/examples/db_search/setup.jsp</code></b>
+into your browser.
+<p>Tomcat:<br>
+If the web server is located on your machine on the default port (8080), load
+<a href="http://localhost:8080/jchem/examples/db_search/setup.jsp" 
+taget="_blank"><code>http://localhost:8080/jchem/examples/db_search/setup.jsp</code></a>
+</p>
+
+<p>
+You can alter the following settings here:
+<ul>
+    <li><b>JDBC driver class name<a href="#rules">*</a>:</b> The class name of the JDBC driver.
+        Please see the <a href="https://docs.chemaxon.com/display/jchembase/JChem+Base+FAQ#JChemBaseFAQ-dburl">FAQ</a> for examples.
+    <li><b>URL for JDBC connection<a href="#rules">*</a>:</b> The JDBC URL of the database.
+        Please see the <a href="https://docs.chemaxon.com/display/jchembase/JChem+Base+FAQ#JChemBaseFAQ-dburl">FAQ</a> for examples.
+    <li><b>Property table name<a href="#rules">*</a>:</b>The name of the table where JChem stores
+    its settings. Please see the
+    <a href="https://docs.chemaxon.com/display/jchembase/Administration+Guide+-+JChem+Manager#AdministrationGuide-JChemManager-settings">administration guide</a> and
+    the description of
+    <a href="https://docs.chemaxon.com/display/jchembase/Multiuser+Support">multiuser options</a>
+    for further information.
+    <li><b>Database user login name<a href="#rules">*</a>:</b> The name of the database user.
+    <li><b>Database user password<a href="#rules">*</a>:</b> The password of the database user.
+    <li><b>Read-only tables:</b> You can specify a list of tables here delimited
+    by semicolon. <code>Insert</code>, <code>modify</code>, <code>update</code>
+    and <code>import</code> commands are not allowed on these tables for the
+    users of the JSP example.
+     For example: <code>REACTIONS;STRUCTURES</code>
+If your RDBMS supports schemes, specify the schema too:
+    <code>SCOTT.REACTIONS;SCOTT.STRUCTURES</code>
+The case of the letters is important. When an RDBMS (like Oracle)
+stores the names in upper case, enter the
+name of the table using capital letters.
+    <li><b>Chemical Terms filter file:</b>This file can specify pre-defiend
+    chemical terms filters that will appear in the query page.
+    If not specified or not found, the default configuration file is used:
+<code>&lt;jchem_home&gt;/examples/db_search/ChemicalTermsFilters.xml</code>.
+NOTE: You have to specify a file path on the server so the web server can
+locate the file.
+    <li><b>Searches to remember:</b> The example can store hits of previous
+    searches and the user can search within the previous hit list. This number
+    specifies how many searches should be stored in the memory per session.
+    Note: storing the hit lists can require significant amount of memory, which
+    depends on the number of open sessions (users), and the size of the hit
+    lists (the maximum size is all rows from the table). A simple estimation
+    of the memory size surplus in bytes:
+    <code>open_sessions * rows_in_largest_table * searches_to_remember * 4</code>.
+</ul>
+
+<p><a name="properties"></a>Modify the values of the</p> 
+
+<p><a name="rules"></a><b><u>*</u></b> For the driver, url, username, password,
+and property table the following rules apply:
+<ul>
+    <li>If you define none of the values, the user has to enter them.<br>
+        If cookies are enabled, the browser will remember the last
+        settings.</li>
+    <li>If you define <i>all</i> of these values, the login page will be 
+        skipped.</li>
+    <li>If you define the driver and the URL, these fields
+        will not appear in the login page.</li>
+    <li>The property table name is
+        <ul>
+            <li> "JChemProperties" by default.</li>
+            <li> Will appear as specified, but
+                but not stored in the browser as cookie.</li>
+            <li> The last entered value stored in the browser as cookie 
+                (strongest).</li>    
+        </ul>
+        
+</ul>
+
+<p><i>Additional properties:</i>
+
+<p>There is a text area for defining some other properties for the example
+application. You will find some example variables here after installation.
+
+<p>The <code>&lt;table_name&gt;.queryConditions</code> variables define
+conditions that can be set for a query.
+The fields have to be separated by semicolon.
+A default value for all structure tables can be defined by using the
+"<i>default.</i>" tag before the <code>queryConditions</code> instead of the
+table name.
+
+For example:
+<pre>
+    SCOTT.JSPEXAMPLE.queryConditions=cd_id;cd_molweight#Molweight
+    default.queryConditions=cd_id#Id: </pre>
+<p>The text after the <code>#</code> character (if specified) will be written
+on the query page instead the database name of the field.</p>
+<p><a href="forms.html">Forms</a> for displaying a result can be defined here as well.  
+</p>
+<p>After setting all values you can store the settings and start using the example by
+pressing the <code>Save changes</code> button.</p>
+</li>
+
+<li><p><a name="login"></a>The first page of the example is a login page. After the login, entered values will be stored in cookies and will appear on the next login.<br>
+The page can be bypassed by defining the properties mentioned <a href="#properties">above</a> in the <code>setup.jsp</code>.
+</p>
+</li>
+
+<li><p>If you receive the message 
+"<i>Error: Maximum number of searches allowed per minute is exceeded. 
+Please try it later</i>", then please 
+<script language="JavaScript"><!--
+document.write('<a href="mailto:support');
+document.write('@');
+document.write('chemaxon.com">contact ChemAxon\'s support</a>');
+//--></script>
+for a license key that allows more frequent searching.
+</p>
+</li>
+
+<li><p>Please note that some less sophisticated databases like MS Access
+don't support parallel update or insert operations.
+</p>
+</li>
+
+<li><p>Instructions for license installation can be found here:
+<a href="http://www.chemaxon.com/marvin/help/licensedoc/installToServer.html">Installing licenses</a>.
+<br>The user account of the ChemAxon license should be set on the <b>Properties</b>&gt;<b>Log On</b> tab of Apache Tomcat service.</p>
+</li>
+</ol>
+
+<p>If you have any problem concerning the installation of
+the example, visit our
+<a href="http://www.chemaxon.com/forum">forum</a>
+or
+<script language="JavaScript"><!--
+document.write('<a href="mailto:support');
+document.write('@');
+document.write('chemaxon.com">contact ChemAxon\'s support</a>');
+//--></script>.
+<center>
+
+<center><div class="lenia">&nbsp;</div></center>
+<font size="-2" face="helvetica">
+Copyright &copy; 1999-2016 
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+
+</body>
+</html>
+

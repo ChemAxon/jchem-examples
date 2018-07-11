@@ -1,0 +1,73 @@
+<!-- 
+    Document   : comparatorexamples
+    Created on : Jun 25, 2009, 13:58:56 PM
+    Author     : Tamas Csizmazia
+-->
+
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../jchemmanuals.css">
+<TITLE>MolComparator examples</TITLE>
+</HEAD>
+
+<BODY>
+
+<center><h1>Customized MolComparators</h1></center>
+
+<h2><a class="anchor" name="intro">Introduction</a></h2>
+
+<p>Using customized MolComparators is an easy way to check extra conditions
+when matching query and target structures. MolComparators can check 
+atom and bond properties (e.g. stereo properties, type of neighbors, ...) and 
+prevent match if these properties do not fit.
+The extra conditions are checked beyond standard matching conditions, 
+so they restrict the possible matches. On the other hand, relieving some 
+search options can help to obtain more matches (e.g. setting isotope matching
+option to 'ignore' and check only some specific isotopes in a custom 
+molcomparator).</p>
+<p>
+For technical details see <a name="apidoc" 
+href="http://www.chemaxon.com/jchem/doc/dev/java/api/chemaxon/sss/search/MolComparator.html">
+MolComparator API</a>.
+</p>
+
+<h2><a class="anchor" name="examples">Examples</a></h2>
+
+<p>Our custom MolComparator examples are based on requests from our users.
+At each example, the related Chemaxon forum topics are linked.
+<p>A sample program 
+(<a name="EFMC" href="ExampleForMolComparators.java">
+ExampleForMolComparators.java</a>) shows usage of these comparators.
+The structure files used by the sample program: 
+<a href="SGroupShortcut.mrv">SGroupShortcut.mrv</a>,  
+<a href="SGroupExpanded.mrv">SGroupExpanded.mrv</a>,  
+<a href="SGroupUngrouped.mrv">SGroupUngrouped.mrv</a></p>
+<p>All downloaded sources can be freely modified and redistributed.</p>
+
+<h3>Atom map comparison</h3>
+<p>Atoms should match only when their atom map number is the same 
+("Exact" option) or only the target atom has atom map number ("At least" option).
+</p>
+<p><a name="AMC" href="AtomMapComparator.java">AtomMapComparator.java</a>
+</p>
+<a name="forum topic" href="http://www.chemaxon.com/forum/viewpost3401.html">Forum topic</a>
+
+<h3>Shortcut group comparison</h3>
+<p>Checks whether structures contain shortcut groups or only their 
+ungrouped equivalents. 
+</p>
+<p><a name="SGC" href="SGroupComparator.java">SGroupComparator.java</a>
+</p>
+<a name="forum topic" href="http://www.chemaxon.com/forum/viewpost3172.html">Forum topic</a>
+
+<h3>Stereo AND comparison</h3>
+<p>A wavy bond in query can match only to a wavy bond in target.
+</p>
+<p><a name="SAC" href="StereoANDComparator.java">StereoANDComparator.java</a>
+</p>
+<p><a name="forum topic" href="http://www.chemaxon.com/forum/viewpost6379.html">Forum topic 1</a></p>
+<p><a name="forum topic" href="http://www.chemaxon.com/forum/viewpost7841.html">Forum topic 2</a></p>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+
+body{
+	background-color:#e1e1e1;	
+}
+
+div.optionPanel{
+	position:absolute; 
+	top:61px; 
+	left:540px;
+	border:1px solid black;
+	padding:10px;
+	z-index:1;
+}
+
+legend{
+	color:#2473E9;
+}
+
+div.tabInactive{
+	width:90px;
+	height:23px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	cursor:pointer;
+	position:absolute; 
+	top:27px;
+	border-top:1px solid black;
+	border-left:1px solid black;
+	border-right:1px solid black;
+	background-color:#E6EEF6;
+	padding:5px;
+	z-index:2;
+}
+
+div.tabActive{
+	width:90px;
+	height:23px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	cursor:pointer;
+	position:absolute; 
+	top:27px;
+	border-top:1px solid black;
+	border-left:1px solid black;
+	border-right:1px solid black;
+	border-bottom:1px solid #e1e1e1;
+	background-color:#e1e1e1;
+	padding:5px;
+	z-index:2;
+}
+
+div.tabDisabled{
+	width:90px;
+	height:23px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	color:#7e7e7e;
+	position:absolute; 
+	top:27px;
+	border-top:1px solid black;
+	border-left:1px solid black;
+	border-right:1px solid black;
+	border-bottom:1px solid #e1e1e1;
+	background-color:#e1e1e1;
+	padding:5px;
+	z-index:2;
+}

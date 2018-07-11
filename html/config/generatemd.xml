@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GenerateMD configuration file -->
+
+<GenerateMDConfiguration schemaLocation="generatemd.xsd">
+
+    <Input>
+        <File Name="examples/molecules/nci1000.sdf" GenerateID="false"/>
+    </Input>
+                        
+    <Output FileName="examples/output/nci1000-PF.sdf" SDFOutput="true"/>
+    
+    <Descriptor Type="PF" ConfigFile="examples/config/pharma-frag.xml" />
+
+</GenerateMDConfiguration>

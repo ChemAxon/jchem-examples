@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ScreeningOptimizer configuration file -->
+
+<ScreeningOptimizerConfiguration schemaLocation="screeningoptimizer.xsd">
+
+    <Input InputDir="examples/molecules" OutputDir="examples/output" 
+            RandomSetDir="examples/output"
+            TargetFile="nci500.smiles" 
+            ActiveFile="beta2_adrenoceptor_antagonists.smiles"/>
+
+    <RandomSets NewRandomSets="true" NumberOfRandomSets="5" 
+            NumberOfTargetTestStructures="50" ActiveSetDivision="35/33/32"
+            SelectedSets="1"/>
+            
+    <Configuration OptimizeMetrics="examples/config/optimizemetrics.xml" 
+            HitStatistics="examples/config/hitstatistics.xml"/>
+    
+</ScreeningOptimizerConfiguration>
+
