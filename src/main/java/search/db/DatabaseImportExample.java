@@ -16,6 +16,7 @@
 package search.db;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.SQLException;
 
 import resource.ResourceLocator;
@@ -38,12 +39,15 @@ public final class DatabaseImportExample {
 
     private static final String IMPORT_TABLE = "import_test";
     private ConnectionHandler connHandler;
+    
+    static PrintStream out = System.out;
+    static PrintStream err = System.err;
 
     public static void main(String[] args) {
         try {
             new DatabaseImportExample().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -72,7 +76,7 @@ public final class DatabaseImportExample {
             Molecule mol = mi.read();
             while (mol != null) {
                 molCount++;
-                System.out.printf("Molecule %4d: %s\n", molCount,
+                out.printf("Molecule %4d: %s\n", molCount,
                         MolExporter.exportToFormat(mol, "smiles"));
                 mol = mi.read();
             }
@@ -87,7 +91,7 @@ public final class DatabaseImportExample {
      * @param ch connection handler to use
      */
     private void importMoleculesIntoDB() throws TransferException {
-        System.out.println("\n\nDatabase import:");
+        out.println("\n\nDatabase import:");
         Importer importer = new Importer();
 
         importer.setConnectionHandler(connHandler);
@@ -96,7 +100,7 @@ public final class DatabaseImportExample {
         importer.init();
         int importedMoleculeCount = importer.importMols();
 
-        System.out.printf("%d structures imported\n", importedMoleculeCount);
+        out.printf("%d structures imported\n", importedMoleculeCount);
     }
 
 }
