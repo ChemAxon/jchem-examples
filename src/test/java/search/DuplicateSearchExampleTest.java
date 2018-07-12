@@ -1,15 +1,9 @@
 package search;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,43 +13,30 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.chemaxon.test.helper.PrintCollector;
+
 public class DuplicateSearchExampleTest {
 
 	private static final Pattern isDuplicateMatcher = Pattern.compile("(\\d+)( is duplicate of )(\\d+)");
 
-	private ByteArrayOutputStream outBaos = new ByteArrayOutputStream();
-	private ByteArrayOutputStream errorBaos = new ByteArrayOutputStream();
-	private PrintStream outMock = new PrintStream(outBaos);
-	private PrintStream errorMock = new PrintStream(errorBaos);
+	private PrintCollector printCollector = new PrintCollector();
 
 	@Before
 	public void setPrintStreams() {
-		DuplicateSearchExample.out = outMock;
-		DuplicateSearchExample.err = errorMock;
+		DuplicateSearchExample.out = printCollector.getOutStream();
+		DuplicateSearchExample.err = printCollector.getErrorStream();
 	}
 
 	@Test
 	public void testMatches() throws Exception {
 		DuplicateSearchExample.main(new String[] {});
-		List<String> lines = getLines(outBaos);
+		List<String> lines = printCollector.getOutputLines();
 		List<IdPair> idPairs = lines.stream().map(String::trim).filter(s -> isDuplicateMatcher.matcher(s).matches())
 				.map(this::convertLine).collect(Collectors.toList());
 		assertThat("we expect 6 matches", idPairs, hasSize(6));
 		assertThat("All predefined pairs shuld be found", idPairs, hasItems(new IdPair(669, 665), new IdPair(792, 197),
 				new IdPair(958, 815), new IdPair(669, 665), new IdPair(792, 197), new IdPair(958, 815)));
-		assertThat("we don't expect any errors", getLines(errorBaos), hasSize(0));
-	}
-
-	private List<String> getLines(ByteArrayOutputStream baos) throws IOException {
-		List<String> lines = new ArrayList<>();
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())))) {
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				lines.add(line);
-			}
-		}
-		return lines;
+		assertThat("we don't expect any errors", printCollector.getErrorLines(), hasSize(0));
 	}
 
 	private IdPair convertLine(String line) {

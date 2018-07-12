@@ -15,6 +15,7 @@
 
 package search;
 
+import java.io.PrintStream;
 import java.util.Arrays;
 
 import chemaxon.formats.MolImporter;
@@ -33,13 +34,16 @@ public final class MemorySearchExample {
 
     private static final String QUERY = "CC";
     private static final String TARGET = "C1CCCCC1";
+    
+    static PrintStream out = System.out;
+    static PrintStream err = System.err;
 
     public static void main(String[] agrs) {
         try {
             new MemorySearchExample().run();
         } catch (Exception e) {
-            System.err.println("Unexpected error during search!");
-            e.printStackTrace();
+            err.println("Unexpected error during search!");
+            e.printStackTrace(err);
         }
     }
 
@@ -59,19 +63,19 @@ public final class MemorySearchExample {
         searcher.setSearchOptions(options);
 
         // Is substructure found?
-        System.out.println("Is query matching target?");
-        System.out.println(searcher.isMatching() ? "yes" : "no");
+        out.println("Is query matching target?");
+        out.println(searcher.isMatching() ? "yes" : "no");
 
         // Number of hits
-        System.out.println("Number of hits:");
-        System.out.println(searcher.getMatchCount());
+        out.println("Number of hits:");
+        out.println(searcher.getMatchCount());
         printHitsWithFindNext(searcher);
 
         // Order sensitive search
-        System.out.println("Number of order sensitive hits:");
+        out.println("Number of order sensitive hits:");
         options.setOrderSensitiveSearch(true);
         searcher.setSearchOptions(options);
-        System.out.println(searcher.getMatchCount());
+        out.println(searcher.getMatchCount());
         printHitsWithFindAll(searcher);
     }
 
@@ -85,7 +89,7 @@ public final class MemorySearchExample {
     private void printHitsWithFindNext(MolSearch molSearch) throws Exception {
         int[] hit = molSearch.findFirst();
         while (hit != null) {
-            System.out.println(Arrays.toString(hit));
+            out.println(Arrays.toString(hit));
             hit = molSearch.findNext();
         }
     }
@@ -100,11 +104,11 @@ public final class MemorySearchExample {
     private void printHitsWithFindAll(MolSearch molSearch) throws Exception {
         int[][] allHits = molSearch.findAll();
         if (allHits == null) {
-            System.out.println("No hits has been found.");
+            out.println("No hits has been found.");
             return;
         }
         for (int[] currHit : allHits) {
-            System.out.println(Arrays.toString(currHit));
+            out.println(Arrays.toString(currHit));
         }
     }
 
