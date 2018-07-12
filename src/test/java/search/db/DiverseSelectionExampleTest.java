@@ -19,7 +19,7 @@ public class DiverseSelectionExampleTest {
 	}
 
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void diverseSelectTets() {
 		DiverseSelectionExample.main(null);
 		assertThat(pc.getOutputLines(),
 				Matchers.hasItems("New representative found: C[N+](C)(C)CC1=CC=CC=C1",

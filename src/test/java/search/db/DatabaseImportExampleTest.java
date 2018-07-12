@@ -18,7 +18,7 @@ public class DatabaseImportExampleTest {
 	}
 
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void canImport1000Molecules() {
 		DatabaseImportExample.main(null);
 		assertThat(pc.getOutputLines(),
 				Matchers.hasItem("1000 structures imported"));

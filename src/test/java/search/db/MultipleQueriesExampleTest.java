@@ -19,7 +19,7 @@ public class MultipleQueriesExampleTest {
 	}
 
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void searchWithMultipleQueriesTest() {
 		MultipleQueriesExample.main(null);
 		long queriesRun = pc.getOutputLines().stream().filter("Result count: 52"::equals).count();
 		assertThat(queriesRun, Matchers.is(2L));

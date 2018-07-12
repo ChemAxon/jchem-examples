@@ -19,7 +19,7 @@ public class ChemicalTermsFilteringExampleTest {
 	}
 
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void chemicalTermsFilteringTest() {
 		ChemicalTermsFilteringExample.main(null);
 		assertThat(pc.getOutputLines(), Matchers.hasItems("Search has found 122 hits in which O has pka value greater than 2", "Search has found 81 hits in which O has pka value greater than 3.5"));
 	}

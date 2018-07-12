@@ -17,7 +17,7 @@ public class SimilaritySearchExampleTest {
 	}
 	
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void search() {
 		SimilaritySearchExample.main(null);
 	}
 	

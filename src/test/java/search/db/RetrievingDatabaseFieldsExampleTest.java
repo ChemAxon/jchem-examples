@@ -21,7 +21,7 @@ public class RetrievingDatabaseFieldsExampleTest {
 	}
 
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void searchRetrievsFields() {
 		RetrievingDatabaseFieldsExample.main(null);
 		List<String> lines = pc.getOutputLines();
 		assertTrue("These messages should follow each other", followsEachOther(lines, "ID: 6", "Formula: C20H10Br2O5", "Mass: 490.103"));

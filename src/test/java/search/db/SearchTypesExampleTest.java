@@ -20,7 +20,7 @@ public class SearchTypesExampleTest {
 	}
 
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void searchTypesTest() {
 		SearchTypesExample.main(null);
 		List<String> lines = pc.getOutputLines();
 		assertStartsWith(lines.get(0), "21 hit(s) found");

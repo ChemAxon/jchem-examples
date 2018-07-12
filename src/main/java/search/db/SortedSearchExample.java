@@ -18,6 +18,9 @@ package search.db;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
+
+import java.io.PrintStream;
+
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.sss.SearchConstants;
 import chemaxon.sss.search.JChemSearchOptions;
@@ -31,6 +34,8 @@ import chemaxon.util.ConnectionHandler;
 public final class SortedSearchExample {
 
     private static final String TABLE_NAME = "demo";
+    
+    static PrintStream out = System.out;
 
     private ConnectionHandler connHandler;
 
@@ -65,14 +70,14 @@ public final class SortedSearchExample {
         jcs.setOrder(JChemSearch.ORDERING_BY_ID);
         jcs.run();
 
-        System.out.printf("%d hit(s) found (in ID order)\n", jcs.getResultCount());
+        out.printf("%d hit(s) found (in ID order)\n", jcs.getResultCount());
         printResult(jcs);
 
         jcs.getSearchOptions().setFilterQuery("SELECT cd_id FROM " + TABLE_NAME
                 + " ORDER BY cd_molweight");
         jcs.run();
-        System.out.println();
-        System.out.printf("%d hit(s) found (in molweight order)\n", jcs.getResultCount());
+        out.println();
+        out.printf("%d hit(s) found (in molweight order)\n", jcs.getResultCount());
         printResult(jcs);
     }
 
@@ -81,7 +86,7 @@ public final class SortedSearchExample {
         for (int i = 0; i < cdIds.length; i++) {
             int cdId = cdIds[i];
             float dissim = jcs.getDissimilarity(i);
-            System.out.printf("cd_id: %d dissimilarity: %.3f\n", cdId, dissim);
+            out.printf("cd_id: %d dissimilarity: %.3f\n", cdId, dissim);
         }
     }
 
