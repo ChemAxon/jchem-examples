@@ -15,6 +15,7 @@
 
 package search.db;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +40,8 @@ public final class MultipleQueriesExample {
     private static final String TABLE_NAME = "demo";
 
     private static final String[] QUERIES = new String[] { "CCCCC", "O", "N" };
+    
+    static PrintStream out = System.out;
 
     private ConnectionHandler connHandler;
 
@@ -68,7 +71,7 @@ public final class MultipleQueriesExample {
      */
     private void runNormalQueries() throws Exception {
 
-        System.out.println("Running normal queries");
+        out.println("Running normal queries");
 
         long start = System.currentTimeMillis();
 
@@ -76,8 +79,8 @@ public final class MultipleQueriesExample {
         results.retainAll(getSearchHits(QUERIES[1]));
         results.retainAll(getSearchHits(QUERIES[2]));
 
-        System.out.println("Final results:");
-        System.out.println("Elapsed time (in ms): " + (System.currentTimeMillis() - start));
+        out.println("Final results:");
+        out.println("Elapsed time (in ms): " + (System.currentTimeMillis() - start));
         listResults(results);
     }
 
@@ -87,15 +90,15 @@ public final class MultipleQueriesExample {
      */
     private void runFilteredQueries() throws Exception {
 
-        System.out.println("Running filtered queries");
+        out.println("Running filtered queries");
 
         long start = System.currentTimeMillis();
         Collection<Integer> results = getSearchHits(QUERIES[0]);
         results = getFilteredSearchHits(QUERIES[1], results);
         results = getFilteredSearchHits(QUERIES[2], results);
 
-        System.out.println("Final results:");
-        System.out.println("Elapsed time (in ms): " + (System.currentTimeMillis() - start));
+        out.println("Final results:");
+        out.println("Elapsed time (in ms): " + (System.currentTimeMillis() - start));
         listResults(results);
     }
 
@@ -114,7 +117,7 @@ public final class MultipleQueriesExample {
      * Warmup search to load structure cache.
      */
     private void warmupSearch() throws Exception {
-        System.out.println("Warmup search...");
+        out.println("Warmup search...");
         getSearchHits("");
     }
 
@@ -148,9 +151,9 @@ public final class MultipleQueriesExample {
     }
 
     private void listResults(Collection<Integer> results) {
-        System.out.printf("Result count: %d\n", results.size());
-        System.out.printf("Result cd_ids: %s\n", results.toString());
-        System.out.println();
+        out.printf("Result count: %d\n", results.size());
+        out.printf("Result cd_ids: %s\n", results.toString());
+        out.println();
     }
 
     /**
