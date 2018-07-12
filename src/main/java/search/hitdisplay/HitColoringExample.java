@@ -33,7 +33,7 @@ public final class HitColoringExample {
     private static final String QUERY = "N1C=NC2=C1C(=O)N(C)C(=O)N2CCC";
     private static final String TARGET = "CN1C=NC2=C1C(=O)N(C)C(=O)N2OC";
     
-    private static boolean hideDisplay = true;
+    private static boolean hideDisplay = false;
 
     public static void main(String[] args) {
     	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);

@@ -31,7 +31,10 @@ import chemaxon.util.HitDisplayTool;
  */
 public final class RotateExample {
 
+	private static boolean hideDisplay = false;
+
     public static void main(String[] args) {
+    	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
         new RotateExample().run();
     }
 
@@ -48,9 +51,11 @@ public final class RotateExample {
         Molecule target = getTargetMolecule();
         Molecule display = getDisplayMol(query, target, getDisplayOptions());
 
-        DisplayUtil.showMolecule(query, 0, "Query");
-        DisplayUtil.showMolecule(target, 1, "Target");
-        DisplayUtil.showMolecule(display, 2, "Rotated target");
+		if (!hideDisplay) {
+			DisplayUtil.showMolecule(query, 0, "Query");
+			DisplayUtil.showMolecule(target, 1, "Target");
+			DisplayUtil.showMolecule(display, 2, "Rotated target");
+		}
     }
 
     private HitColoringAndAlignmentOptions getDisplayOptions() {

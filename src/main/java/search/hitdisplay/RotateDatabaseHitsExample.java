@@ -41,7 +41,7 @@ public final class RotateDatabaseHitsExample {
 
     private ConnectionHandler connHandler;
 
-    private static boolean hideDisplay = true;
+    private static boolean hideDisplay = false;
 
     public static void main(String[] args) {
     	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);

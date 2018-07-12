@@ -32,7 +32,7 @@ import chemaxon.util.HitDisplayTool;
  */
 public final class PartialCleanExample {
 
-	private static boolean hideDisplay = true;
+	private static boolean hideDisplay = false;
 
     public static void main(String[] args) {
     	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
