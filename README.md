@@ -15,7 +15,7 @@ Copy a correct JChem Base license (provided to you by your sales contact) to `cx
 To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home˛` folder.
 
 * On linux type `./gradlew <task_name>`
-* On windows tyoe `gradlew <task_name>`
+* On windows type `gradlew <task_name>`
 
 the exmaple tasks are the followings: 
 * runAsyncSearchExample
