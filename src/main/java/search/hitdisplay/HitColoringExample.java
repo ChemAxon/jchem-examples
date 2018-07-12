@@ -32,8 +32,11 @@ public final class HitColoringExample {
 
     private static final String QUERY = "N1C=NC2=C1C(=O)N(C)C(=O)N2CCC";
     private static final String TARGET = "CN1C=NC2=C1C(=O)N(C)C(=O)N2OC";
+    
+    private static boolean hideDisplay = true;
 
     public static void main(String[] args) {
+    	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
         try {
             new HitColoringExample().run();
         } catch (Exception e) {
@@ -46,9 +49,11 @@ public final class HitColoringExample {
         Molecule target = MolImporter.importMol(TARGET);
         Molecule display = getDisplayMol(query, target, getDisplayOptions());
 
-        DisplayUtil.showMolecule(query, 0, "Query");
-        DisplayUtil.showMolecule(target, 1, "Target");
-        DisplayUtil.showMolecule(display, 2, "Colored target");
+        if(!hideDisplay) {
+	        DisplayUtil.showMolecule(query, 0, "Query");
+	        DisplayUtil.showMolecule(target, 1, "Target");
+	        DisplayUtil.showMolecule(display, 2, "Colored target");
+        }
     }
 
     private HitColoringAndAlignmentOptions getDisplayOptions() {
