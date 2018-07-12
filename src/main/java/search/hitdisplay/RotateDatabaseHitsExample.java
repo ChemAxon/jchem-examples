@@ -41,7 +41,10 @@ public final class RotateDatabaseHitsExample {
 
     private ConnectionHandler connHandler;
 
+    private static boolean hideDisplay = true;
+
     public static void main(String[] args) {
+    	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
         try {
             new RotateDatabaseHitsExample().run();
         } catch (Exception e) {
@@ -82,13 +85,15 @@ public final class RotateDatabaseHitsExample {
         System.out.println("Hits: " + Arrays.toString(results));
         hits = jcs.getHitsAsMolecules(results, displayOpts, null, null);
 
-        // Show query
-        DisplayUtil.showMolecule(query, 0, 200, "Query");
+		if (!hideDisplay) {
+			// Show query
+			DisplayUtil.showMolecule(query, 0, 200, "Query");
 
-        // Showing first 8 hits
-        for (int i = 0; i < 8; i++) {
-            DisplayUtil.showMolecule(hits[i], i + 4, 200, "Hit " + (i + 1));
-        }
+			// Showing first 8 hits
+			for (int i = 0; i < 8; i++) {
+				DisplayUtil.showMolecule(hits[i], i + 4, 200, "Hit " + (i + 1));
+			}
+		}
     }
 
 }
