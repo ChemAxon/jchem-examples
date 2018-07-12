@@ -15,6 +15,7 @@
 
 package search.db;
 
+import java.io.PrintStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,6 +39,8 @@ public final class RetrievingDatabaseFieldsExample {
 
     private static final String TABLE_NAME = "demo";
 
+    static PrintStream out = System.out;
+    
     private ConnectionHandler connHandler;
 
     public static void main(String[] args) {
@@ -75,8 +78,8 @@ public final class RetrievingDatabaseFieldsExample {
 
     private void retrieveFieldsWithSQL(int[] cdIds) throws SQLException {
 
-        System.out.println("Retrieving field values " + "with SQL statement.");
-        System.out.println();
+        out.println("Retrieving field values " + "with SQL statement.");
+        out.println();
 
         // Specify fields to retrieve, cd_id is (the first) parameter!
         String retrieverSql = "SELECT cd_formula, cd_molweight from " + TABLE_NAME
@@ -95,7 +98,7 @@ public final class RetrievingDatabaseFieldsExample {
                 // Display result
                 try {
                     if (rs.next()) {
-                        System.out.printf("ID: %d\nFormula: %s\nMass: %.3f\n\n", cdId,
+                        out.printf("ID: %d\nFormula: %s\nMass: %.3f\n\n", cdId,
                                 rs.getString(1), rs.getDouble(2));
                     } else {
                         // Do nothing, the record may have been deleted in the meantime
@@ -111,8 +114,8 @@ public final class RetrievingDatabaseFieldsExample {
 
     private void retrieveFieldsWithJChemSearch(JChemSearch jcs) throws Exception {
 
-        System.out.println("Retrieving field values using JChemSearch.");
-        System.out.println();
+        out.println("Retrieving field values using JChemSearch.");
+        out.println();
 
         int[] cdIds = jcs.getResults();
 
@@ -134,7 +137,7 @@ public final class RetrievingDatabaseFieldsExample {
         for (int i = 0; i < cdIds.length; i++) {
             String formula = (String) fieldValues.get(i)[0];
             Double mass = (Double) fieldValues.get(i)[1];
-            System.out.printf("ID: %d\nFormula: %s\nMass: %.3f\n\n", cdIds[i], formula, mass);
+            out.printf("ID: %d\nFormula: %s\nMass: %.3f\n\n", cdIds[i], formula, mass);
         }
 
     }
