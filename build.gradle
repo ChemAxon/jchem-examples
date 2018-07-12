@@ -77,6 +77,13 @@ mains.each { className ->
 	}
 }
 
+task runAllExamples {
+	group 'Run all examples'
+	mains.each {
+		dependsOn getTaskNameFromClass(it)
+	}
+}
+
 if(findCxlFiles().isEmpty()) {
 	throw new GradleException("cxn_home folder has no license, gardle can not run! Please copy license.cxl to cxn_home folder");
 }
