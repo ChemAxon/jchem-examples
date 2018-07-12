@@ -17,6 +17,10 @@ package search.db;
 
 import util.ConnectionUtil;
 import util.SearchUtil;
+import util.TableOperations;
+
+import java.io.PrintStream;
+
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.sss.SearchConstants;
 import chemaxon.sss.search.JChemSearchOptions;
@@ -30,6 +34,8 @@ import chemaxon.util.ConnectionHandler;
 public final class SearchTypesExample {
 
     private static final String TABLE_NAME = "demo";
+    
+    static PrintStream out = System.out;
 
     private ConnectionHandler connHandler;
 
@@ -44,6 +50,7 @@ public final class SearchTypesExample {
     private void run() throws Exception {
         connHandler = ConnectionUtil.connectToDB();
         try {
+            TableOperations.setupMoleculeTable(connHandler, TABLE_NAME);
             runSearches();
         } finally {
             ConnectionUtil.closeConnection(connHandler);
@@ -70,7 +77,7 @@ public final class SearchTypesExample {
     }
 
     private void printResultMessage(JChemSearch search) {
-        System.out.printf("%d hit(s) found, %d ms\n", search.getResultCount(),
+        out.printf("%d hit(s) found, %d ms\n", search.getResultCount(),
                 search.getSearchTime());
     }
 

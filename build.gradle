@@ -69,7 +69,8 @@ def mains = [
 	'search.db.DatabaseImportExample',
 	'search.db.DiverseSelectionExample',
 	'search.db.MultipleQueriesExample',
-	'search.db.RetrievingDatabaseFieldsExample'
+	'search.db.RetrievingDatabaseFieldsExample',
+	'search.db.SearchTypesExample'
 ]
 
 mains.each { className ->

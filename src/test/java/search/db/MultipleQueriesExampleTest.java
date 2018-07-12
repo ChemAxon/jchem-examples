@@ -2,8 +2,6 @@ package search.db;
 
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
-
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
