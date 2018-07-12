@@ -15,6 +15,7 @@
 
 package search.db;
 
+import java.io.PrintStream;
 import java.sql.SQLException;
 
 import resource.ResourceLocator;
@@ -39,6 +40,8 @@ public final class DiverseSelectionExample {
     private static final String DIVERSE_MOLECULES_TABLE = "diverse_mols";
     private static final float DISSIM_THRESHOLD = 0.9f;
 
+    static PrintStream out = System.out;
+    
     private ConnectionHandler connHandler;
 
     public static void main(String[] args) {
@@ -77,7 +80,7 @@ public final class DiverseSelectionExample {
                 // Check for similar structures in the database
                 if (!similarMoleculeExistsInDB(newMol)) {
                     String smilesMol = MolExporter.exportToFormat(newMol, "smiles");
-                    System.out.println("New representative found: " + smilesMol);
+                    out.println("New representative found: " + smilesMol);
                     insertMoleculeIntoDB(smilesMol);
                     count++;
                 }
@@ -85,7 +88,7 @@ public final class DiverseSelectionExample {
         } finally {
             imp.close();
         }
-        System.out.println("Number of representatives: " + count);
+        out.println("Number of representatives: " + count);
     }
 
     private void insertMoleculeIntoDB(String smilesMolecule) throws SQLException {
@@ -113,7 +116,7 @@ public final class DiverseSelectionExample {
         try {
             jcs.run();
         } catch (Exception e) {
-            System.out.println("Unexpected error during DB search!");
+            out.println("Unexpected error during DB search!");
             e.printStackTrace();
         }
 

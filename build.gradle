@@ -66,7 +66,8 @@ def mains = [
 	'search.db.AsyncSearchExample',
 	'search.db.CalculatedColumnsSearchExample',
 	'search.db.ChemicalTermsFilteringExample',
-	'search.db.DatabaseImportExample'
+	'search.db.DatabaseImportExample',
+	'search.db.DiverseSelectionExample'
 ]
 
 mains.each { className ->
