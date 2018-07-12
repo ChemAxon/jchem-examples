@@ -5,3 +5,5 @@ bin
 .project
 /.settings/
 gradle_Eclipse.bat
+cxn_home/license.cxl
+cxn_home/*.log

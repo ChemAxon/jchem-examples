@@ -54,3 +54,31 @@ repositories {
         url chemaxonRepository
     }
 }
+
+test {
+	systemProperty 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
+}
+
+if(findCxlFiles().isEmpty()) {
+	throw new GradleException("cxn_home folder has no license, gardle can not run");
+}
+
+
+def findCxlFiles() {
+	File cxnHome=file('cxn_home')
+	return findCxlFiles(cxnHome)
+}
+
+def findCxlFiles(File file) {
+	def result = []
+	if(file.isDirectory()) {
+		file.listFiles().each{ File f ->
+			if(f.isDirectory()) {
+				result.addAll(findCxlFiles(f));
+			} else if(f.getName().endsWith('.cxl')) {
+				result.add(f);
+			}
+		}
+	}
+	return result
+}

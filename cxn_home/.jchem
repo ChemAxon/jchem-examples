@@ -1,0 +1,9 @@
+#Settings of the ChemDB system
+#Thu Jul 12 11:15:12 CEST 2018
+connection.jdbcDriverName=HSQLDB
+connection.login=
+connection.propertyTable=JChemProperties
+connection.password=
+connection.jdbcUrl=jdbc\:hsqldb\:mem\:testdb
+gui.lookAndFeel.className=com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+connection.jdbcDriver=org.hsqldb.jdbcDriver

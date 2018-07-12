@@ -18,6 +18,9 @@ package search.db;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
+
+import java.io.PrintStream;
+
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.sss.SearchConstants;
 import chemaxon.sss.search.JChemSearchOptions;
@@ -32,6 +35,8 @@ public final class AsyncSearchExample {
 
     private static final String TABLE_NAME = "largetable";
 
+    static PrintStream out = System.out;
+    
     private ConnectionHandler connHandler;
 
     public static void main(String[] args) {
@@ -64,11 +69,11 @@ public final class AsyncSearchExample {
         while (jcs.isRunning()) {
             String msg = jcs.getProgressMessage();
             int count = jcs.getResultCount();
-            System.out.printf("Progress message: %s, result count: %d\n", msg, count);
+            out.printf("Progress message: %s, result count: %d\n", msg, count);
             Thread.sleep(50);
         }
 
-        System.out.println(jcs.getResultCount() + " hit(s) found.");
+        out.println(jcs.getResultCount() + " hit(s) found.");
     }
 
 }

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import chemaxon.jchem.db.DatabaseProperties;
 import chemaxon.jchem.db.SettingsHandler;
 import chemaxon.util.ConnectionHandler;
 
@@ -64,7 +65,9 @@ public final class ConnectionUtil {
         // The name of the property table could also be changed:
         // connHandler.setPropertyTable("MyPropertyTable");
         // The default value is "JChemProperties".
-
+        
+        initJchemPropertiesTableIfNeeded(connHandler);
+        
         return connHandler;
     }
 
@@ -110,6 +113,7 @@ public final class ConnectionUtil {
         try {
             ConnectionHandler connHandler = ConnectionUtil.getDefaultConnectionHandler();
             connHandler.connectToDatabase();
+            initJchemPropertiesTableIfNeeded(connHandler);
             System.out.println("Connection estabilished to " + connHandler.getUrl());
             return connHandler;
         } catch (Exception e) {
@@ -130,6 +134,20 @@ public final class ConnectionUtil {
             System.err.println("Unable to close connection!");
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Uses the connection handler to check for JChem Properties table. It creates it, if can not be found.
+     * @param connHandler
+     */
+    public static void initJchemPropertiesTableIfNeeded(ConnectionHandler connHandler) {
+	    if(connHandler.isConnected() && !DatabaseProperties.propertyTableExists(connHandler)) {
+	    	try {
+				DatabaseProperties.createPropertyTable(connHandler);
+			} catch (SQLException e) {
+				throw new IllegalStateException("Could not init JChem properties table", e);
+			}
+	    }
     }
 
 }
