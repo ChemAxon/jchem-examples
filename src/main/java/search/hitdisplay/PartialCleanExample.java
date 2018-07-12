@@ -32,7 +32,10 @@ import chemaxon.util.HitDisplayTool;
  */
 public final class PartialCleanExample {
 
+	private static boolean hideDisplay = true;
+
     public static void main(String[] args) {
+    	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
         try {
             new PartialCleanExample().run();
         } catch (Exception e) {
@@ -45,9 +48,11 @@ public final class PartialCleanExample {
         Molecule target = getTarget();
         Molecule display = getDisplayMol(query, target, getDisplayOptions());
 
-        DisplayUtil.showMolecule(query, 0, "Query");
-        DisplayUtil.showMolecule(target, 1, "Target");
-        DisplayUtil.showMolecule(display, 2, "Aligned target");
+		if (!hideDisplay) {
+			DisplayUtil.showMolecule(query, 0, "Query");
+			DisplayUtil.showMolecule(target, 1, "Target");
+			DisplayUtil.showMolecule(display, 2, "Aligned target");
+		}
     }
 
     private HitColoringAndAlignmentOptions getDisplayOptions() {

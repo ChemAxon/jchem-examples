@@ -75,7 +75,8 @@ def mains = [
 	'search.db.SearchWithFilterQueryExample',
 	'search.db.SimilaritySearchExample',
 	'search.db.SortedSearchExample',
-	'search.hitdisplay.HitColoringExample'
+	'search.hitdisplay.HitColoringExample',
+	'search.hitdisplay.PartialCleanExample'
 ]
 
 mains.each { className ->
