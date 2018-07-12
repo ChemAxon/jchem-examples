@@ -9,3 +9,31 @@ You can find the original HTML files in `html` folder.
 # Prerequisites
 
 Copy a correct JChem Base license (provided to you by your sales contact) to `cxn_home` folder in this project and name the file as `license.cxl`.  
+
+# Running an example
+
+To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home˛` folder.
+
+* On linux type `./gradlew <task_name>`
+* On windows tyoe `gradlew <task_name>`
+
+the exmaple tasks are the followings: 
+* runAsyncSearchExample
+* runCalculatedColumnsSearchExample
+* runChemicalTermsFilteringExample
+* runDatabaseImportExample
+* runDiverseSelectionExample
+* runDuplicateSearchExample
+* runHitColoringExample
+* runMemorySearchExample
+* runMultipleQueriesExample
+* runPartialCleanExample
+* runReactionSimilaritySearchExample
+* runRetrievingDatabaseFieldsExample
+* runRotateDatabaseHitsExample
+* runRotateExample
+* runSearchTypesExample
+* runSearchWithFilterQueryExample
+* runSimilaritySearchExample
+* runSortedSearchExample
+* runStandardizedMolSearchExample
