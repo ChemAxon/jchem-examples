@@ -18,6 +18,9 @@ package search.db;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
+
+import java.io.PrintStream;
+
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.sss.SearchConstants;
 import chemaxon.sss.formula.FormulaSearch;
@@ -32,6 +35,9 @@ import chemaxon.util.ConnectionHandler;
 public final class DatabaseSearchExample {
 
     private static final String TABLE_NAME = "demo";
+    
+    static PrintStream out = System.out;
+    static PrintStream err = System.err;
 
     private ConnectionHandler connHandler;
 
@@ -39,7 +45,7 @@ public final class DatabaseSearchExample {
         try {
             new DatabaseSearchExample().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -64,19 +70,19 @@ public final class DatabaseSearchExample {
         JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SUBSTRUCTURE);
         jcs.setSearchOptions(searchOpts);
 
-        System.out.println("Searching: " + queryStructure);
+        out.println("Searching: " + queryStructure);
         // Execute search and print results
         search(jcs);    // --> several hits
 
         // Change N to N+ in the query and re-run search
         queryStructure = "CC[N+]CC";
         jcs.setQueryStructure(queryStructure);
-        System.out.println("Searching: " + queryStructure);
+        out.println("Searching: " + queryStructure);
         search(jcs);    // --> only a few hits
 
         // Change search options to ignore charges
         searchOpts.setChargeMatching(SearchConstants.CHARGE_MATCHING_IGNORE);
-        System.out.println("Searching: " + queryStructure + " with charge ignore");
+        out.println("Searching: " + queryStructure + " with charge ignore");
         jcs.setSearchOptions(searchOpts);
         search(jcs);    // --> several hits again
 
@@ -85,7 +91,7 @@ public final class DatabaseSearchExample {
 
         searchOpts.setFormulaSearchType(FormulaSearch.SUBFORMULA);
         searchOpts.setFormulaSearchQuery("C10N1");
-        System.out.println("Searching: " + queryStructure
+        out.println("Searching: " + queryStructure
                 + " with charge ignore and formula query");
         jcs.setSearchOptions(searchOpts);
         search(jcs);
@@ -99,7 +105,7 @@ public final class DatabaseSearchExample {
         try {
             jcs.run();
             int[] results = jcs.getResults();
-            SearchUtil.printSearchResults(results);
+            SearchUtil.printSearchResults(results, out);
         } catch (Exception e) {
             System.err.println("Unexpected error during DB search!");
             e.printStackTrace();

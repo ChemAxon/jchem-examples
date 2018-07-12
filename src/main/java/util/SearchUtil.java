@@ -15,6 +15,7 @@
 
 package util;
 
+import java.io.PrintStream;
 import java.util.Arrays;
 
 import chemaxon.jchem.db.JChemSearch;
@@ -54,10 +55,10 @@ public final class SearchUtil {
     /**
      * Prints the given array of CD_IDs to the standard output.
      */
-    public static void printSearchResults(int[] array) {
-        System.out.println("Hit count: " + array.length);
-        System.out.println("Hit IDs:   " + Arrays.toString(array));
-        System.out.println();
+    public static void printSearchResults(int[] array, PrintStream out) {
+        out.println("Hit count: " + array.length);
+        out.println("Hit IDs:   " + Arrays.toString(array));
+        out.println();
     }
 
 }

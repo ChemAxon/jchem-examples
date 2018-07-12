@@ -18,6 +18,9 @@ package search.db;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
+
+import java.io.PrintStream;
+
 import chemaxon.descriptors.GenerateMD;
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.sss.SearchConstants;
@@ -36,6 +39,8 @@ public final class SimilaritySearchExample {
     private static final String TABLE_NAME = "similaritySearchTable";
     private static final float DISSIMILARITY_THRESHOLD = 0.65F;
     private static final String[] DESCRIPTORS = { "Pharmacophore", "HDonor", "HAcceptor" };
+    
+    static PrintStream out = System.out;
 
     private ConnectionHandler connHandler;
 
@@ -78,8 +83,8 @@ public final class SimilaritySearchExample {
         jcs.run();
 
         int[] cdIDs = jcs.getResults();
-        System.out.println("Results using chemical hashed fingerprint:");
-        SearchUtil.printSearchResults(cdIDs);
+        out.println("Results using chemical hashed fingerprint:");
+        SearchUtil.printSearchResults(cdIDs, out);
     }
 
     /**
@@ -107,8 +112,8 @@ public final class SimilaritySearchExample {
 
             int[] cdIDs = jcs.getResults();
             String descName = "descriptor: " + desc;
-            System.out.println("Results using " + descName);
-            SearchUtil.printSearchResults(cdIDs);
+            out.println("Results using " + descName);
+            SearchUtil.printSearchResults(cdIDs, out);
         }
     }
 
@@ -119,7 +124,7 @@ public final class SimilaritySearchExample {
      */
     private void generateDescriptors() throws Exception {
 
-        System.out.println("Generating descriptors...");
+        out.println("Generating descriptors...");
 
         // Set connection and table parameters for descriptor generation
         GenerateMD gmd = new GenerateMD(DESCRIPTORS.length);

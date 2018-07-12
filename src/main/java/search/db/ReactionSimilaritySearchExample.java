@@ -16,6 +16,7 @@
 package search.db;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.SQLException;
 
 import resource.ResourceLocator;
@@ -40,6 +41,9 @@ public final class ReactionSimilaritySearchExample {
 
     private static final String REACTION_TABLE = "reactionTable";
     private static final String REACTION_FILE = "hits1_100.smiles";
+    
+    static PrintStream out=System.out;
+    static PrintStream err=System.err;
 
     private ConnectionHandler connHandler;
 
@@ -47,7 +51,7 @@ public final class ReactionSimilaritySearchExample {
         try {
             new ReactionSimilaritySearchExample().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -75,14 +79,14 @@ public final class ReactionSimilaritySearchExample {
                 { "ReactantTanimoto", "ProductTanimoto", "CoarseReactionTanimoto",
                         "MediumReactionTanimoto", "StrictReactionTanimoto" };
         for (String m : metrics) {
-            System.out.println("Metric: " + m);
+            out.println("Metric: " + m);
             searchOpts.setDissimilarityMetric(m);
             searchOpts.setDissimilarityThreshold(dissimThreshold);
             jcs.run();
 
             int[] cdIDs = jcs.getResults();
-            System.out.println("Results using " + m);
-            SearchUtil.printSearchResults(cdIDs);
+            out.println("Results using " + m);
+            SearchUtil.printSearchResults(cdIDs, out);
         }
 
     }

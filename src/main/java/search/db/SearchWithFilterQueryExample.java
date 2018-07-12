@@ -15,6 +15,7 @@
 
 package search.db;
 
+import java.io.PrintStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,13 +43,16 @@ public final class SearchWithFilterQueryExample {
     private static final String STOCK_TABLE_NAME = "stock";
     private static final int MAX_QUANTITY = 10;
 
+    static PrintStream out = System.out;
+    static PrintStream err = System.err;
+    
     private ConnectionHandler connHandler;
 
     public static void main(String[] args) {
         try {
             new SearchWithFilterQueryExample().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -70,7 +74,7 @@ public final class SearchWithFilterQueryExample {
                 searchOpts);
 
         jcs.run();
-        SearchUtil.printSearchResults(jcs.getResults());
+        SearchUtil.printSearchResults(jcs.getResults(), out);
 
         // Include into the substructure search only the substances of which we have
         // less than 3 (grams) in stock
@@ -78,7 +82,7 @@ public final class SearchWithFilterQueryExample {
                 + " WHERE quantity < 3");
 
         jcs.run();
-        SearchUtil.printSearchResults(jcs.getResults());
+        SearchUtil.printSearchResults(jcs.getResults(), out);
     }
 
     /**
@@ -88,7 +92,7 @@ public final class SearchWithFilterQueryExample {
      */
     private void createPopulateStockTable(ConnectionHandler connHandler) throws SQLException {
 
-        System.out.println("Setting up stock table... ");
+        out.println("Setting up stock table... ");
 
         Statement stmt = connHandler.getConnection().createStatement();
         try {

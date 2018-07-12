@@ -15,6 +15,7 @@
 
 package search.db;
 
+import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,27 +41,30 @@ public final class CalculatedColumnsSearchExample {
 
     private static final String TABLE_NAME = "demo";
 
+    static PrintStream out=System.out;
+    static PrintStream err=System.err;
+    
     private ConnectionHandler connHandler;
 
     public static void main(String[] args) {
         try {
             new CalculatedColumnsSearchExample().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
     private void run() throws Exception {
         connHandler = ConnectionUtil.connectToDB();
         try {
-            System.out.print("Setting up molecule table... ");
+            out.print("Setting up molecule table... ");
 
             createTable();
             MolImportUtil.databaseImport(ResourceLocator.getDefaultInputPath(), connHandler,
                     TABLE_NAME);
 
-            System.out.println("Done.");
-            System.out.println();
+            out.println("Done.");
+            out.println();
 
             search();
         } finally {
@@ -115,8 +119,8 @@ public final class CalculatedColumnsSearchExample {
                     + columns[i] + ">" + thresholds[i]);
             jcs.run();
             int[] cdIDs = jcs.getResults();
-            System.out.println("Results using " + columns[i]);
-            SearchUtil.printSearchResults(cdIDs);
+            out.println("Results using " + columns[i]);
+            SearchUtil.printSearchResults(cdIDs, out);
         }
     }
 
