@@ -18,6 +18,9 @@ package search.db;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
+
+import java.io.PrintStream;
+
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.sss.SearchConstants;
 import chemaxon.sss.search.JChemSearchOptions;
@@ -32,13 +35,16 @@ public final class ChemicalTermsFilteringExample {
 
     private static final String TABLE_NAME = "demo";
 
+    static PrintStream out = System.out;
+    static PrintStream err = System.err;
+    
     private ConnectionHandler connHandler;
 
     public static void main(String[] args) {
         try {
             new ChemicalTermsFilteringExample().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -63,13 +69,13 @@ public final class ChemicalTermsFilteringExample {
                 SearchUtil.createJChemSearch(connHandler, "OC=O", TABLE_NAME, searchOpts);
 
         jcs.run();
-        System.out.println("Search has found " + jcs.getResultCount()
+        out.println("Search has found " + jcs.getResultCount()
                 + " hits in which O has pka value greater than 2");
 
         searchOpts.setChemTermsFilter("pka(h(0))> 3.5");
         jcs.setSearchOptions(searchOpts);
         jcs.run();
-        System.out.println("Search has found " + jcs.getResultCount()
+        out.println("Search has found " + jcs.getResultCount()
                 + " hits in which O has pka value greater than 3.5");
     }
 }

@@ -59,8 +59,26 @@ test {
 	systemProperty 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
 }
 
+def mains = [
+	'search.DuplicateSearchExample',
+	'search.MemorySearchExample',
+	'search.StandardizedMolSearchExample',
+	'search.db.AsyncSearchExample',
+	'search.db.CalculatedColumnsSearchExample',
+	'search.db.ChemicalTermsFilteringExample'
+]
+
+mains.each { className ->
+	task "${getTaskNameFromClass(className)}" (type: JavaExec) {
+		classpath=sourceSets.main.runtimeClasspath
+		main=className
+		environment "CHEMACON_HOME", file('cxn_home').getAbsolutePath()
+		group 'example'
+	}
+}
+
 if(findCxlFiles().isEmpty()) {
-	throw new GradleException("cxn_home folder has no license, gardle can not run");
+	throw new GradleException("cxn_home folder has no license, gardle can not run! Please copy license.cxl to cxn_home folder");
 }
 
 
@@ -81,4 +99,8 @@ def findCxlFiles(File file) {
 		}
 	}
 	return result
+}
+
+def getTaskNameFromClass(String className) {
+	return "run${className.split('\\.')[-1]}"
 }
