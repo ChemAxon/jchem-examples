@@ -1,3 +1,5 @@
+## IMPORTANT: This project can only be compiled & run in Java 8 currently.
+
 # About
 
 This project contains sources to give code examples how to use ChemAxon [JChem Base](https://chemaxon.com/products/jchem-engines) to search and store molecules.
