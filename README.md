@@ -1,4 +1,4 @@
-## - ![#f03c15](IMPORTANT): This project can only be compiled & run in Java 8 currently.
+## ![#f03c15](IMPORTANT): This project can only be compiled & run in Java 8 currently.
 
 # About
 
