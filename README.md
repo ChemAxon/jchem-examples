@@ -12,6 +12,13 @@ You can find the original HTML files in `html` folder.
 
 Copy all requested license (provided to you by your sales contact) to `cxn_home` folder in this project and name the file as `license.cxl`.  
 
+The following licenses are needed to access all the examples:
+* JChem Base
+* Structure Search
+* Geometry Plugin Group
+* Protonation Plugin Group
+* Partitioning Plugin Group
+
 # Running an example
 
 To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home˛` folder.
