@@ -59,6 +59,7 @@ repositories {
 
 test {
 	environment 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
+    maxHeapSize = "2g"
 }
 
 def mains = [
