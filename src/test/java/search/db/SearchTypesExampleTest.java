@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.chemaxon.test.helper.PrintCollector;
-import com.chemaxon.version.VersionInfo;
+import chemaxon.jchem.version.JChemVersionInfo;
 
 public class SearchTypesExampleTest {
 
@@ -26,7 +26,7 @@ public class SearchTypesExampleTest {
 		List<String> lines = pc.getOutputLines();
 		//System.out.println(lines);
 		assertStartsWith(lines.get(0), "21 hit(s) found");
-		int expectedSimilarityHitCount = VersionInfo.getJChemTableVersion() >= 23050000 ? 7 : 6;
+		int expectedSimilarityHitCount = JChemVersionInfo.getJChemTableVersion() >= 23050000 ? 7 : 6;
 		assertStartsWith(lines.get(1), expectedSimilarityHitCount+ " hit(s) found");
 		assertStartsWith(lines.get(2), "0 hit(s) found");
 	}
