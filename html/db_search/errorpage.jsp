@@ -18,7 +18,7 @@ function popupMessage() {
     "</HEAD>\n"+
     "<BODY>\n"+
     "<PRE>\n"+
-    "JChem version : "+chemaxon.jchem.version.VersionInfo.getJChemTableVersion()+"\n"+
+    "JChem version : "+chemaxon.jchem.version.JChemVersionInfo.getJChemTableVersion()+"\n"+
     "JVM : "+System.getProperty("java.vendor")+" "+System.getProperty("java.version")+"\n"+
     "OS  : "+System.getProperty("os.arch")+" "+System.getProperty("os.name")+" "+System.getProperty("os.version")+"\n"+
     "\n\nStack trace:\n"+
