@@ -27,7 +27,7 @@ opener.document.childOpened="true";  //For pop-up window check
     <tr>
         <td><a href="http://www.chemaxon.com/jchem" target="_blank">JChem</a> version:</td>
 	<td width="30">&nbsp;</td>
-        <td><%=chemaxon.jchem.version.JChemVersionInfo.getVersion()%></td>
+        <td><%=chemaxon.jchem.version.VersionInfo.getVersion()%></td>
     </tr>
     <tr>
         <td>JVM*:</td>
