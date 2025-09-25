@@ -1,0 +1,8 @@
+# Normalize all text files to LF in the repository
+* text=auto
+
+# Shell scripts should always have LF line endings
+*.sh eol=lf
+
+# Batch scripts should always have CRLF line endings
+*.bat eol=crlf
