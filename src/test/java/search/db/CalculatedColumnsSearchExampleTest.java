@@ -20,10 +20,10 @@ public class CalculatedColumnsSearchExampleTest {
 	}
 
 	@Test
-	public void logPHas69Hits() {
+	public void logPHas70Hits() {
 		CalculatedColumnsSearchExample.main(new String[] {});
 		assertThat(pc.getOutputLines().get(2), Matchers.is("Results using logp"));
-		assertThat(pc.getOutputLines().get(3), Matchers.is("Hit count: 69"));
+		assertThat(pc.getOutputLines().get(3), Matchers.is("Hit count: 70"));
 	}
 
 	@Test
