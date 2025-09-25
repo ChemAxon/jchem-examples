@@ -1,4 +1,4 @@
-## IMPORTANT: This project can only be compiled & run in Java 11 currently.
+## IMPORTANT: This project can be compiled & run with Java 17 currently.
 
 # About
 
