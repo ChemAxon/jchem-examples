@@ -114,7 +114,7 @@ public final class ConnectionUtil {
             ConnectionHandler connHandler = ConnectionUtil.getDefaultConnectionHandler();
             connHandler.connectToDatabase();
             initJchemPropertiesTableIfNeeded(connHandler);
-            System.out.println("Connection estabilished to " + connHandler.getUrl());
+            System.out.println("Connection established to " + connHandler.getUrl());
             return connHandler;
         } catch (Exception e) {
             throw new IOException("Error connecting database", e);
