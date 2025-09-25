@@ -89,16 +89,6 @@ tasks.register('runAllExamples') {
     }
 }
 
-if(findCxlFiles().isEmpty()) {
-	throw new GradleException("cxn_home folder has no license, gardle can not run! Please copy license.cxl to cxn_home folder");
-}
-
-
-def findCxlFiles() {
-	File cxnHome=file('cxn_home')
-	return findCxlFiles(cxnHome)
-}
-
 def findCxlFiles(File file) {
     def result = []
     if (file.isDirectory()) {
