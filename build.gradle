@@ -20,7 +20,7 @@ plugins {
 def version = project.hasProperty('release') ? project.getProperty('release') : '+'
 
 dependencies {
-    implementation "com.chemaxon:jchem-main:${version}"
+    implementation "com.chemaxon:chemaxon-jchem:${version}"
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.hamcrest:hamcrest:3.0'
@@ -41,7 +41,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 

@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,39 +15,39 @@
 
 package search.db;
 
+import chemaxon.jchem.db.JChemSearch;
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.descriptors.GenerateMD;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
 
 import java.io.PrintStream;
 
-import chemaxon.descriptors.GenerateMD;
-import chemaxon.jchem.db.JChemSearch;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.search.JChemSearchOptions;
-import chemaxon.util.ConnectionHandler;
 
 /**
  * Example code showing the creation of descriptor tables together with similarity searching
  * using the measures stored in these descriptor tables. Searching using built-in similarity
  * measures not requiring descriptor tables are also shown.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class SimilaritySearchExample {
 
     private static final String TABLE_NAME = "similaritySearchTable";
     private static final float DISSIMILARITY_THRESHOLD = 0.65F;
-    private static final String[] DESCRIPTORS = { "Pharmacophore", "HDonor", "HAcceptor" };
-    
+    private static final String[] DESCRIPTORS = {"Pharmacophore", "HDonor", "HAcceptor"};
+
     static PrintStream out = System.out;
 
     private ConnectionHandler connHandler;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new SimilaritySearchExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -70,10 +70,10 @@ public final class SimilaritySearchExample {
      * Tanimoto metrics.
      */
     private void performSimpleSimilaritySearch() throws Exception {
-        String query = "C[Si](C)(C)CC1=CC=CC=C1";
+        final String query = "C[Si](C)(C)CC1=CC=CC=C1";
 
-        JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SIMILARITY);
-        JChemSearch jcs =
+        final JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SIMILARITY);
+        final JChemSearch jcs =
                 SearchUtil.createJChemSearch(connHandler, query, TABLE_NAME, searchOpts);
 
         searchOpts.setDissimilarityThreshold(DISSIMILARITY_THRESHOLD);
@@ -82,7 +82,7 @@ public final class SimilaritySearchExample {
 
         jcs.run();
 
-        int[] cdIDs = jcs.getResults();
+        final int[] cdIDs = jcs.getResults();
         out.println("Results using chemical hashed fingerprint:");
         SearchUtil.printSearchResults(cdIDs, out);
     }
@@ -94,14 +94,14 @@ public final class SimilaritySearchExample {
      * {@link #generateDescriptors()} generates them.
      */
     private void performSimilaritySearchOnDescriptorTable() throws Exception {
-        String query = "C[Si](C)(C)CC1=CC=CC=C1";
+        final String query = "C[Si](C)(C)CC1=CC=CC=C1";
 
-        JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SIMILARITY);
+        final JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SIMILARITY);
         searchOpts.setDissimilarityThreshold(DISSIMILARITY_THRESHOLD);
-        JChemSearch jcs =
+        final JChemSearch jcs =
                 SearchUtil.createJChemSearch(connHandler, query, TABLE_NAME, searchOpts);
 
-        for (String desc : DESCRIPTORS) {
+        for (final String desc : DESCRIPTORS) {
             // Adjust search options: select descriptor name
             searchOpts.setDescriptorName(desc);
 
@@ -110,8 +110,8 @@ public final class SimilaritySearchExample {
 
             jcs.run();
 
-            int[] cdIDs = jcs.getResults();
-            String descName = "descriptor: " + desc;
+            final int[] cdIDs = jcs.getResults();
+            final String descName = "descriptor: " + desc;
             out.println("Results using " + descName);
             SearchUtil.printSearchResults(cdIDs, out);
         }
@@ -119,7 +119,7 @@ public final class SimilaritySearchExample {
 
     /**
      * Generates the descriptors used for the similarity search.
-     * 
+     *
      * @throws Exception
      */
     private void generateDescriptors() throws Exception {
@@ -127,11 +127,11 @@ public final class SimilaritySearchExample {
         out.println("Generating descriptors...");
 
         // Set connection and table parameters for descriptor generation
-        GenerateMD gmd = new GenerateMD(DESCRIPTORS.length);
+        final GenerateMD gmd = new GenerateMD(DESCRIPTORS.length);
         gmd.setConnectionHandler(connHandler);
         gmd.setStructureTableName(TABLE_NAME);
 
-        String settings = null;
+        final String settings = null;
         // You can see the list of chemaxon implemented descriptor types by entering
         // "generatemd -L" on the console.
 

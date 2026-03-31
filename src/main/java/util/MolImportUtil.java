@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,73 +15,69 @@
 
 package util;
 
+import chemaxon.formats.MolExporter;
+import chemaxon.formats.MolFormatException;
+import chemaxon.formats.MolImporter;
+import chemaxon.jchem.db.MolHandler;
+import chemaxon.jchem.db.TableImporter;
+import chemaxon.jchem.db.TableUpdateHandler;
+import chemaxon.jchem.db.exceptions.TableTransferException;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.struc.Molecule;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import chemaxon.formats.MolExporter;
-import chemaxon.formats.MolFormatException;
-import chemaxon.formats.MolImporter;
-import chemaxon.jchem.db.Importer;
-import chemaxon.jchem.db.TransferException;
-import chemaxon.jchem.db.UpdateHandler;
-import chemaxon.struc.Molecule;
-import chemaxon.util.ConnectionHandler;
-import chemaxon.util.MolHandler;
 
 /**
  * Example codes for importing molecules from molecule files or strings into {@link Molecule}
  * objects or database tables.
  * <p>
  * When structures are stored in a file, we can import them into Molecule objects using
- * {@link MolImporter} (e.g. see importMol(), method) or into database using {@link Importer}
+ * {@link MolImporter} (e.g. see importMol(), method) or into database using {@link TableImporter}
  * (see databaseImport() method).
  * <p>
  * If we know only string representation of a structure (SMILES, MDL Molfile, ...), we can
  * import it into a Molecule object using {@link MolImporter} (see importMolFromString()
  * method). importMolFromStringAsQuery() method is useful to import molecules from SMARTS string
  * representation (instead of SMILES).
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class MolImportUtil {
 
     /***
      * Imports a molecule from a file given by full path.
-     * 
+     *
      * @param fullPath full path name of file
      * @return first molecule stored in the given file
      * @throws IllegalArgumentException if an error occurs during import
      */
-    public static Molecule importMol(String fullPath) {
-        try {
-            MolImporter mi = new MolImporter(fullPath);
-            try {
+    public static Molecule importMol(final String fullPath) {
+        try(MolImporter mi = new MolImporter(fullPath)) {
                 return mi.read();
-            } finally {
-                mi.close();
-            }
-        } catch (MolFormatException e) {
+        } catch (final MolFormatException e) {
             throw new IllegalArgumentException("Invalid molecule format", e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IllegalArgumentException("Error reading input file", e);
         }
     }
 
     /**
      * Imports a molecule given by its SMARTS representation.
-     * 
+     *
      * @param molString molecule string (SMARTS)
      * @return the molecule object
      * @throws IllegalArgumentException if an error occurs during import
      */
-    public static Molecule importMolFromStringAsQuery(String molString) {
+    public static Molecule importMolFromStringAsQuery(final String molString) {
         try {
             // If queryMode (second parameter) is set true, the input will be interpreted
             // as SMARTS. If SMILES import is needed, set queryMode to false (default).
-            MolHandler mh = new MolHandler(molString, true);
+            final MolHandler mh = new MolHandler(molString, true);
             return mh.getMolecule();
-        } catch (MolFormatException e) {
+        } catch (final MolFormatException e) {
             throw new IllegalArgumentException("Invalid molecule format", e);
         }
     }
@@ -89,23 +85,23 @@ public final class MolImportUtil {
     /**
      * Imports the content of an input molecule file to a specified structure table in a
      * database.
-     * 
-     * @param inputFile full path of input file
+     *
+     * @param inputFile   full path of input file
      * @param connHandler open connection handler
-     * @param tableName structure table name
-     * @throws TransferException if an error occurs during import
+     * @param tableName   structure table name
+     * @throws TableTransferException if an error occurs during import
      */
-    public static void databaseImport(String inputFile, ConnectionHandler connHandler,
-            String tableName) throws TransferException {
+    public static void databaseImport(final String inputFile, final ConnectionHandler connHandler,
+                                      final String tableName) throws TableTransferException {
 
-        Importer importer = new Importer();
+        final TableImporter importer = new TableImporter();
 
         importer.setInput(inputFile);
         importer.setConnectionHandler(connHandler);
         importer.setTableName(tableName);
         importer.setHaltOnError(false);
         // Checking duplicates may slow down import!
-        importer.setDuplicateImportAllowed(UpdateHandler.DUPLICATE_FILTERING_OFF);
+        importer.setDuplicateImportAllowed(TableUpdateHandler.DUPLICATE_FILTERING_OFF);
 
         // Gather information about file
         importer.init();
@@ -116,17 +112,17 @@ public final class MolImportUtil {
 
     /**
      * Imports a single input molecule object to a specified structure table in a database.
-     * 
-     * @param mol the molecule to import
+     *
+     * @param mol         the molecule to import
      * @param connHandler open connection handler
-     * @param tableName structure table name
+     * @param tableName   structure table name
      * @throws Exception if an error occurs during import
      */
-    public static void databaseImportFromMolObject(Molecule mol, ConnectionHandler connHandler,
-            String tableName) throws Exception {
+    public static void databaseImportFromMolObject(final Molecule mol, final ConnectionHandler connHandler,
+                                                   final String tableName) throws Exception {
 
-        UpdateHandler uh =
-                new UpdateHandler(connHandler, UpdateHandler.INSERT, tableName, null);
+        final TableUpdateHandler uh =
+                new TableUpdateHandler(connHandler, TableUpdateHandler.INSERT, tableName, null);
         try {
             // The molecule has to be converted to one of the available formats
             uh.setStructure(MolExporter.exportToFormat(mol, "mrv"));
@@ -139,25 +135,21 @@ public final class MolImportUtil {
 
     /**
      * Imports the content of an input molecule file to a list of Molecule objects.
-     * 
+     *
      * @param inputFile full path of input file
-     * @throws IOException if I/O error occurs during import
+     * @throws IOException        if I/O error occurs during import
      * @throws MolFormatException if the input file contains erroneous structures
      */
-    public static List<Molecule> moleculeListImport(String inputFile)
+    public static List<Molecule> moleculeListImport(final String inputFile)
             throws MolFormatException, IOException {
 
-        List<Molecule> molList = new ArrayList<Molecule>();
-        MolImporter imp = new MolImporter(inputFile);
-        try {
+        final List<Molecule> molList = new ArrayList<>();
+        try(MolImporter imp = new MolImporter(inputFile)) {
             Molecule mol;
             while ((mol = imp.read()) != null) {
                 molList.add(mol);
             }
-        } finally {
-            imp.close();
         }
-
         return molList;
     }
 

@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,32 +15,31 @@
 
 package search;
 
+import chemaxon.formats.MolImporter;
+import chemaxon.search.MolSearch;
+import chemaxon.search.StandardizedMolSearch;
+import chemaxon.search.api.options.MolSearchOptions;
+import chemaxon.search.hitdisplay.HitDisplayOptions;
+import chemaxon.search.hitdisplay.HitDisplayTool;
+import chemaxon.struc.Molecule;
+import util.DisplayUtil;
+
 import java.io.PrintStream;
 import java.util.Arrays;
 
-import util.DisplayUtil;
-import chemaxon.formats.MolImporter;
-import chemaxon.sss.search.MolSearch;
-import chemaxon.sss.search.MolSearchOptions;
-import chemaxon.sss.search.StandardizedMolSearch;
-import chemaxon.struc.Molecule;
-import chemaxon.util.HitColoringAndAlignmentOptions;
-import chemaxon.util.HitDisplayTool;
 
 /**
  * Example codes for demonstrating the difference between {@link MolSearch} and
  * {@link StandardizedMolSearch} classes.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class StandardizedMolSearchExample {
 
     private static final String QUERY = "Cc1ccccc1";
     private static final String TARGET = "CC1=C(C)C=CC=C1C";
-    
-    private static boolean hideFrames = false;
-    
     static PrintStream out = System.out;
+    private static boolean hideFrames = false;
 
     /**
      * Imports the target and query molecule. Checks whether the query matches the target
@@ -49,12 +48,27 @@ public final class StandardizedMolSearchExample {
      * {@link MolSearch#findNext()} methods. Then in one step with the
      * {@link MolSearch#findAll()} method.
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
-        	hideFrames = (args.length > 0 && "hideFrames".equals(args[0]));
+            hideFrames = (args.length > 0 && "hideFrames".equals(args[0]));
             new StandardizedMolSearchExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void displayHits(final Molecule query, final Molecule target,
+                                    final MolSearchOptions searchOpts) throws Exception {
+
+        final HitDisplayOptions displayOpts = DisplayUtil.createColoringOptions();
+
+        final HitDisplayTool hdt = new HitDisplayTool(displayOpts, searchOpts, query);
+        hdt.setTarget(target);
+
+        int pos = 0;
+        Molecule hitMol = null;
+        while ((hitMol = hdt.getNextHit()) != null && !hideFrames) {
+            DisplayUtil.showMolecule(hitMol, pos++, "Rotated target");
         }
     }
 
@@ -71,8 +85,8 @@ public final class StandardizedMolSearchExample {
 
     private void searchWithAromatization() throws Exception {
         out.println("Executing molecule search " + "with aromatized molecules.");
-        Molecule query = MolImporter.importMol(QUERY);
-        Molecule target = MolImporter.importMol(TARGET);
+        final Molecule query = MolImporter.importMol(QUERY);
+        final Molecule target = MolImporter.importMol(TARGET);
         query.aromatize();
         target.aromatize();
         doSearch(new MolSearch(), query, target);
@@ -84,14 +98,14 @@ public final class StandardizedMolSearchExample {
                 MolImporter.importMol(TARGET));
     }
 
-    private void doSearch(MolSearch searcher, Molecule query, Molecule target)
+    private void doSearch(final MolSearch searcher, final Molecule query, final Molecule target)
             throws Exception {
         searcher.setQuery(query);
         searcher.setTarget(target);
         if (searcher.isMatching()) {
-            out.printf("%s is matching %s\n", DisplayUtil.toSmiles(query),
+            out.printf("%s is matching %s%n", DisplayUtil.toSmiles(query),
                     DisplayUtil.toSmiles(target));
-            out.printf("There are %d different hits\n", searcher.getMatchCount());
+            out.printf("There are %d different hits%n", searcher.getMatchCount());
 
             int[] hit = searcher.findFirst();
             while (hit != null) {
@@ -105,21 +119,6 @@ public final class StandardizedMolSearchExample {
             out.println("No match has been found.");
         }
         out.println();
-    }
-
-    private static void displayHits(Molecule query, Molecule target,
-            MolSearchOptions searchOpts) throws Exception {
-
-        HitColoringAndAlignmentOptions displayOpts = DisplayUtil.createColoringOptions();
-
-        HitDisplayTool hdt = new HitDisplayTool(displayOpts, searchOpts, query);
-        hdt.setTarget(target);
-
-        int pos = 0;
-        Molecule hitMol = null;
-        while ((hitMol = hdt.getNextHit()) != null && !hideFrames) {
-            DisplayUtil.showMolecule(hitMol, pos++, "Rotated target");
-        }
     }
 
 }

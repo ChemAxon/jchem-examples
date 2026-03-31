@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,24 +15,27 @@
 
 package search.db;
 
-import java.io.PrintStream;
-import java.sql.SQLException;
+import chemaxon.formats.MolExporter;
+import chemaxon.formats.MolImporter;
+import chemaxon.jchem.db.JChemSearch;
+
+
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.db.TableUpdateHandler;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
+import chemaxon.struc.Molecule;
 
 import resource.ResourceLocator;
 import util.ConnectionUtil;
 import util.TableOperations;
-import chemaxon.formats.MolExporter;
-import chemaxon.formats.MolImporter;
-import chemaxon.jchem.db.JChemSearch;
-import chemaxon.jchem.db.UpdateHandler;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.search.JChemSearchOptions;
-import chemaxon.struc.Molecule;
-import chemaxon.util.ConnectionHandler;
+
+import java.io.PrintStream;
+import java.sql.SQLException;
 
 /**
  * Example code which imports a diverse subset of the input molecules.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class DiverseSelectionExample {
@@ -41,13 +44,13 @@ public final class DiverseSelectionExample {
     private static final float DISSIM_THRESHOLD = 0.9f;
 
     static PrintStream out = System.out;
-    
+
     private ConnectionHandler connHandler;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new DiverseSelectionExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -73,27 +76,24 @@ public final class DiverseSelectionExample {
     private void importDiverseMolecules() throws Exception {
 
         int count = 0;
-        MolImporter imp = new MolImporter(ResourceLocator.getDefaultInputPath());
-        try {
+        try(MolImporter imp = new MolImporter(ResourceLocator.getDefaultInputPath())) {
             Molecule newMol;
             while ((newMol = imp.read()) != null) {
                 // Check for similar structures in the database
                 if (!similarMoleculeExistsInDB(newMol)) {
-                    String smilesMol = MolExporter.exportToFormat(newMol, "smiles");
+                    final String smilesMol = MolExporter.exportToFormat(newMol, "smiles");
                     out.println("New representative found: " + smilesMol);
                     insertMoleculeIntoDB(smilesMol);
                     count++;
                 }
             }
-        } finally {
-            imp.close();
         }
         out.println("Number of representatives: " + count);
     }
 
-    private void insertMoleculeIntoDB(String smilesMolecule) throws SQLException {
+    private void insertMoleculeIntoDB(final String smilesMolecule) throws SQLException {
 
-        UpdateHandler uh = new UpdateHandler(connHandler, UpdateHandler.INSERT,
+        final TableUpdateHandler uh = new TableUpdateHandler(connHandler, TableUpdateHandler.INSERT,
                 DIVERSE_MOLECULES_TABLE, null);
         try {
             uh.setStructure(smilesMolecule);
@@ -103,11 +103,11 @@ public final class DiverseSelectionExample {
         }
     }
 
-    private boolean similarMoleculeExistsInDB(Molecule mol) {
-        JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SIMILARITY);
+    private boolean similarMoleculeExistsInDB(final Molecule mol) {
+        final JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SIMILARITY);
         searchOpts.setDissimilarityThreshold(DISSIM_THRESHOLD);
 
-        JChemSearch jcs = new JChemSearch();
+        final JChemSearch jcs = new JChemSearch();
         jcs.setConnectionHandler(connHandler);
         jcs.setStructureTable(DIVERSE_MOLECULES_TABLE);
         jcs.setQueryStructure(mol);
@@ -115,7 +115,7 @@ public final class DiverseSelectionExample {
 
         try {
             jcs.run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             out.println("Unexpected error during DB search!");
             e.printStackTrace();
         }
