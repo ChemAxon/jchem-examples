@@ -10,17 +10,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SearchTypesExampleTest {
+class SearchTypesExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         SearchTypesExample.out = pc.getOutStream();
     }
 
     @Test
-    public void searchTypesTest() {
+    void searchTypesTest() {
         SearchTypesExample.main(null);
         final List<String> lines = pc.getOutputLines();
         //System.out.println(lines);
@@ -36,7 +36,7 @@ public class SearchTypesExampleTest {
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         SearchTypesExample.out = System.out;
     }
 

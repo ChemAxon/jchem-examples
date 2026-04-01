@@ -7,22 +7,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DatabaseImportExampleTest {
+class DatabaseImportExampleTest {
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         DatabaseImportExample.out = pc.getOutStream();
     }
 
     @Test
-    public void canImport1000Molecules() {
+    void canImport1000Molecules() {
         DatabaseImportExample.main(null);
         assertThat(pc.getOutputLines().contains("1000 structures imported"));
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         DatabaseImportExample.out = System.out;
     }
 }

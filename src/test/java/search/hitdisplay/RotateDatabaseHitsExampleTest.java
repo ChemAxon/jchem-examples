@@ -2,10 +2,10 @@ package search.hitdisplay;
 
 import org.junit.jupiter.api.Test;
 
-public class RotateDatabaseHitsExampleTest {
+class RotateDatabaseHitsExampleTest {
 
     @Test
-    public void canRun() {
+    void canRun() {
         RotateDatabaseHitsExample.main(new String[]{"hideDisplay"});
     }
 

@@ -14,18 +14,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SortedSearchExampleTest {
+class SortedSearchExampleTest {
 
     Pattern pattern = Pattern.compile("(cd_id: )(\\d+)( dissimilarity: )(\\d+\\.\\d+)");
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         SortedSearchExample.out = pc.getOutStream();
     }
 
     @Test
-    public void search() {
+    void search() {
         SortedSearchExample.main(null);
         final List<String> lines = pc.getOutputLines();
         assertEquals("7 hit(s) found (in ID order)", lines.get(0));
@@ -43,7 +43,7 @@ public class SortedSearchExampleTest {
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         SortedSearchExample.out = System.out;
     }
 

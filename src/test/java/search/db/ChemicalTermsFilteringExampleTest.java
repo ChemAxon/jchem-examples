@@ -9,17 +9,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ChemicalTermsFilteringExampleTest {
+class ChemicalTermsFilteringExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         ChemicalTermsFilteringExample.out = pc.getOutStream();
     }
 
     @Test
-    public void chemicalTermsFilteringTest() {
+    void chemicalTermsFilteringTest() {
         ChemicalTermsFilteringExample.main(null);
 
         final List<String> outputLines = pc.getOutputLines();
@@ -34,7 +34,7 @@ public class ChemicalTermsFilteringExampleTest {
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         ChemicalTermsFilteringExample.out = System.out;
     }
 

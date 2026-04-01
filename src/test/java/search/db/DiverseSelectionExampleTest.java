@@ -11,17 +11,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class DiverseSelectionExampleTest {
+class DiverseSelectionExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         DiverseSelectionExample.out = pc.getOutStream();
     }
 
     @Test
-    public void diverseSelectTets() {
+    void diverseSelectTets() {
         DiverseSelectionExample.main(null);
         final List<String> outputLines = pc.getOutputLines();
         //System.out.println(outputLines);
@@ -38,7 +38,7 @@ public class DiverseSelectionExampleTest {
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         DiverseSelectionExample.out = System.out;
     }
 }

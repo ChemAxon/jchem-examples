@@ -8,23 +8,23 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AsyncSearchExampleTest {
+class AsyncSearchExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void setOutput() {
+    void setOutput() {
         AsyncSearchExample.out = pc.getOutStream();
     }
 
     @Test
-    public void finds210Hits() {
+    void finds210Hits() {
         AsyncSearchExample.main(new String[]{});
         assertThat(pc.getOutputLines().contains("210 hit(s) found."));
     }
 
     @AfterEach
-    public void resetOutput() {
+    void resetOutput() {
         AsyncSearchExample.out = System.out;
     }
 

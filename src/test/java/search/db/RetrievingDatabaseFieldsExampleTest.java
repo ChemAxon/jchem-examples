@@ -10,17 +10,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RetrievingDatabaseFieldsExampleTest {
+class RetrievingDatabaseFieldsExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         RetrievingDatabaseFieldsExample.out = pc.getOutStream();
     }
 
     @Test
-    public void searchRetrievsFields() {
+    void searchRetrievsFields() {
         RetrievingDatabaseFieldsExample.main(null);
         final List<String> lines = pc.getOutputLines();
         // JUnit 5: condition first, message last
@@ -31,7 +31,7 @@ public class RetrievingDatabaseFieldsExampleTest {
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         RetrievingDatabaseFieldsExample.out = System.out;
     }
 

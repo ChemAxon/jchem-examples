@@ -12,20 +12,20 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DuplicateSearchExampleTest {
+class DuplicateSearchExampleTest {
 
     private static final Pattern isDuplicateMatcher = Pattern.compile("(\\d+)( is duplicate of )(\\d+)");
 
     private final PrintCollector printCollector = new PrintCollector();
 
     @BeforeEach
-    public void setPrintStreams() {
+    void setPrintStreams() {
         DuplicateSearchExample.out = printCollector.getOutStream();
         DuplicateSearchExample.err = printCollector.getErrorStream();
     }
 
     @Test
-    public void testMatches() throws Exception {
+    void testMatches() throws Exception {
         DuplicateSearchExample.main(new String[]{});
         final List<String> lines = printCollector.getOutputLines();
         final List<IdPair> idPairs = lines.stream().map(String::trim).filter(s -> isDuplicateMatcher.matcher(s).matches())
@@ -49,7 +49,7 @@ public class DuplicateSearchExampleTest {
     }
 
     @AfterEach
-    public void resetPrintStreams() {
+    void resetPrintStreams() {
         DuplicateSearchExample.out = System.out;
         DuplicateSearchExample.err = System.err;
     }

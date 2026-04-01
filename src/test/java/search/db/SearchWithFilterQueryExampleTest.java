@@ -8,23 +8,23 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SearchWithFilterQueryExampleTest {
+class SearchWithFilterQueryExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
-    public void changeOutputStream() {
+    void changeOutputStream() {
         SearchWithFilterQueryExample.out = pc.getOutStream();
     }
 
     @Test
-    public void searchWithFilterQuery() {
+    void searchWithFilterQuery() {
         SearchWithFilterQueryExample.main(null);
         assertThat(pc.getOutputLines().contains("Hit count: 21"));
     }
 
     @AfterEach
-    public void resetOutputStream() {
+    void resetOutputStream() {
         SearchWithFilterQueryExample.out = System.out;
     }
 

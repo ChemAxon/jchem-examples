@@ -2,10 +2,10 @@ package search.hitdisplay;
 
 import org.junit.jupiter.api.Test;
 
-public class HitColoringExampleTest {
+class HitColoringExampleTest {
 
     @Test
-    public void canRun() {
+    void canRun() {
         HitColoringExample.main(new String[]{"hideDisplay"});
     }
 
