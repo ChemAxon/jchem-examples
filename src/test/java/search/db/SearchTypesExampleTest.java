@@ -2,19 +2,19 @@ package search.db;
 
 import chemaxon.jchem.version.JChemVersionInfo;
 import com.chemaxon.test.helper.PrintCollector;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchTypesExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
-    @Before
+    @BeforeEach
     public void changeOutputStream() {
         SearchTypesExample.out = pc.getOutStream();
     }
@@ -31,10 +31,11 @@ public class SearchTypesExampleTest {
     }
 
     private void assertStartsWith(final String line, final String prefix) {
-        assertTrue(line + " should start with " + prefix, line.startsWith(prefix));
+        // JUnit 5: condition first, message last
+        assertTrue(line.startsWith(prefix), line + " should start with " + prefix);
     }
 
-    @After
+    @AfterEach
     public void resetOutputStream() {
         SearchTypesExample.out = System.out;
     }

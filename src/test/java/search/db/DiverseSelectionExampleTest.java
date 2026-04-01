@@ -2,21 +2,20 @@ package search.db;
 
 import chemaxon.jchem.version.JChemVersionInfo;
 import com.chemaxon.test.helper.PrintCollector;
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class DiverseSelectionExampleTest {
 
     private final PrintCollector pc = new PrintCollector();
 
-    @Before
+    @BeforeEach
     public void changeOutputStream() {
         DiverseSelectionExample.out = pc.getOutStream();
     }
@@ -33,12 +32,12 @@ public class DiverseSelectionExampleTest {
         final int expectedRepresentativeCount = JChemVersionInfo.getJChemTableVersion() >= 23050000 ? 8 : 10;
 
         for (final String expectedRepresentative : expectedRepresentatives) {
-            assertThat(outputLines, Matchers.hasItem("New representative found: " + expectedRepresentative));
+            assertThat(outputLines.contains("New representative found: " + expectedRepresentative));
         }
-        assertThat(outputLines, Matchers.hasItem("Number of representatives: " + expectedRepresentativeCount));
+        assertThat(outputLines.contains("Number of representatives: " + expectedRepresentativeCount));
     }
 
-    @After
+    @AfterEach
     public void resetOutputStream() {
         DiverseSelectionExample.out = System.out;
     }

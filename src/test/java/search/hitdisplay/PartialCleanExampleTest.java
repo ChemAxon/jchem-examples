@@ -1,11 +1,11 @@
 package search.hitdisplay;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PartialCleanExampleTest {
 
-	@Test
-	public void canRun() {
-		PartialCleanExample.main(new String[] { "hideDisplay" });
-	}
+    @Test
+    public void canRun() {
+        PartialCleanExample.main(new String[]{"hideDisplay"});
+    }
 }
