@@ -30,9 +30,9 @@ class DuplicateSearchExampleTest {
         final List<String> lines = printCollector.getOutputLines();
         final List<IdPair> idPairs = lines.stream().map(String::trim).filter(s -> isDuplicateMatcher.matcher(s).matches())
                 .map(this::convertLine).collect(Collectors.toList());
-        assertThat(idPairs).as("we expect 6 matches").hasSize(6);
-        assertThat(idPairs).as("All predefined pairs shuld be found")
-                .contains(new IdPair(669, 665), new IdPair(792, 197),
+        assertThat(idPairs).as("we expect 6 matches").hasSize(6)
+                .as("All predefined pairs shuld be found").contains(
+                        new IdPair(669, 665), new IdPair(792, 197),
                         new IdPair(958, 815), new IdPair(669, 665),
                         new IdPair(792, 197), new IdPair(958, 815));
         assertThat(printCollector.getErrorLines()).as("we don't expect any errors").isEmpty();

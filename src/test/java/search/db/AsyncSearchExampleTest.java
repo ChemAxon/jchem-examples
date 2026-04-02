@@ -20,7 +20,7 @@ class AsyncSearchExampleTest {
     @Test
     void finds210Hits() {
         AsyncSearchExample.main(new String[]{});
-        assertThat(pc.getOutputLines().contains("210 hit(s) found."));
+        assertThat(pc.getOutputLines()).contains("210 hit(s) found.");
     }
 
     @AfterEach

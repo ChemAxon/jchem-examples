@@ -31,6 +31,10 @@ import java.util.Arrays;
  */
 public final class SearchUtil {
 
+    private SearchUtil() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     /**
      * Creates a JChemSearch object and fills its main parameters.
      *

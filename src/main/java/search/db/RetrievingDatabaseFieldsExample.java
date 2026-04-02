@@ -113,12 +113,12 @@ public final class RetrievingDatabaseFieldsExample {
         final int[] cdIds = jcs.getResults();
 
         // Specify database fields to retrieve
-        final ArrayList<String> fieldNames = new ArrayList<String>();
+        final ArrayList<String> fieldNames = new ArrayList<>();
         fieldNames.add("cd_formula");
         fieldNames.add("cd_molweight");
 
         // ArrayList for returned database field values
-        final ArrayList<Object[]> fieldValues = new ArrayList<Object[]>();
+        final ArrayList<Object[]> fieldValues = new ArrayList<>();
 
         // One can also specify coloring and alignment options (not used now)
         final HitDisplayOptions displayOpts = null;

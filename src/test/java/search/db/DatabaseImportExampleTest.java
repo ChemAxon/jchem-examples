@@ -18,7 +18,7 @@ class DatabaseImportExampleTest {
     @Test
     void canImport1000Molecules() {
         DatabaseImportExample.main(null);
-        assertThat(pc.getOutputLines().contains("1000 structures imported"));
+        assertThat(pc.getOutputLines()).contains("1000 structures imported");
     }
 
     @AfterEach

@@ -47,6 +47,10 @@ import java.util.List;
  */
 public final class MolImportUtil {
 
+    private MolImportUtil() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     /***
      * Imports a molecule from a file given by full path.
      *

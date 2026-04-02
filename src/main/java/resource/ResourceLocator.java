@@ -9,6 +9,10 @@ import java.net.URL;
  */
 public final class ResourceLocator {
 
+    private ResourceLocator() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     private static final String DEFAULT_INPUT_FILE = "nci1000.smiles";
 
     /**

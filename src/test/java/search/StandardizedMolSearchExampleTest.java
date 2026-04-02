@@ -21,19 +21,19 @@ class StandardizedMolSearchExampleTest {
     @Test
     void byDefultThereAreNoMatches() {
         StandardizedMolSearchExample.main(args);
-        assertThat(pc.getOutputLines().get(1).equals("No match has been found."));
+        assertThat(pc.getOutputLines().get(1)).isEqualTo("No match has been found.");
     }
 
     @Test
     void aromatizedHas3Hits() {
         StandardizedMolSearchExample.main(args);
-        assertThat(pc.getOutputLines().get(5).equals("There are 3 different hits"));
+        assertThat(pc.getOutputLines().get(5)).isEqualTo("There are 3 different hits");
     }
 
     @Test
     void standardizedMolSearchHas3hits() {
         StandardizedMolSearchExample.main(args);
-        assertThat(pc.getOutputLines().get(12).equals("There are 3 different hits"));
+        assertThat(pc.getOutputLines().get(12)).isEqualTo("There are 3 different hits");
     }
 
     @AfterEach

@@ -34,6 +34,10 @@ import java.sql.SQLException;
  */
 public final class TableOperations {
 
+    private TableOperations() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     private static final int LARGE_TABLE_IMPORT_COUNT = 10;
 
     /**

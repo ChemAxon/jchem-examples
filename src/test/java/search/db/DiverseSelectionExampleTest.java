@@ -32,9 +32,9 @@ class DiverseSelectionExampleTest {
         final int expectedRepresentativeCount = JChemVersionInfo.getJChemTableVersion() >= 23050000 ? 8 : 10;
 
         for (final String expectedRepresentative : expectedRepresentatives) {
-            assertThat(outputLines.contains("New representative found: " + expectedRepresentative));
+            assertThat(outputLines).contains("New representative found: " + expectedRepresentative);
         }
-        assertThat(outputLines.contains("Number of representatives: " + expectedRepresentativeCount));
+        assertThat(outputLines).contains("Number of representatives: " + expectedRepresentativeCount);
     }
 
     @AfterEach

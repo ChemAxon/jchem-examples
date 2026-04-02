@@ -19,25 +19,25 @@ class DatabaseSearchExampleTest {
     @Test
     void searchCCNCCHas111Hits() {
         DatabaseSearchExample.main(null);
-        assertThat(pc.getOutputLines().get(1).equals("Hit count: 111"));
+        assertThat(pc.getOutputLines().get(1)).isEqualTo("Hit count: 111");
     }
 
     @Test
     void searchCCNPlusCCHas2Hits() {
         DatabaseSearchExample.main(null);
-        assertThat(pc.getOutputLines().get(5).equals("Hit count: 2"));
+        assertThat(pc.getOutputLines().get(5)).isEqualTo("Hit count: 2");
     }
 
     @Test
     void searchCCNPlusCCWithChargeIgnoreHas111Hits() {
         DatabaseSearchExample.main(null);
-        assertThat(pc.getOutputLines().get(9).equals("Hit count: 111"));
+        assertThat(pc.getOutputLines().get(9)).isEqualTo("Hit count: 111");
     }
 
     @Test
     void searchCCNPlusCCWithChargeIgnoreAndForumlaQueryHas68Hits() {
         DatabaseSearchExample.main(null);
-        assertThat(pc.getOutputLines().get(13).equals("Hit count: 68"));
+        assertThat(pc.getOutputLines().get(13)).isEqualTo("Hit count: 68");
     }
 
     @AfterEach

@@ -45,6 +45,10 @@ import java.util.Properties;
  */
 public final class ConnectionUtil {
 
+    private ConnectionUtil() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     /**
      * Returns a connection handler using the specified parameters.
      *

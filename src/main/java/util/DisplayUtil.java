@@ -31,6 +31,10 @@ import java.io.IOException;
  */
 public final class DisplayUtil {
 
+    private DisplayUtil() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     private static final int DEFAULT_FRAME_SIZE = 300;
 
     /**
@@ -73,7 +77,7 @@ public final class DisplayUtil {
 
         // Display the result in a JFrame window
         final JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(mvpane);
         frame.pack();
         frame.setBounds((pos % 4) * size, (pos / 4) * size, size, size);

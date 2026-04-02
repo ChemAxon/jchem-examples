@@ -20,7 +20,7 @@ class SearchWithFilterQueryExampleTest {
     @Test
     void searchWithFilterQuery() {
         SearchWithFilterQueryExample.main(null);
-        assertThat(pc.getOutputLines().contains("Hit count: 21"));
+        assertThat(pc.getOutputLines()).contains("Hit count: 21");
     }
 
     @AfterEach

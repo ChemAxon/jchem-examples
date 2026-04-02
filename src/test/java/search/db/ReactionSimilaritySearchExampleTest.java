@@ -20,25 +20,25 @@ class ReactionSimilaritySearchExampleTest {
     @Test
     void searchReactantTanimotoHas1Hit() {
         ReactionSimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(2).equals("Hit count: 1"));
+        assertThat(pc.getOutputLines().get(2)).isEqualTo("Hit count: 1");
     }
 
     @Test
     void searchProductTanimotoHas1Hits() {
         ReactionSimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(7).equals("Hit count: 1"));
+        assertThat(pc.getOutputLines().get(7)).isEqualTo("Hit count: 1");
     }
 
     @Test
     void searchCoarseReactionTanimotoHas6Hits() {
         ReactionSimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(12).equals("Hit count: 6"));
+        assertThat(pc.getOutputLines().get(12)).isEqualTo("Hit count: 6");
     }
 
     @Test
     void searchMediumReactionTanimotoHas5Hits() {
         ReactionSimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(17).equals("Hit count: 5"));
+        assertThat(pc.getOutputLines().get(17)).isEqualTo("Hit count: 5");
     }
 
     @AfterEach

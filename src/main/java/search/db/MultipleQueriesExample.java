@@ -171,8 +171,8 @@ public final class MultipleQueriesExample {
     }
 
     private void listResults(final Collection<Integer> results) {
-        out.printf("Result count: %d\n", results.size());
-        out.printf("Result cd_ids: %s\n", results);
+        out.printf("Result count: %d%nn", results.size());
+        out.printf("Result cd_ids: %s%n", results);
         out.println();
     }
 

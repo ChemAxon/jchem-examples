@@ -32,8 +32,8 @@ class SortedSearchExampleTest {
         assertEquals("7 hit(s) found (in molweight order)", lines.get(9));
         final List<String> idOrder = lines.subList(1, 8);
         final List<String> mwOrder = lines.subList(10, lines.size());
-        assertThat(idOrder.contains(mwOrder.toArray(new String[]{})));
-        assertThat(mwOrder.contains(idOrder.toArray(new String[]{})));
+        assertThat(idOrder).contains(mwOrder.toArray(new String[]{}));
+        assertThat(mwOrder).contains(idOrder.toArray(new String[]{}));
         final List<Integer> ids = idOrder.stream().map(this::toId).collect(Collectors.toList());
         for (int i = 1; i < ids.size(); ++i) {
             assertIntInOrder(ids, i);
