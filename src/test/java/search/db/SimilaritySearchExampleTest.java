@@ -30,17 +30,17 @@ class SimilaritySearchExampleTest {
     }
 
     @Test
-    void hDonorHas382Hits() {
+    void hDonorHas383Hits() {
         SimilaritySearchExample.main(null);
         assertThat(pc.getOutputLines().get(9)).isEqualTo("Results using descriptor: HDonor");
-        assertThat(pc.getOutputLines().get(10)).isEqualTo("Hit count: 382");
+        assertThat(pc.getOutputLines().get(10)).isEqualTo("Hit count: 383");
     }
 
     @Test
-    void hAcceptorHas382Hits() {
+    void hAcceptorHas383Hits() {
         SimilaritySearchExample.main(null);
         assertThat(pc.getOutputLines().get(13)).isEqualTo("Results using descriptor: HAcceptor");
-        assertThat(pc.getOutputLines().get(14)).isEqualTo("Hit count: 382");
+        assertThat(pc.getOutputLines().get(14)).isEqualTo("Hit count: 383");
     }
 
     @AfterEach
