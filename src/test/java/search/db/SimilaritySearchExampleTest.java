@@ -32,7 +32,6 @@ class SimilaritySearchExampleTest {
     @Test
     void hDonorHas382Hits() {
         SimilaritySearchExample.main(null);
-        String ol = pc.getOutputLines().toString();
         assertThat(pc.getOutputLines().get(9)).isEqualTo("Results using descriptor: HDonor");
         assertThat(pc.getOutputLines().get(10)).isEqualTo("Hit count: 382");
     }
