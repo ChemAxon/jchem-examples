@@ -20,12 +20,12 @@ plugins {
 def version = project.hasProperty('release') ? project.getProperty('release') : '+'
 
 dependencies {
-    implementation "com.chemaxon:chemaxon-jchem:${version}"
+    implementation "com.chemaxon:chemaxon-jchem-db:${version}"
 
     testImplementation 'org.junit.jupiter:junit-jupiter:6.0.3'
     testImplementation 'org.junit.platform:junit-platform-launcher:6.0.3'
     testImplementation 'org.assertj:assertj-core:4.0.0-M1'
-    testImplementation 'org.mockito:mockito-core:5.20.0'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
 }
 
 repositories {
