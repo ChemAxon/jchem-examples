@@ -15,15 +15,18 @@
 
 package search.db;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import util.ConnectionUtil;
+import util.TableOperations;
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.jchem.db.JChemSearchOptions;
 import chemaxon.jchem.util.ConnectionHandler;
 import chemaxon.search.api.SearchConstants;
-import util.ConnectionUtil;
-import util.TableOperations;
-
-import java.io.PrintStream;
-import java.util.*;
 
 
 /**

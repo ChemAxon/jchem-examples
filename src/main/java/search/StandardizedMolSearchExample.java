@@ -15,6 +15,9 @@
 
 package search;
 
+import java.io.PrintStream;
+import java.util.Arrays;
+import util.DisplayUtil;
 import chemaxon.formats.MolImporter;
 import chemaxon.search.MolSearch;
 import chemaxon.search.StandardizedMolSearch;
@@ -22,10 +25,6 @@ import chemaxon.search.api.options.MolSearchOptions;
 import chemaxon.search.hitdisplay.HitDisplayOptions;
 import chemaxon.search.hitdisplay.HitDisplayTool;
 import chemaxon.struc.Molecule;
-import util.DisplayUtil;
-
-import java.io.PrintStream;
-import java.util.Arrays;
 
 
 /**

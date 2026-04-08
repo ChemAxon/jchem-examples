@@ -15,13 +15,12 @@
 
 package util;
 
-import chemaxon.jchem.db.DatabaseProperties;
-import chemaxon.jchem.util.ConnectionHandler;
-import chemaxon.jchem.util.internal.SettingsHandler;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
+import chemaxon.jchem.db.DatabaseProperties;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.jchem.util.internal.SettingsHandler;
 
 
 /**

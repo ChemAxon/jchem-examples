@@ -15,16 +15,19 @@
 
 package search.hitdisplay;
 
+import java.util.Arrays;
+import resource.ResourceLocator;
+import util.ConnectionUtil;
+import util.DisplayUtil;
+import util.MolImportUtil;
+import util.SearchUtil;
+import util.TableOperations;
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.jchem.db.JChemSearchOptions;
 import chemaxon.jchem.util.ConnectionHandler;
 import chemaxon.search.api.SearchConstants;
 import chemaxon.search.hitdisplay.HitDisplayOptions;
 import chemaxon.struc.Molecule;
-import resource.ResourceLocator;
-import util.*;
-
-import java.util.Arrays;
 
 
 /**

@@ -15,20 +15,19 @@
 
 package search.db;
 
+import java.io.PrintStream;
+import java.sql.SQLException;
+import resource.ResourceLocator;
+import util.ConnectionUtil;
+import util.MolImportUtil;
+import util.SearchUtil;
+import util.TableOperations;
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.jchem.db.JChemSearchOptions;
 import chemaxon.jchem.db.constants.TableTypeConstants;
 import chemaxon.jchem.db.exceptions.TableTransferException;
 import chemaxon.jchem.util.ConnectionHandler;
 import chemaxon.search.api.SearchConstants;
-import resource.ResourceLocator;
-import util.ConnectionUtil;
-import util.MolImportUtil;
-import util.SearchUtil;
-import util.TableOperations;
-
-import java.io.PrintStream;
-import java.sql.SQLException;
 
 
 /**

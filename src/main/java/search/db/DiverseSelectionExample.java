@@ -15,23 +15,19 @@
 
 package search.db;
 
+import java.io.PrintStream;
+import java.sql.SQLException;
+import resource.ResourceLocator;
+import util.ConnectionUtil;
+import util.TableOperations;
 import chemaxon.formats.MolExporter;
 import chemaxon.formats.MolImporter;
 import chemaxon.jchem.db.JChemSearch;
-
-
 import chemaxon.jchem.db.JChemSearchOptions;
 import chemaxon.jchem.db.TableUpdateHandler;
 import chemaxon.jchem.util.ConnectionHandler;
 import chemaxon.search.api.SearchConstants;
 import chemaxon.struc.Molecule;
-
-import resource.ResourceLocator;
-import util.ConnectionUtil;
-import util.TableOperations;
-
-import java.io.PrintStream;
-import java.sql.SQLException;
 
 /**
  * Example code which imports a diverse subset of the input molecules.

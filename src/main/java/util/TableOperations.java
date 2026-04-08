@@ -15,13 +15,12 @@
 
 package util;
 
+import java.sql.SQLException;
+import resource.ResourceLocator;
 import chemaxon.jchem.db.TableOptions;
 import chemaxon.jchem.db.TableUpdateHandler;
 import chemaxon.jchem.db.constants.TableTypeConstants;
 import chemaxon.jchem.util.ConnectionHandler;
-import resource.ResourceLocator;
-
-import java.sql.SQLException;
 
 
 /**

@@ -1,13 +1,12 @@
 package search.db;
 
-import com.chemaxon.test.helper.PrintCollector;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.chemaxon.test.helper.PrintCollector;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ChemicalTermsFilteringExampleTest {
 
@@ -23,14 +22,15 @@ class ChemicalTermsFilteringExampleTest {
         ChemicalTermsFilteringExample.main(null);
 
         final List<String> outputLines = pc.getOutputLines();
-        assertTrue(getHitAndPkaAboveLimit(outputLines.get(0)) > 60);
-        assertTrue(getHitAndPkaAboveLimit(outputLines.get(1)) > 60);
+        assertThat(extractHitCount(outputLines.get(0))).isGreaterThan(60);
+        assertThat(extractHitCount(outputLines.get(1))).isGreaterThan(60);
     }
 
-    private int getHitAndPkaAboveLimit(final String string) {
-        final String hitCountStr =
-                string.replaceFirst("Search has found ", "").replaceFirst(" hits in which .* has pka value greater than .*", "");
-        return Integer.valueOf(hitCountStr);
+    private int extractHitCount(final String string) {
+        final String hitCountStr = string
+                .replaceFirst("Search has found ", "")
+                .replaceFirst(" hits in which .* has pka value greater than .*", "");
+        return Integer.parseInt(hitCountStr);
     }
 
     @AfterEach

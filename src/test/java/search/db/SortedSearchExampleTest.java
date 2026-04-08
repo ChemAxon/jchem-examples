@@ -1,22 +1,18 @@
 package search.db;
 
-import com.chemaxon.test.helper.PrintCollector;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.chemaxon.test.helper.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SortedSearchExampleTest {
 
-    Pattern pattern = Pattern.compile("(cd_id: )(\\d+)( dissimilarity: )(\\d+\\.\\d+)");
+    private static final Pattern PATTERN = Pattern.compile("cd_id: (\\d+) dissimilarity: (\\d+\\.\\d+)");
     private final PrintCollector pc = new PrintCollector();
 
     @BeforeEach
@@ -28,18 +24,16 @@ class SortedSearchExampleTest {
     void search() {
         SortedSearchExample.main(null);
         final List<String> lines = pc.getOutputLines();
-        assertEquals("7 hit(s) found (in ID order)", lines.get(0));
-        assertEquals("7 hit(s) found (in molweight order)", lines.get(9));
+        assertThat(lines.get(0)).isEqualTo("7 hit(s) found (in ID order)");
+        assertThat(lines.get(9)).isEqualTo("7 hit(s) found (in molweight order)");
         final List<String> idOrder = lines.subList(1, 8);
         final List<String> mwOrder = lines.subList(10, lines.size());
-        assertThat(idOrder).contains(mwOrder.toArray(new String[]{}));
-        assertThat(mwOrder).contains(idOrder.toArray(new String[]{}));
-        final List<Integer> ids = idOrder.stream().map(this::toId).collect(Collectors.toList());
-        for (int i = 1; i < ids.size(); ++i) {
-            assertIntInOrder(ids, i);
-        }
-        assertTrue(notInSameOrder(idOrder, mwOrder),
-                "list: " + idOrder + " should not have the same order as list: " + mwOrder);
+        assertThat(idOrder).as("Both orderings should contain the same hits")
+                .containsExactlyInAnyOrderElementsOf(mwOrder);
+        final List<Integer> ids = idOrder.stream().map(this::extractId).toList();
+        assertThat(ids).as("IDs should be in ascending order").isSorted();
+        assertThat(idOrder).as("Molweight order should differ from ID order")
+                .isNotEqualTo(mwOrder);
     }
 
     @AfterEach
@@ -47,30 +41,11 @@ class SortedSearchExampleTest {
         SortedSearchExample.out = System.out;
     }
 
-    private int toId(final String line) {
-        return getNum(line, 2);
-    }
-
-    private int getNum(final String line, final int group) {
-        final Matcher matcher = pattern.matcher(line);
+    private int extractId(final String line) {
+        final Matcher matcher = PATTERN.matcher(line);
         if (matcher.matches()) {
-            return Integer.parseInt(matcher.group(group));
+            return Integer.parseInt(matcher.group(1));
         }
-        throw new IllegalStateException("line: \"" + line + "\" should match pattern: \"" + pattern.toString() + "\"");
-    }
-
-    private void assertIntInOrder(final List<Integer> nums, final int idx) {
-        assertTrue(nums.get(idx - 1) < nums.get(idx),
-                "in list: " + nums + " [" + idx + "]=" + nums.get(idx) + " should be bigger than [" + (idx - 1)
-                        + "]=" + nums.get(idx - 1));
-    }
-
-    private boolean notInSameOrder(final List<String> idOrder, final List<String> mwOrder) {
-        boolean differentIndexFound = false;
-        for (int i = 0; i < mwOrder.size() && !differentIndexFound; ++i) {
-            final int idx = mwOrder.indexOf(idOrder.get(i));
-            differentIndexFound = idx != i;
-        }
-        return differentIndexFound;
+        throw new IllegalStateException("Line does not match expected pattern: \"" + line + "\"");
     }
 }

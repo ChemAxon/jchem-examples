@@ -15,20 +15,19 @@
 
 package search.db;
 
-import chemaxon.jchem.db.JChemSearch;
-import chemaxon.jchem.db.JChemSearchOptions;
-import chemaxon.jchem.util.ConnectionHandler;
-import chemaxon.search.api.SearchConstants;
-import util.ConnectionUtil;
-import util.SearchUtil;
-import util.TableOperations;
-
 import java.io.PrintStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
+import util.ConnectionUtil;
+import util.SearchUtil;
+import util.TableOperations;
+import chemaxon.jchem.db.JChemSearch;
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
 
 
 /**

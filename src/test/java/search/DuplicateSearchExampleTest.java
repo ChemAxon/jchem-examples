@@ -1,14 +1,12 @@
 package search;
 
-import com.chemaxon.test.helper.PrintCollector;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.chemaxon.test.helper.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,16 +23,24 @@ class DuplicateSearchExampleTest {
     }
 
     @Test
-    void testMatches() throws Exception {
+    void testMatches() {
         DuplicateSearchExample.main(new String[]{});
         final List<String> lines = printCollector.getOutputLines();
-        final List<IdPair> idPairs = lines.stream().map(String::trim).filter(s -> isDuplicateMatcher.matcher(s).matches())
-                .map(this::convertLine).collect(Collectors.toList());
-        assertThat(idPairs).as("we expect 6 matches").hasSize(6)
+        final List<IdPair> idPairs = lines.stream()
+                .map(String::trim)
+                .filter(s -> isDuplicateMatcher.matcher(s).matches())
+                .map(this::convertLine)
+                .toList();
+        assertThat(idPairs)
+                .as("we expect 6 matches").hasSize(6)
                 .as("All predefined pairs shuld be found").contains(
-                        new IdPair(669, 665), new IdPair(792, 197),
-                        new IdPair(958, 815), new IdPair(669, 665),
-                        new IdPair(792, 197), new IdPair(958, 815));
+                        new IdPair(669, 665),
+                        new IdPair(792, 197),
+                        new IdPair(958, 815),
+                        new IdPair(669, 665),
+                        new IdPair(792, 197),
+                        new IdPair(958, 815)
+                );
         assertThat(printCollector.getErrorLines()).as("we don't expect any errors").isEmpty();
     }
 
@@ -57,24 +63,10 @@ class DuplicateSearchExampleTest {
     private record IdPair(int first, int second) {
 
         @Override
-            public boolean equals(final Object obj) {
-                if (this == obj)
-                    return true;
-                if (obj == null)
-                    return false;
-                if (getClass() != obj.getClass())
-                    return false;
-                final IdPair other = (IdPair) obj;
-                if (first != other.first)
-                    return false;
-                return second == other.second;
-            }
-
-            @Override
-            public String toString() {
-                return "IdPair [first=" + first + ", second=" + second + "]";
-            }
-
+        public String toString() {
+            return "IdPair [first=" + first + ", second=" + second + "]";
         }
+
+    }
 
 }

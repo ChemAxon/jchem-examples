@@ -15,12 +15,11 @@
 
 package util;
 
+import java.io.PrintStream;
+import java.util.Arrays;
 import chemaxon.jchem.db.JChemSearch;
 import chemaxon.jchem.db.JChemSearchOptions;
 import chemaxon.jchem.util.ConnectionHandler;
-
-import java.io.PrintStream;
-import java.util.Arrays;
 
 
 /**

@@ -1,12 +1,11 @@
 package search.db;
 
-import chemaxon.jchem.version.JChemVersionInfo;
-import com.chemaxon.test.helper.PrintCollector;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
+import chemaxon.jchem.version.JChemVersionInfo;
+import com.chemaxon.test.helper.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +23,6 @@ class DiverseSelectionExampleTest {
     void diverseSelectTets() {
         DiverseSelectionExample.main(null);
         final List<String> outputLines = pc.getOutputLines();
-        //System.out.println(outputLines);
 
         final String[] expectedRepresentatives = JChemVersionInfo.getJChemTableVersion() >= 23050000
                 ? new String[]{"S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O"}

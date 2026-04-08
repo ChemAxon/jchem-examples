@@ -15,19 +15,18 @@
 
 package search.db;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.sql.SQLException;
+import resource.ResourceLocator;
+import util.ConnectionUtil;
+import util.TableOperations;
 import chemaxon.formats.MolExporter;
 import chemaxon.formats.MolImporter;
 import chemaxon.jchem.db.TableImporter;
 import chemaxon.jchem.db.exceptions.TableTransferException;
 import chemaxon.jchem.util.ConnectionHandler;
 import chemaxon.struc.Molecule;
-import resource.ResourceLocator;
-import util.ConnectionUtil;
-import util.TableOperations;
-
-import java.io.IOException;
-import java.io.PrintStream;
-import java.sql.SQLException;
 
 /**
  * Example code for importing molecules into database.

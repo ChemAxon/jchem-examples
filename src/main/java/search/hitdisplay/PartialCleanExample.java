@@ -15,15 +15,15 @@
 
 package search.hitdisplay;
 
+import resource.ResourceLocator;
+import util.DisplayUtil;
+import util.MolImportUtil;
 import chemaxon.formats.MolImporter;
 import chemaxon.search.api.SearchConstants;
 import chemaxon.search.api.options.MolSearchOptions;
 import chemaxon.search.hitdisplay.HitDisplayOptions;
 import chemaxon.search.hitdisplay.HitDisplayTool;
 import chemaxon.struc.Molecule;
-import resource.ResourceLocator;
-import util.DisplayUtil;
-import util.MolImportUtil;
 
 
 /**

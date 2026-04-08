@@ -1,8 +1,12 @@
 package com.chemaxon.test.helper;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PrintCollector {
 
@@ -37,7 +41,7 @@ public class PrintCollector {
     private List<String> getLines(final ByteArrayOutputStream baos) {
         try (final BufferedReader br = new BufferedReader(
                 new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())))) {
-            return br.lines().collect(Collectors.toList());
+            return br.lines().toList();
         } catch (final IOException e) {
             throw new IllegalStateException("can not read data", e);
         }

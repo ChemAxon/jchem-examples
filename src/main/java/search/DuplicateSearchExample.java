@@ -15,6 +15,14 @@
 
 package search;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import resource.ResourceLocator;
+import util.MolImportUtil;
 import chemaxon.formats.MolExporter;
 import chemaxon.formats.MolFormatException;
 import chemaxon.search.StandardizedMolSearch;
@@ -23,15 +31,6 @@ import chemaxon.search.api.SearchException;
 import chemaxon.search.api.options.MolSearchOptions;
 import chemaxon.search.util.HashCode;
 import chemaxon.struc.Molecule;
-import resource.ResourceLocator;
-import util.MolImportUtil;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Running various types of duplicate search:

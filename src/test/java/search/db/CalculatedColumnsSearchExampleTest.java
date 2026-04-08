@@ -1,12 +1,11 @@
 package search.db;
 
-import com.chemaxon.test.helper.PrintCollector;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.chemaxon.test.helper.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CalculatedColumnsSearchExampleTest {
 
@@ -35,7 +34,8 @@ class CalculatedColumnsSearchExampleTest {
     void pkaAc2HasAtLeast6Hits() {
         CalculatedColumnsSearchExample.main(new String[]{});
         assertThat(pc.getOutputLines().get(10)).isEqualTo("Results using pka_ac_2");
-        assertTrue(Integer.parseInt(pc.getOutputLines().get(11).substring("Hit count: ".length())) >= 6);
+        assertThat(Integer.parseInt(pc.getOutputLines().get(11).substring("Hit count: ".length())))
+                .isGreaterThanOrEqualTo(6);
     }
 
     @AfterEach

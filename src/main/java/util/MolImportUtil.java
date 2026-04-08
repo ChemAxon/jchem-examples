@@ -15,6 +15,9 @@
 
 package util;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import chemaxon.formats.MolExporter;
 import chemaxon.formats.MolFormatException;
 import chemaxon.formats.MolImporter;
@@ -24,10 +27,6 @@ import chemaxon.jchem.db.TableUpdateHandler;
 import chemaxon.jchem.db.exceptions.TableTransferException;
 import chemaxon.jchem.util.ConnectionHandler;
 import chemaxon.struc.Molecule;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

@@ -15,15 +15,14 @@
 
 package search;
 
+import java.io.PrintStream;
+import java.util.Arrays;
 import chemaxon.formats.MolImporter;
 import chemaxon.search.MolSearch;
 import chemaxon.search.StandardizedMolSearch;
 import chemaxon.search.api.SearchConstants;
 import chemaxon.search.api.options.MolSearchOptions;
 import chemaxon.struc.Molecule;
-
-import java.io.PrintStream;
-import java.util.Arrays;
 
 /**
  * Example code for demonstrating the usage of {@link MolSearch} class.

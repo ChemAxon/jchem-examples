@@ -15,14 +15,14 @@
 
 package util;
 
+import java.awt.Color;
+import java.io.IOException;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 import chemaxon.formats.MolExporter;
 import chemaxon.marvin.beans.MViewPane;
 import chemaxon.search.hitdisplay.HitDisplayOptions;
 import chemaxon.struc.Molecule;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 
 /**
  * Various utility functions used in the example codes for displaying molecules.

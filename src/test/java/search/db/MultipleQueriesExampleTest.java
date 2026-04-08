@@ -1,9 +1,9 @@
 package search.db;
 
-import com.chemaxon.test.helper.PrintCollector;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.chemaxon.test.helper.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +19,9 @@ class MultipleQueriesExampleTest {
     @Test
     void searchWithMultipleQueriesTest() {
         MultipleQueriesExample.main(null);
-        final long queriesRun = pc.getOutputLines().stream().filter("Result count: 52"::equals).count();
+        final long queriesRun = pc.getOutputLines().stream()
+                .filter("Result count: 52"::equals)
+                .count();
         assertThat(queriesRun).isEqualTo(2L);
     }
 
