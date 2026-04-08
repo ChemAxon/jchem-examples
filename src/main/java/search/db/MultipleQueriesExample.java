@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,36 +21,59 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import util.ConnectionUtil;
 import util.TableOperations;
 import chemaxon.jchem.db.JChemSearch;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.search.JChemSearchOptions;
-import chemaxon.util.ConnectionHandler;
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
+
 
 /**
  * This class demonstrates two different approaches to retrieve the intersection of the result
  * of multiple queries (logical AND operation).
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class MultipleQueriesExample {
 
     private static final String TABLE_NAME = "demo";
 
-    private static final String[] QUERIES = new String[] { "CCCCC", "O", "N" };
-    
+    private static final String[] QUERIES = new String[]{"CCCCC", "O", "N"};
+
     static PrintStream out = System.out;
 
     private ConnectionHandler connHandler;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new MultipleQueriesExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Converts the given int array to an Integer list.
+     */
+    public static List<Integer> toIntegerList(final int[] source) {
+        final List<Integer> result = new ArrayList<>(source.length);
+        for (final int i : source) {
+            result.add(i);
+        }
+        return result;
+    }
+
+    /**
+     * Converts the given collection of Integer objects to int array.
+     */
+    public static int[] toIntArray(final Collection<Integer> source) {
+        final int[] result = new int[source.size()];
+        int i = 0;
+        for (final Integer x : source) {
+            result[i++] = x;
+        }
+        return result;
     }
 
     private void run() throws Exception {
@@ -73,9 +96,9 @@ public final class MultipleQueriesExample {
 
         out.println("Running normal queries");
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
 
-        Set<Integer> results = new TreeSet<Integer>(getSearchHits(QUERIES[0]));
+        final Set<Integer> results = new TreeSet<>(getSearchHits(QUERIES[0]));
         results.retainAll(getSearchHits(QUERIES[1]));
         results.retainAll(getSearchHits(QUERIES[2]));
 
@@ -92,7 +115,7 @@ public final class MultipleQueriesExample {
 
         out.println("Running filtered queries");
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         Collection<Integer> results = getSearchHits(QUERIES[0]);
         results = getFilteredSearchHits(QUERIES[1], results);
         results = getFilteredSearchHits(QUERIES[2], results);
@@ -104,12 +127,12 @@ public final class MultipleQueriesExample {
 
     /**
      * Get hits for a database search without filter ids.
-     * 
+     *
      * @param query the query string
      * @return the cd_ids of the matching targets
      * @throws Exception
      */
-    private Collection<Integer> getSearchHits(String query) throws Exception {
+    private Collection<Integer> getSearchHits(final String query) throws Exception {
         return getFilteredSearchHits(query, null);
     }
 
@@ -123,19 +146,19 @@ public final class MultipleQueriesExample {
 
     /**
      * Get hits for a database search with filter ids.
-     * 
-     * @param query the query string
-     * @param cd_ids the ids to use as filter, search will be performed only on molecules with
-     *            these ids
+     *
+     * @param query     the query string
+     * @param filterIds the ids to use as filter, search will be performed only on molecules with
+     *                  these ids
      * @return the cd_ids of the matching targets
      * @throws Exception
      */
-    private Collection<Integer> getFilteredSearchHits(String query,
-            Collection<Integer> filterIds) throws Exception {
+    private Collection<Integer> getFilteredSearchHits(final String query,
+                                                      final Collection<Integer> filterIds) throws Exception {
 
         // Create options and searcher
-        JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SUBSTRUCTURE);
-        JChemSearch jcs = new JChemSearch();
+        final JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SUBSTRUCTURE);
+        final JChemSearch jcs = new JChemSearch();
         jcs.setSearchOptions(searchOpts);
         jcs.setConnectionHandler(connHandler);
         jcs.setStructureTable(TABLE_NAME);
@@ -146,37 +169,14 @@ public final class MultipleQueriesExample {
 
         // Perform search and create results
         jcs.run();
-        int[] results = jcs.getResults();
+        final int[] results = jcs.getResults();
         return MultipleQueriesExample.toIntegerList(results);
     }
 
-    private void listResults(Collection<Integer> results) {
-        out.printf("Result count: %d\n", results.size());
-        out.printf("Result cd_ids: %s\n", results.toString());
+    private void listResults(final Collection<Integer> results) {
+        out.printf("Result count: %d%nn", results.size());
+        out.printf("Result cd_ids: %s%n", results);
         out.println();
-    }
-
-    /**
-     * Converts the given int array to an Integer list.
-     */
-    public static List<Integer> toIntegerList(int[] source) {
-        List<Integer> result = new ArrayList<Integer>(source.length);
-        for (int i : source) {
-            result.add(i);
-        }
-        return result;
-    }
-
-    /**
-     * Converts the given collection of Integer objects to int array.
-     */
-    public static int[] toIntArray(Collection<Integer> source) {
-        int[] result = new int[source.size()];
-        int i = 0;
-        for (Integer x : source) {
-            result[i++] = x;
-        }
-        return result;
     }
 
 }

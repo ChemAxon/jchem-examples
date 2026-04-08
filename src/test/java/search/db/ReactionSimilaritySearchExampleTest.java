@@ -1,50 +1,49 @@
 package search.db;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.chemaxon.test.helper.PrintCollector;
 
-public class ReactionSimilaritySearchExampleTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	private PrintCollector pc = new PrintCollector();
-	
-	@Before
-	public void changeOutputStream() {
-		ReactionSimilaritySearchExample.out=pc.getOutStream();
-	}
-	
-	@Test
-	public void searchReactantTanimotoHas1Hit() {
-		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(2), is("Hit count: 1"));
-	}
-	
-	@Test
-	public void searchProductTanimotoHas1Hits() {
-		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(7), is("Hit count: 1"));
-	}
-	
-	@Test
-	public void searchCoarseReactionTanimotoHas6Hits() {
-		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(12), is("Hit count: 6"));
-	}
-	
-	@Test
-	public void searchMediumReactionTanimotoHas5Hits() {
-		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(17), is("Hit count: 5"));
-	}
-	
-	@After
-	public void resetOutputStream() {
-		ReactionSimilaritySearchExample.out=System.out;
-	}
-	
+class ReactionSimilaritySearchExampleTest {
+
+    private final PrintCollector pc = new PrintCollector();
+
+    @BeforeEach
+    void changeOutputStream() {
+        ReactionSimilaritySearchExample.out = pc.getOutStream();
+    }
+
+    @Test
+    void searchReactantTanimotoHas1Hit() {
+        ReactionSimilaritySearchExample.main(null);
+        assertThat(pc.getOutputLines().get(2)).isEqualTo("Hit count: 1");
+    }
+
+    @Test
+    void searchProductTanimotoHas1Hits() {
+        ReactionSimilaritySearchExample.main(null);
+        assertThat(pc.getOutputLines().get(7)).isEqualTo("Hit count: 1");
+    }
+
+    @Test
+    void searchCoarseReactionTanimotoHas6Hits() {
+        ReactionSimilaritySearchExample.main(null);
+        assertThat(pc.getOutputLines().get(12)).isEqualTo("Hit count: 6");
+    }
+
+    @Test
+    void searchMediumReactionTanimotoHas5Hits() {
+        ReactionSimilaritySearchExample.main(null);
+        assertThat(pc.getOutputLines().get(17)).isEqualTo("Hit count: 5");
+    }
+
+    @AfterEach
+    void resetOutputStream() {
+        ReactionSimilaritySearchExample.out = System.out;
+    }
+
 }

@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,19 +21,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
-
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
 import chemaxon.jchem.db.JChemSearch;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.search.JChemSearchOptions;
-import chemaxon.util.ConnectionHandler;
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
+
 
 /**
  * Example codes for filtering search results based on other (possibly not chemical) database
  * tables.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class SearchWithFilterQueryExample {
@@ -45,13 +45,13 @@ public final class SearchWithFilterQueryExample {
 
     static PrintStream out = System.out;
     static PrintStream err = System.err;
-    
+
     private ConnectionHandler connHandler;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new SearchWithFilterQueryExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace(err);
         }
     }
@@ -69,8 +69,8 @@ public final class SearchWithFilterQueryExample {
 
     private void search() throws Exception {
 
-        JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SUBSTRUCTURE);
-        JChemSearch jcs = SearchUtil.createJChemSearch(connHandler, "Brc1ccccc1", TABLE_NAME,
+        final JChemSearchOptions searchOpts = new JChemSearchOptions(SearchConstants.SUBSTRUCTURE);
+        final JChemSearch jcs = SearchUtil.createJChemSearch(connHandler, "Brc1ccccc1", TABLE_NAME,
                 searchOpts);
 
         jcs.run();
@@ -90,52 +90,40 @@ public final class SearchWithFilterQueryExample {
      * table. The stock table is created such that it can be joined with the structure table
      * through the cd_id column.
      */
-    private void createPopulateStockTable(ConnectionHandler connHandler) throws SQLException {
+    private void createPopulateStockTable(final ConnectionHandler connHandler) throws SQLException {
 
         out.println("Setting up stock table... ");
 
-        Statement stmt = connHandler.getConnection().createStatement();
-        try {
-            String sql = "DROP TABLE " + STOCK_TABLE_NAME;
+        try(Statement stmt = connHandler.getConnection().createStatement()) {
+            final String sql = "DROP TABLE " + STOCK_TABLE_NAME;
             stmt.execute(sql);
-        } catch (SQLException sqlException) {
+        } catch (final SQLException sqlException) {
             // The stock table doesn't exist yet
-        } finally {
-            stmt.close();
         }
-        stmt = connHandler.getConnection().createStatement();
-        try {
-            String sql = "CREATE TABLE " + STOCK_TABLE_NAME
+
+        try(Statement stmt = connHandler.getConnection().createStatement()) {
+            final String sql = "CREATE TABLE " + STOCK_TABLE_NAME
                     + " (cd_id NUMERIC(10,0), quantity NUMERIC(10,2))";
             stmt.execute(sql);
-        } finally {
-            stmt.close();
         }
 
-        stmt = connHandler.getConnection().createStatement();
-        try {
-            String sql = "SELECT cd_id FROM " + TABLE_NAME;
-            ResultSet rs = stmt.executeQuery(sql);
-
-            Random r = new Random(System.currentTimeMillis());
-            String stockPopulatorSql = "INSERT INTO " + STOCK_TABLE_NAME
-                    + " (cd_id, quantity) VALUES(?, ?)";
-            PreparedStatement ps =
-                    connHandler.getConnection().prepareStatement(stockPopulatorSql);
-            try {
-                while (rs.next()) {
-                    int cdId = rs.getInt(1);
-                    float qOnStock = r.nextInt(10 * MAX_QUANTITY) / 10F;
-                    ps.setInt(1, cdId);
-                    ps.setFloat(2, qOnStock);
-                    ps.execute();
+        try(Statement stmt = connHandler.getConnection().createStatement()){
+            final String sql = "SELECT cd_id FROM " + TABLE_NAME;
+            try (ResultSet rs = stmt.executeQuery(sql)) {
+                final Random r = new Random(System.currentTimeMillis());
+                final String stockPopulatorSql = "INSERT INTO " + STOCK_TABLE_NAME
+                        + " (cd_id, quantity) VALUES(?, ?)";
+                try(PreparedStatement ps =
+                            connHandler.getConnection().prepareStatement(stockPopulatorSql)) {
+                    while (rs.next()) {
+                        final int cdId = rs.getInt(1);
+                        final float qOnStock = r.nextInt(10 * MAX_QUANTITY) / 10F;
+                        ps.setInt(1, cdId);
+                        ps.setFloat(2, qOnStock);
+                        ps.execute();
+                    }
                 }
-            } finally {
-                rs.close();
-                ps.close();
             }
-        } finally {
-            stmt.close();
         }
     }
 

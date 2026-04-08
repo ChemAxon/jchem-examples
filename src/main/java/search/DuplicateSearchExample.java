@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,17 +21,15 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import resource.ResourceLocator;
 import util.MolImportUtil;
 import chemaxon.formats.MolExporter;
 import chemaxon.formats.MolFormatException;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.screen.HashCode;
-import chemaxon.sss.search.MolSearch;
-import chemaxon.sss.search.MolSearchOptions;
-import chemaxon.sss.search.SearchException;
-import chemaxon.sss.search.StandardizedMolSearch;
+import chemaxon.search.StandardizedMolSearch;
+import chemaxon.search.api.SearchConstants;
+import chemaxon.search.api.SearchException;
+import chemaxon.search.api.options.MolSearchOptions;
+import chemaxon.search.util.HashCode;
 import chemaxon.struc.Molecule;
 
 /**
@@ -41,42 +39,45 @@ import chemaxon.struc.Molecule;
  * <li>comparing smiles format of molecules</li>
  * <li>comparing based on hash-code comparison</li>
  * </ul>
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class DuplicateSearchExample {
-	
-	static PrintStream out = System.out;
-	static PrintStream err = System.err;
 
+    static PrintStream out = System.out;
+    static PrintStream err = System.err;
+
+    private static final String MATCHING_IDS = "\tMatching IDs";
+    private static final String FOUND_DUPLICATES_MILLIS = "Found %d duplicates in %d milliseconds%n";
+    private static final String IS_DUPLICATE_OF = "\t%d is duplicate of %d%n";
     /**
      * Imports molecules from the default input file (1000 structures from NCI data set) and
      * carries out three solution methods of duplicate search on it.
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new DuplicateSearchExample().run();
-        } catch (SearchException e) {
+        } catch (final SearchException e) {
             out.println("Error during duplicate searching.");
             e.printStackTrace(err);
-        } catch (MolFormatException e) {
+        } catch (final MolFormatException e) {
             out.println("Bad structures in input file.");
             e.printStackTrace(err);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             out.println("Input file couldn't be found");
             e.printStackTrace(err);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             out.println("I/O error during molecule import.");
             e.printStackTrace(err);
         }
     }
 
-    private void run() throws MolFormatException, FileNotFoundException, IOException,
+    private void run() throws IOException,
             SearchException {
 
         out.println("Reading molecules.");
-        String path = ResourceLocator.getDefaultInputPath();
-        List<Molecule> mols = MolImportUtil.moleculeListImport(path);
+        final String path = ResourceLocator.getDefaultInputPath();
+        final List<Molecule> mols = MolImportUtil.moleculeListImport(path);
         for (int i = 0; i < mols.size(); i++) {
             mols.get(i).aromatize();    // aromatization is needed for search!
         }
@@ -88,21 +89,21 @@ public final class DuplicateSearchExample {
     }
 
     /**
-     * Performs duplicate search with {@link MolSearch} to compare every pairs of molecules.
-     * 
+     * Performs duplicate search with {@link MolSearchOptions} to compare every pairs of molecules.
+     *
      * @param mols molecules to search
      * @throws SearchException if error occurs during duplicate searching
      */
-    private void searchForDuplicates(List<Molecule> mols) throws SearchException {
+    private void searchForDuplicates(final List<Molecule> mols) throws SearchException {
 
-        MolSearchOptions searchOptions = new MolSearchOptions(SearchConstants.DUPLICATE);
-        StandardizedMolSearch searcher = new StandardizedMolSearch();
+        final MolSearchOptions searchOptions = new MolSearchOptions(SearchConstants.DUPLICATE);
+        final StandardizedMolSearch searcher = new StandardizedMolSearch();
         searcher.setSearchOptions(searchOptions);
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         out.println();
         out.println("Searching for duplicates.");
-        out.println("\tMatching IDs");
+        out.println(MATCHING_IDS);
 
         int num = 0;
         for (int q = 0; q < mols.size(); q++) {
@@ -110,37 +111,37 @@ public final class DuplicateSearchExample {
             for (int t = 0; t < q; t++) {
                 searcher.setTarget(mols.get(t));
                 if (searcher.isMatching()) {
-                    out.printf("\t%d is duplicate of %d\n", q + 1, t + 1);
+                    out.printf(IS_DUPLICATE_OF, q + 1, t + 1);
                     num++;
                     break;
                 }
             }
         }
-        out.printf("Found %d duplicates in %d milliseconds\n", num,
+        out.printf(FOUND_DUPLICATES_MILLIS, num,
                 System.currentTimeMillis() - start);
     }
 
     /**
      * Searches for duplicates based on comparison of the molecules' unique SMILES
      * representation.
-     * 
+     *
      * @param mols molecules to search
      * @throws IOException if error occurs during unique SMILES conversion
      */
-    private void searchForDuplicatesUniqueSmiles(List<Molecule> mols) throws IOException {
+    private void searchForDuplicatesUniqueSmiles(final List<Molecule> mols) throws IOException {
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
 
         out.println();
         out.println("Searching for duplicates based on "
-         + "unique SMILES string comparison.");
-        out.println("\tMatching IDs");
+                + "unique SMILES string comparison.");
+        out.println(MATCHING_IDS);
 
-        Set<String> smilesSet = new HashSet<String>();
+        final Set<String> smilesSet = new HashSet<>();
         int num = 0;
         for (int i = 0; i < mols.size(); i++) {
             // Create unique SMILES representation
-            String smiles = MolExporter.exportToFormat(mols.get(i), "smiles:u");
+            final String smiles = MolExporter.exportToFormat(mols.get(i), "smiles:u");
             // Check if the same unique SMILES has already been found
             if (!smilesSet.contains(smiles)) {
                 smilesSet.add(smiles);
@@ -150,7 +151,7 @@ public final class DuplicateSearchExample {
                 num++;
             }
         }
-        out.printf("Found %d duplicates in %d milliseconds\n", num,
+        out.printf(FOUND_DUPLICATES_MILLIS, num,
                 System.currentTimeMillis() - start);
     }
 
@@ -158,25 +159,25 @@ public final class DuplicateSearchExample {
      * Searches for duplicates based on the comparison of the molecules' hash code. The
      * equivalence of the hash codes doesn't imply a structural equivalence, so molecules with
      * similar hash code should still be matched in structure.
-     * 
+     *
      * @param mols molecules to search
      * @throws SearchException if error occurs during duplicate searching
      */
-    private void searchForDuplicatesHash(List<Molecule> mols) throws SearchException {
+    private void searchForDuplicatesHash(final List<Molecule> mols) throws SearchException {
 
-        StandardizedMolSearch searcher = new StandardizedMolSearch();
-        long start = System.currentTimeMillis();
-        HashCode hc = new HashCode();
+        final StandardizedMolSearch searcher = new StandardizedMolSearch();
+        final long start = System.currentTimeMillis();
+        final HashCode hc = new HashCode();
 
         // Generate hash codes
-        int[] codes = new int[mols.size()];
+        final int[] codes = new int[mols.size()];
         for (int i = 0; i < mols.size(); i++) {
             codes[i] = hc.getHashCode(mols.get(i));
         }
 
         out.println("\nSearching for duplicates based on "
                 + "hash code comparison and subsequent searching");
-        out.println("\tMatching IDs");
+        out.println(MATCHING_IDS);
         int num = 0;
         for (int q = 0; q < mols.size(); q++) {
             for (int t = 0; t < q; t++) {
@@ -185,14 +186,14 @@ public final class DuplicateSearchExample {
                     searcher.setQuery(mols.get(q));
                     searcher.setTarget(mols.get(t));
                     if (searcher.isMatching()) {
-                        out.printf("\t%d is duplicate of %d\n", q + 1, t + 1);
+                        out.printf(IS_DUPLICATE_OF, q + 1, t + 1);
                         num++;
                         break;
                     }
                 }
             }
         }
-        out.printf("Found %d duplicates in %d milliseconds\n", num,
+        out.printf(FOUND_DUPLICATES_MILLIS, num,
                 System.currentTimeMillis() - start);
     }
 

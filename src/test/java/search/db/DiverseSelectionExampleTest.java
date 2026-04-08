@@ -1,45 +1,42 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
-
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.chemaxon.test.helper.PrintCollector;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import chemaxon.jchem.version.JChemVersionInfo;
+import com.chemaxon.test.helper.PrintCollector;
 
-public class DiverseSelectionExampleTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	private PrintCollector pc = new PrintCollector();
 
-	@Before
-	public void changeOutputStream() {
-		DiverseSelectionExample.out = pc.getOutStream();
-	}
+class DiverseSelectionExampleTest {
 
-	@Test
-	public void diverseSelectTets() {
-		DiverseSelectionExample.main(null);
-		List<String> outputLines = pc.getOutputLines();
-		//System.out.println(outputLines);
+    private final PrintCollector pc = new PrintCollector();
 
-		String[] expectedRepresentatives = JChemVersionInfo.getJChemTableVersion() >= 23050000
-				? new String[] { "S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O" }
-				: new String[] { "C[N+](C)(C)CC1=CC=CC=C1", "CC(C)CCCC(C)C1CCC2C3CC(Br)C4(Br)CC(Cl)CCC4(C)C3CCC12C" };
-		int expectedRepresentativeCount = JChemVersionInfo.getJChemTableVersion() >= 23050000 ? 8 : 10;
+    @BeforeEach
+    void changeOutputStream() {
+        DiverseSelectionExample.out = pc.getOutStream();
+    }
 
-		for (String expectedRepresentative : expectedRepresentatives) {
-			assertThat(outputLines, Matchers.hasItem("New representative found: " + expectedRepresentative));
-		}
-		assertThat(outputLines, Matchers.hasItem("Number of representatives: " + expectedRepresentativeCount));
-	}
+    @Test
+    void diverseSelectTets() {
+        DiverseSelectionExample.main(null);
+        final List<String> outputLines = pc.getOutputLines();
 
-	@After
-	public void resetOutputStream() {
-		DiverseSelectionExample.out = System.out;
-	}
+        final String[] expectedRepresentatives = JChemVersionInfo.getJChemTableVersion() >= 23050000
+                ? new String[]{"S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O"}
+                : new String[]{"C[N+](C)(C)CC1=CC=CC=C1", "CC(C)CCCC(C)C1CCC2C3CC(Br)C4(Br)CC(Cl)CCC4(C)C3CCC12C"};
+        final int expectedRepresentativeCount = JChemVersionInfo.getJChemTableVersion() >= 23050000 ? 8 : 10;
+
+        for (final String expectedRepresentative : expectedRepresentatives) {
+            assertThat(outputLines).contains("New representative found: " + expectedRepresentative);
+        }
+        assertThat(outputLines).contains("Number of representatives: " + expectedRepresentativeCount);
+    }
+
+    @AfterEach
+    void resetOutputStream() {
+        DiverseSelectionExample.out = System.out;
+    }
 }

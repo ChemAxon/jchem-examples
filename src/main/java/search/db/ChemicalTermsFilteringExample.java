@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,20 +15,19 @@
 
 package search.db;
 
+import java.io.PrintStream;
 import util.ConnectionUtil;
 import util.SearchUtil;
 import util.TableOperations;
-
-import java.io.PrintStream;
-
 import chemaxon.jchem.db.JChemSearch;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.search.JChemSearchOptions;
-import chemaxon.util.ConnectionHandler;
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
+
 
 /**
  * Example code for pre-filtering database hits by calculated chemical terms.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class ChemicalTermsFilteringExample {
@@ -37,13 +36,13 @@ public final class ChemicalTermsFilteringExample {
 
     static PrintStream out = System.out;
     static PrintStream err = System.err;
-    
+
     private ConnectionHandler connHandler;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new ChemicalTermsFilteringExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace(err);
         }
     }
@@ -61,11 +60,11 @@ public final class ChemicalTermsFilteringExample {
 
     private void search() throws Exception {
 
-        JChemSearchOptions searchOpts =
+        final JChemSearchOptions searchOpts =
                 new JChemSearchOptions(SearchConstants.DEFAULT_SEARCHTYPE);
         searchOpts.setChemTermsFilter("pka(h(0))> 2");
 
-        JChemSearch jcs =
+        final JChemSearch jcs =
                 SearchUtil.createJChemSearch(connHandler, "OC=O", TABLE_NAME, searchOpts);
 
         jcs.run();

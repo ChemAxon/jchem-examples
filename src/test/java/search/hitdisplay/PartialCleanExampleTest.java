@@ -1,11 +1,13 @@
 package search.hitdisplay;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PartialCleanExampleTest {
+import static org.assertj.core.api.Assertions.assertThatCode;
 
-	@Test
-	public void canRun() {
-		PartialCleanExample.main(new String[] { "hideDisplay" });
-	}
+class PartialCleanExampleTest {
+
+    @Test
+    void canRun() {
+        assertThatCode(() -> PartialCleanExample.main(new String[]{"hideDisplay"})).doesNotThrowAnyException();
+    }
 }

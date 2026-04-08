@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,34 +16,38 @@
 package util;
 
 import java.sql.SQLException;
-
 import resource.ResourceLocator;
-import chemaxon.jchem.db.StructureTableOptions;
-import chemaxon.jchem.db.TableTypeConstants;
-import chemaxon.jchem.db.UpdateHandler;
-import chemaxon.util.ConnectionHandler;
+import chemaxon.jchem.db.TableOptions;
+import chemaxon.jchem.db.TableUpdateHandler;
+import chemaxon.jchem.db.constants.TableTypeConstants;
+import chemaxon.jchem.util.ConnectionHandler;
+
 
 /**
  * Example codes for creating structure tables in database.
  * <p>
  * There are mandatory parameters for creating a database table: open connection handler, name
  * of the table to create, and table type.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class TableOperations {
+
+    private TableOperations() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
 
     private static final int LARGE_TABLE_IMPORT_COUNT = 10;
 
     /**
      * Creates a structure table of type "Molecules". If a table with the same name already
      * exists, it will be dropped first.
-     * 
+     *
      * @param connHandler an open connection handler
-     * @param tableName name of the table to be created
+     * @param tableName   name of the table to be created
      * @throws SQLException if table cannot be created
      */
-    public static void createMoleculeTable(ConnectionHandler connHandler, String tableName)
+    public static void createMoleculeTable(final ConnectionHandler connHandler, final String tableName)
             throws SQLException {
         createStructureTable(connHandler, tableName, TableTypeConstants.TABLE_TYPE_MOLECULES);
     }
@@ -51,34 +55,34 @@ public final class TableOperations {
     /**
      * Creates a structure table of the given type. If a table with the same name already
      * exists, it will be dropped first.
-     * 
+     *
      * @param connHandler an open connection handler
-     * @param tableName name of the table to be created
-     * @param tableType table type
+     * @param tableName   name of the table to be created
+     * @param tableType   table type
      * @throws SQLException if table cannot be created
      */
-    public static void createStructureTable(ConnectionHandler connHandler, String tableName,
-            int tableType) throws SQLException {
-        
+    public static void createStructureTable(final ConnectionHandler connHandler, final String tableName,
+                                            final int tableType) throws SQLException {
+
         // Drop the table if it already exists
-        if (UpdateHandler.isStructureTable(connHandler, tableName)) {
-            UpdateHandler.dropStructureTable(connHandler, tableName);
+        if (TableUpdateHandler.isStructureTable(connHandler, tableName)) {
+            TableUpdateHandler.dropStructureTable(connHandler, tableName);
         }
 
         // Create the table
-        StructureTableOptions tableOptions = new StructureTableOptions(tableName, tableType);
-        UpdateHandler.createStructureTable(connHandler, tableOptions);
+        final TableOptions tableOptions = new TableOptions(tableName, tableType);
+        TableUpdateHandler.createStructureTable(connHandler, tableOptions);
     }
 
     /**
      * Creates a molecule table and loads some structures into it. If a table with the same name
      * already exists, it will be dropped first.
-     * 
+     *
      * @param connHandler an open connection handler
-     * @param tableName name of the table to be created
+     * @param tableName   name of the table to be created
      * @throws Exception if an error occurs during table creation or molecule import
      */
-    public static void setupMoleculeTable(ConnectionHandler connHandler, String tableName)
+    public static void setupMoleculeTable(final ConnectionHandler connHandler, final String tableName)
             throws Exception {
 
         System.out.print("Setting up default molecule table... ");
@@ -94,12 +98,12 @@ public final class TableOperations {
     /**
      * Creates a molecule table and loads many structures into it. If a table with the same name
      * already exists, it will be dropped first.
-     * 
+     *
      * @param connHandler an open connection handler
-     * @param tableName name of the table to be created
+     * @param tableName   name of the table to be created
      * @throws Exception if an error occurs during table creation or molecule import
      */
-    public static void setupLargeMoleculeTable(ConnectionHandler connHandler, String tableName)
+    public static void setupLargeMoleculeTable(final ConnectionHandler connHandler, final String tableName)
             throws Exception {
 
         System.out.print("Setting up large molecule table...");

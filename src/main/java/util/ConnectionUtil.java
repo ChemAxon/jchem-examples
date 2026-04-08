@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,10 +18,10 @@ package util;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
-
 import chemaxon.jchem.db.DatabaseProperties;
-import chemaxon.jchem.db.SettingsHandler;
-import chemaxon.util.ConnectionHandler;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.jchem.util.internal.SettingsHandler;
+
 
 /**
  * Example codes for handling database connections.
@@ -39,24 +39,28 @@ import chemaxon.util.ConnectionHandler;
  * <p>
  * Examples of connection settings can be found in the
  * <a href="http://www.chemaxon.com/jchem/doc/admin/JChemBaseFAQ.html#dburl">JChemBase FAQ</a>.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class ConnectionUtil {
 
+    private ConnectionUtil() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility class cannot be instantiated");
+    }
+
     /**
      * Returns a connection handler using the specified parameters.
-     * 
+     *
      * @param driverClass class name of the database driver
-     * @param dbUrl URL of the database
-     * @param userName user name for the database
-     * @param password password for the database
+     * @param dbUrl       URL of the database
+     * @param userName    user name for the database
+     * @param password    password for the database
      * @return initialized connection handler
      */
-    public static ConnectionHandler getConnectionHandler(String driverClass, String dbUrl,
-            String userName, String password) {
+    public static ConnectionHandler getConnectionHandler(final String driverClass, final String dbUrl,
+                                                         final String userName, final String password) {
 
-        ConnectionHandler connHandler = new ConnectionHandler();
+        final ConnectionHandler connHandler = new ConnectionHandler();
         connHandler.setDriver(driverClass);
         connHandler.setUrl(dbUrl);
         connHandler.setLoginName(userName);
@@ -65,22 +69,22 @@ public final class ConnectionUtil {
         // The name of the property table could also be changed:
         // connHandler.setPropertyTable("MyPropertyTable");
         // The default value is "JChemProperties".
-        
+
         initJchemPropertiesTableIfNeeded(connHandler);
-        
+
         return connHandler;
     }
 
     /**
      * Returns a connection handler using properties defined in user settings (the .jchem
      * configuration file).
-     * 
+     *
      * @return initialized connection handler
      * @throws IOException if JDBC driver or database URL is missing in the user settings
      */
     public static ConnectionHandler getDefaultConnectionHandler() throws IOException {
-        ConnectionHandler connHandler = new ConnectionHandler();
-        Properties props = new SettingsHandler().getSettings();
+        final ConnectionHandler connHandler = new ConnectionHandler();
+        final Properties props = new SettingsHandler().getSettings();
         if (!connHandler.loadValuesFromProperties(props)) {
             // Throw exception only when driver or URL is null
             throw new IOException("Insufficient connection data "
@@ -92,62 +96,63 @@ public final class ConnectionUtil {
     /**
      * Saves the properties of the given connection handler to user settings (the .jchem
      * configuration file).
-     * 
+     *
      * @param connHandler connection handler
      * @throws IOException if the properties cannot be saved
      */
-    public static void saveConnectionProperties(ConnectionHandler connHandler)
+    public static void saveConnectionProperties(final ConnectionHandler connHandler)
             throws IOException {
-        Properties props = new Properties();
+        final Properties props = new Properties();
         connHandler.storeValuesToProperties(props);
         new SettingsHandler().save(props);
     }
 
     /**
      * Connects to the database specified in the user settings (the .jchem configuration file).
-     * 
+     *
      * @return the established connection handler
      * @throws IOException if an error occurs during database connection
      */
     public static ConnectionHandler connectToDB() throws IOException {
         try {
-            ConnectionHandler connHandler = ConnectionUtil.getDefaultConnectionHandler();
+            final ConnectionHandler connHandler = ConnectionUtil.getDefaultConnectionHandler();
             connHandler.connectToDatabase();
             initJchemPropertiesTableIfNeeded(connHandler);
             System.out.println("Connection established to " + connHandler.getUrl());
             return connHandler;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new IOException("Error connecting database", e);
         }
     }
 
     /**
      * Closes the connection represented by the given connection handler.
-     * 
+     *
      * @param connHandler connection handler
      */
-    public static void closeConnection(ConnectionHandler connHandler) {
+    public static void closeConnection(final ConnectionHandler connHandler) {
         try {
             connHandler.close();
             System.out.println("Connection closed.");
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("Unable to close connection!");
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Uses the connection handler to check for JChem Properties table. It creates it, if can not be found.
+     *
      * @param connHandler
      */
-    public static void initJchemPropertiesTableIfNeeded(ConnectionHandler connHandler) {
-	    if(connHandler.isConnected() && !DatabaseProperties.propertyTableExists(connHandler)) {
-	    	try {
-				DatabaseProperties.createPropertyTable(connHandler);
-			} catch (SQLException e) {
-				throw new IllegalStateException("Could not init JChem properties table", e);
-			}
-	    }
+    public static void initJchemPropertiesTableIfNeeded(final ConnectionHandler connHandler) {
+        if (connHandler.isConnected() && !DatabaseProperties.propertyTableExists(connHandler)) {
+            try {
+                DatabaseProperties.createPropertyTable(connHandler);
+            } catch (final SQLException e) {
+                throw new IllegalStateException("Could not init JChem properties table", e);
+            }
+        }
     }
 
 }

@@ -1,48 +1,46 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.chemaxon.test.helper.PrintCollector;
 
-public class CalculatedColumnsSearchExampleTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	private final PrintCollector pc = new PrintCollector();
+class CalculatedColumnsSearchExampleTest {
 
-	@Before
-	public void setOutputStream() {
-		CalculatedColumnsSearchExample.out=pc.getOutStream();
-	}
+    private final PrintCollector pc = new PrintCollector();
 
-	@Test
-	public void logPHas70Hits() {
-		CalculatedColumnsSearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines().get(2), Matchers.is("Results using logp"));
-		assertThat(pc.getOutputLines().get(3), Matchers.is("Hit count: 70"));
-	}
+    @BeforeEach
+    void setOutputStream() {
+        CalculatedColumnsSearchExample.out = pc.getOutStream();
+    }
 
-	@Test
-	public void rtblBndCountHas0Hits() {
-		CalculatedColumnsSearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines().get(6), Matchers.is("Results using rtbl_bnd_cnt"));
-		assertThat(pc.getOutputLines().get(7), Matchers.is("Hit count: 0"));
-	}
+    @Test
+    void logPHas70Hits() {
+        CalculatedColumnsSearchExample.main(new String[]{});
+        assertThat(pc.getOutputLines().get(2)).isEqualTo("Results using logp");
+        assertThat(pc.getOutputLines().get(3)).isEqualTo("Hit count: 70");
+    }
 
-	@Test
-	public void pkaAc2HasAtLeast6Hits() {
-		CalculatedColumnsSearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines().get(10), Matchers.is("Results using pka_ac_2"));
-		assertTrue(Integer.parseInt(pc.getOutputLines().get(11).substring("Hit count: ".length()))>=6);
-	}
+    @Test
+    void rtblBndCountHas0Hits() {
+        CalculatedColumnsSearchExample.main(new String[]{});
+        assertThat(pc.getOutputLines().get(6)).isEqualTo("Results using rtbl_bnd_cnt");
+        assertThat(pc.getOutputLines().get(7)).isEqualTo("Hit count: 0");
+    }
 
-	@After
-	public void resetOutputStream() {
-		CalculatedColumnsSearchExample.out=System.out;
-	}
+    @Test
+    void pkaAc2HasAtLeast6Hits() {
+        CalculatedColumnsSearchExample.main(new String[]{});
+        assertThat(pc.getOutputLines().get(10)).isEqualTo("Results using pka_ac_2");
+        assertThat(Integer.parseInt(pc.getOutputLines().get(11).substring("Hit count: ".length())))
+                .isGreaterThanOrEqualTo(6);
+    }
+
+    @AfterEach
+    void resetOutputStream() {
+        CalculatedColumnsSearchExample.out = System.out;
+    }
 
 }

@@ -1,12 +1,14 @@
 package search.hitdisplay;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class HitColoringExampleTest {
+import static org.assertj.core.api.Assertions.assertThatCode;
 
-	@Test
-	public void canRun() {
-		HitColoringExample.main(new String[] {"hideDisplay"});
-	}
-	
+class HitColoringExampleTest {
+
+    @Test
+    void canRun() {
+        assertThatCode(() -> HitColoringExample.main(new String[]{"hideDisplay"})).doesNotThrowAnyException();
+    }
+
 }

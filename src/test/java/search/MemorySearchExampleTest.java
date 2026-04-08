@@ -1,46 +1,44 @@
 package search;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.chemaxon.test.helper.PrintCollector;
 
-public class MemorySearchExampleTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	private PrintCollector pc;
-	
-	@Before
-	public void setMocks() {
-		pc = new PrintCollector();
-		MemorySearchExample.out=pc.getOutStream();
-		MemorySearchExample.err=pc.getErrorStream();
-	}
-	
-	@Test
-	public void queryMatches() {
-		MemorySearchExample.main(new String[] {});
-		assertThat("Should match", pc.getOutputLines().get(1), is("yes"));
-	}
-	
-	@Test
-	public void thereAre6Hits() {
-		MemorySearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines().get(3), is("6"));
-	}
-	
-	@Test
-	public void thereAre12SensitiveHits() {
-		MemorySearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines().get(11), is("12"));
-	}
-	
-	@After
-	public void resetToDefault() {
-		MemorySearchExample.out=System.out;
-		MemorySearchExample.err=System.err;
-	}
+class MemorySearchExampleTest {
+
+    private PrintCollector pc;
+
+    @BeforeEach
+    void setMocks() {
+        pc = new PrintCollector();
+        MemorySearchExample.out = pc.getOutStream();
+        MemorySearchExample.err = pc.getErrorStream();
+    }
+
+    @Test
+    void queryMatches() {
+        MemorySearchExample.main(new String[]{});
+        assertThat(pc.getOutputLines().get(1)).as("Should match").isEqualTo("yes");
+    }
+
+    @Test
+    void thereAre6Hits() {
+        MemorySearchExample.main(new String[]{});
+        assertThat(pc.getOutputLines().get(3)).isEqualTo("6");
+    }
+
+    @Test
+    void thereAre12SensitiveHits() {
+        MemorySearchExample.main(new String[]{});
+        assertThat(pc.getOutputLines().get(11)).isEqualTo("12");
+    }
+
+    @AfterEach
+    void resetToDefault() {
+        MemorySearchExample.out = System.out;
+        MemorySearchExample.err = System.err;
+    }
 }

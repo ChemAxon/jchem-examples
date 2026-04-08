@@ -6,4 +6,5 @@ bin
 /.settings/
 gradle_Eclipse.bat
 cxn_home/license.cxl
+cxn_home/license-manager.properties
 cxn_home/*.log

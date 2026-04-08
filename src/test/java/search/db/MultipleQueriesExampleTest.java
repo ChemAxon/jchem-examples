@@ -1,33 +1,33 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
-
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.chemaxon.test.helper.PrintCollector;
 
-public class MultipleQueriesExampleTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	private PrintCollector pc = new PrintCollector();
+class MultipleQueriesExampleTest {
 
-	@Before
-	public void changeOutputStream() {
-		MultipleQueriesExample.out = pc.getOutStream();
-	}
+    private final PrintCollector pc = new PrintCollector();
 
-	@Test
-	public void searchWithMultipleQueriesTest() {
-		MultipleQueriesExample.main(null);
-		long queriesRun = pc.getOutputLines().stream().filter("Result count: 52"::equals).count();
-		assertThat(queriesRun, Matchers.is(2L));
-	}
+    @BeforeEach
+    void changeOutputStream() {
+        MultipleQueriesExample.out = pc.getOutStream();
+    }
 
-	@After
-	public void resetOutputStream() {
-		MultipleQueriesExample.out = System.out;
-	}
+    @Test
+    void searchWithMultipleQueriesTest() {
+        MultipleQueriesExample.main(null);
+        final long queriesRun = pc.getOutputLines().stream()
+                .filter("Result count: 52"::equals)
+                .count();
+        assertThat(queriesRun).isEqualTo(2L);
+    }
+
+    @AfterEach
+    void resetOutputStream() {
+        MultipleQueriesExample.out = System.out;
+    }
 
 }

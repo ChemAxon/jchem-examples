@@ -1,11 +1,11 @@
 /*  Copyright 2018 ChemAxon Ltd.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@
 package search.hitdisplay;
 
 import java.util.Arrays;
-
 import resource.ResourceLocator;
 import util.ConnectionUtil;
 import util.DisplayUtil;
@@ -24,30 +23,29 @@ import util.MolImportUtil;
 import util.SearchUtil;
 import util.TableOperations;
 import chemaxon.jchem.db.JChemSearch;
-import chemaxon.sss.SearchConstants;
-import chemaxon.sss.search.JChemSearchOptions;
+import chemaxon.jchem.db.JChemSearchOptions;
+import chemaxon.jchem.util.ConnectionHandler;
+import chemaxon.search.api.SearchConstants;
+import chemaxon.search.hitdisplay.HitDisplayOptions;
 import chemaxon.struc.Molecule;
-import chemaxon.util.ConnectionHandler;
-import chemaxon.util.HitColoringAndAlignmentOptions;
+
 
 /**
  * This example demonstrates how to retrieve search results rotated according to the query.
- * 
+ *
  * @author JChem Base team, ChemAxon Ltd.
  */
 public final class RotateDatabaseHitsExample {
 
     private static final String TABLE_NAME = "demo";
-
+    private static boolean hideDisplay = false;
     private ConnectionHandler connHandler;
 
-    private static boolean hideDisplay = false;
-
-    public static void main(String[] args) {
-    	hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
+    public static void main(final String[] args) {
+        hideDisplay = args.length == 1 && "hideDisplay".equals(args[0]);
         try {
             new RotateDatabaseHitsExample().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -66,34 +64,34 @@ public final class RotateDatabaseHitsExample {
     private void runExample() throws Exception {
         Molecule[] hits = null;
 
-        JChemSearchOptions searchOpts =
+        final JChemSearchOptions searchOpts =
                 new JChemSearchOptions(SearchConstants.DEFAULT_SEARCHTYPE);
-        JChemSearch jcs =
+        final JChemSearch jcs =
                 SearchUtil.createJChemSearch(connHandler, "OC(CCC)=O", TABLE_NAME, searchOpts);
 
-        String path = ResourceLocator.getPath("rotateQuery.mrv");
-        Molecule query = MolImportUtil.importMol(path);
+        final String path = ResourceLocator.getPath("rotateQuery.mrv");
+        final Molecule query = MolImportUtil.importMol(path);
         jcs.setQueryStructure(query);
 
         jcs.run();
 
-        HitColoringAndAlignmentOptions displayOpts = DisplayUtil.createColoringOptions();
-        displayOpts.setAlignmentMode(HitColoringAndAlignmentOptions.ALIGNMENT_ROTATE);
+        final HitDisplayOptions displayOpts = DisplayUtil.createColoringOptions();
+        displayOpts.setAlignmentMode(HitDisplayOptions.ALIGNMENT_ROTATE);
 
         // HitDisplayTool is integrated in JChemSearch
-        int[] results = jcs.getResults();
+        final int[] results = jcs.getResults();
         System.out.println("Hits: " + Arrays.toString(results));
         hits = jcs.getHitsAsMolecules(results, displayOpts, null, null);
 
-		if (!hideDisplay) {
-			// Show query
-			DisplayUtil.showMolecule(query, 0, 200, "Query");
+        if (!hideDisplay) {
+            // Show query
+            DisplayUtil.showMolecule(query, 0, 200, "Query");
 
-			// Showing first 8 hits
-			for (int i = 0; i < 8; i++) {
-				DisplayUtil.showMolecule(hits[i], i + 4, 200, "Hit " + (i + 1));
-			}
-		}
+            // Showing first 8 hits
+            for (int i = 0; i < 8; i++) {
+                DisplayUtil.showMolecule(hits[i], i + 4, 200, "Hit " + (i + 1));
+            }
+        }
     }
 
 }

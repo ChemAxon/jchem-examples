@@ -1,32 +1,31 @@
 package search.db;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertThat;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.chemaxon.test.helper.PrintCollector;
 
-public class SearchWithFilterQueryExampleTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	private PrintCollector pc = new PrintCollector();
-	
-	@Before
-	public void changeOutputStream() {
-		SearchWithFilterQueryExample.out=pc.getOutStream();
-	}
-	
-	@Test
-	public void searchWithFilterQuery() {
-		SearchWithFilterQueryExample.main(null);
-		assertThat(pc.getOutputLines(), hasItem("Hit count: 21"));
-	}
-	
-	@After
-	public void resetOutputStream() {
-		SearchWithFilterQueryExample.out=System.out;
-	}
-	
+class SearchWithFilterQueryExampleTest {
+
+    private final PrintCollector pc = new PrintCollector();
+
+    @BeforeEach
+    void changeOutputStream() {
+        SearchWithFilterQueryExample.out = pc.getOutStream();
+    }
+
+    @Test
+    void searchWithFilterQuery() {
+        SearchWithFilterQueryExample.main(null);
+        assertThat(pc.getOutputLines()).contains("Hit count: 21");
+    }
+
+    @AfterEach
+    void resetOutputStream() {
+        SearchWithFilterQueryExample.out = System.out;
+    }
+
 }
