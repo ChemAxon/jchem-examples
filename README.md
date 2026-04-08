@@ -10,7 +10,11 @@ You can find the original HTML files in `html` folder.
 
 # Prerequisites
 
-Set up your license key as described [here](https://docs.chemaxon.com/display/docs/licensing_license-server-configuration.md) or copy all requested licenses (provided to you by your sales contact) to `cxn_home` folder in this project and name the file as `license.cxl`.  
+Set up your license key as described [here](https://docs.chemaxon.com/display/docs/licensing_license-server-configuration.md) (making sure to copy the `license-manager.properties` file created in your user directory to the `cxn_home` folder in this project)
+
+or
+
+copy all requested licenses (provided to you by your sales contact) to the `cxn_home` folder in this project and name the file as `license.cxl`.  
 
 The following licenses are needed to access all the examples:
 * JChem Base
