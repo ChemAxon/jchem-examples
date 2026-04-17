@@ -15,14 +15,14 @@
 
 package util;
 
-import java.awt.Color;
-import java.io.IOException;
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
 import chemaxon.formats.MolExporter;
-import chemaxon.marvin.beans.MViewPane;
 import chemaxon.search.hitdisplay.HitDisplayOptions;
 import chemaxon.struc.Molecule;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * Various utility functions used in the example codes for displaying molecules.
@@ -31,11 +31,11 @@ import chemaxon.struc.Molecule;
  */
 public final class DisplayUtil {
 
+    private static final int DEFAULT_FRAME_SIZE = 300;
+
     private DisplayUtil() throws IllegalAccessException {
         throw new IllegalAccessException("Utility class cannot be instantiated");
     }
-
-    private static final int DEFAULT_FRAME_SIZE = 300;
 
     /**
      * Returns the SMILES representation of the given molecule.
@@ -71,14 +71,13 @@ public final class DisplayUtil {
      */
     public static void showMolecule(final Molecule mol, final int pos, final int size, final String title) {
 
-        // Create an MViewPane
-        final MViewPane mvpane = new MViewPane();
-        mvpane.setM(0, mol);
+        final ResultView resultView = new ResultView();
+        resultView.setM(0, mol);
 
         // Display the result in a JFrame window
         final JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.getContentPane().add(mvpane);
+        frame.getContentPane().add(resultView.getViewComponent());
         frame.pack();
         frame.setBounds((pos % 4) * size, (pos / 4) * size, size, size);
         frame.setTitle(title);
@@ -103,6 +102,46 @@ public final class DisplayUtil {
         coloringOptions.setNonHitColor(Color.GREEN);
 
         return coloringOptions;
+    }
+
+    private static class ResultView {
+
+        private final JComponent mviewPane;
+        private final Method setParamsMethod;
+        private final Method setMMethod;
+
+        ResultView() {
+            try {
+                final Class<?> clazz = Class.forName("chemaxon.marvin.beans.MViewPane");
+                mviewPane = (JComponent) clazz.getConstructor().newInstance();
+                setParamsMethod = clazz.getMethod("setParams", String.class);
+                setMMethod = clazz.getMethod("setM", int.class, Molecule[].class);
+            } catch (final Exception e) {
+                throw new RuntimeException("Cannot open MarvinView for displaying results. "
+                        + "Make sure that 'marvin-classic-gui' library is on the classpath.", e);
+            }
+        }
+
+        void setParams(final String params) {
+            try {
+                setParamsMethod.invoke(mviewPane, params);
+            } catch (final Exception e) {
+                throw new RuntimeException("Error setting parameters for MViewPane.", e);
+            }
+        }
+
+        void setM(final int pos, final Molecule mol) {
+            try {
+                setMMethod.invoke(mviewPane, pos, new Molecule[]{mol});
+            } catch (final Exception e) {
+                throw new RuntimeException("Error setting molecule for MViewPane.", e);
+            }
+        }
+
+        JComponent getViewComponent() {
+            return mviewPane;
+        }
+
     }
 
 }
