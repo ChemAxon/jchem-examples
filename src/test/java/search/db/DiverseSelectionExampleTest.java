@@ -25,7 +25,6 @@ public class DiverseSelectionExampleTest {
 	public void diverseSelectTets() {
 		DiverseSelectionExample.main(null);
 		List<String> outputLines = pc.getOutputLines();
-		//System.out.println(outputLines);
 
 		String[] expectedRepresentatives = VersionInfo.getJChemTableVersion() >= 23050000
 				? new String[] { "S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O" }

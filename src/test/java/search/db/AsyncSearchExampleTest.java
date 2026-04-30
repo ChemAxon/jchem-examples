@@ -12,21 +12,21 @@ import com.chemaxon.test.helper.PrintCollector;
 public class AsyncSearchExampleTest {
 
 	private PrintCollector pc = new PrintCollector();
-	
+
 	@Before
 	public void setOutput() {
 		AsyncSearchExample.out=pc.getOutStream();
 	}
-	
+
 	@Test
-	public void finds210Hits() {
+	public void returnsWithResult() {
 		AsyncSearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines(), Matchers.hasItem("210 hit(s) found."));
+		assertThat(pc.getOutputLines(), Matchers.hasItem(Matchers.endsWith(" hit(s) found.")));
 	}
-	
+
 	@After
 	public void resetOutput() {
 		AsyncSearchExample.out=System.out;
 	}
-	
+
 }

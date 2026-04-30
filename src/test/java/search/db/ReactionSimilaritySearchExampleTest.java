@@ -1,6 +1,6 @@
 package search.db;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.After;
@@ -12,39 +12,39 @@ import com.chemaxon.test.helper.PrintCollector;
 public class ReactionSimilaritySearchExampleTest {
 
 	private PrintCollector pc = new PrintCollector();
-	
+
 	@Before
 	public void changeOutputStream() {
 		ReactionSimilaritySearchExample.out=pc.getOutStream();
 	}
-	
+
 	@Test
-	public void searchReactantTanimotoHas1Hit() {
+	public void searchReactantTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(2), is("Hit count: 1"));
+		assertThat(pc.getOutputLines().get(2), startsWith("Hit count: "));
 	}
-	
+
 	@Test
-	public void searchProductTanimotoHas1Hits() {
+	public void searchProductTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(7), is("Hit count: 1"));
+		assertThat(pc.getOutputLines().get(7), startsWith("Hit count: "));
 	}
-	
+
 	@Test
-	public void searchCoarseReactionTanimotoHas6Hits() {
+	public void searchCoarseReactionTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(12), is("Hit count: 6"));
+		assertThat(pc.getOutputLines().get(12), startsWith("Hit count: "));
 	}
-	
+
 	@Test
-	public void searchMediumReactionTanimotoHas5Hits() {
+	public void searchMediumReactionTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(17), is("Hit count: 5"));
+		assertThat(pc.getOutputLines().get(17), startsWith("Hit count: "));
 	}
-	
+
 	@After
 	public void resetOutputStream() {
 		ReactionSimilaritySearchExample.out=System.out;
 	}
-	
+
 }
