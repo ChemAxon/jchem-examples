@@ -19,10 +19,10 @@ class DiverseSelectionExampleTest {
         DiverseSelectionExample.out = pc.getOutStream();
     }
 
-    @Test
-    void diverseSelectTets() {
-        DiverseSelectionExample.main(null);
-        final List<String> outputLines = pc.getOutputLines();
+	@Test
+	void diverseSelectTets() {
+		DiverseSelectionExample.main(null);
+		final List<String> outputLines = pc.getOutputLines();
 
         final String[] expectedRepresentatives = JChemVersionInfo.getJChemTableVersion() >= 23050000
                 ? new String[]{"S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O"}
