@@ -1,12 +1,13 @@
 package search.db;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.chemaxon.test.helper.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+class AsyncSearchExampleTest {
 
 	private final PrintCollector pc = new PrintCollector();
 
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 	@Test
 	void returnsWithResult() {
 		AsyncSearchExample.main(new String[]{});
-		assertThat(pc.getOutputLines(), Matchers.hasItem(Matchers.endsWith(" hit(s) found.")));
+		assertThat(pc.getOutputLines()).anyMatch(line -> line.endsWith(" hit(s) found."));
 	}
 
 	@AfterEach

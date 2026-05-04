@@ -20,7 +20,7 @@ class MultipleQueriesExampleTest {
 	void searchWithMultipleQueriesTest() {
 		MultipleQueriesExample.main(null);
 		final long queriesRun = pc.getOutputLines().stream().filter(line -> line.contains("Result count: ")).count();
-		assertThat(queriesRun, Matchers.is(2L));
+		assertThat(queriesRun).isEqualTo(2);
 	}
 
     @AfterEach
