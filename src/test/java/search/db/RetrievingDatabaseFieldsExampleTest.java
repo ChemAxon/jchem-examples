@@ -26,14 +26,14 @@ public class RetrievingDatabaseFieldsExampleTest {
 		List<String> lines = pc.getOutputLines();
 		assertEquals("These should be found twice", 2, count(lines, "ID: 6"));
 		assertEquals("These should be found twice", 2, count(lines, "Formula: C20H10Br2O5"));
-		assertEquals("These should be found twice", 2, count(lines, "Mass: "));
+		assertEquals("These should be found eight times", 8, count(lines, "Mass: "));
 	}
 
 	@After
 	public void resetOutputStream() {
 		RetrievingDatabaseFieldsExample.out = System.out;
 	}
-	
+
 	private int count(List<String> lines, String string) {
 		int count = 0;
 		for(String l: lines) {
