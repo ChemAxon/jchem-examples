@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.chemaxon.test.helper.PrintCollector;
+import search.testutil.PrintCollector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
