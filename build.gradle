@@ -50,7 +50,7 @@ java {
 test {
     useJUnitPlatform()
     environment 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
-    maxHeapSize = "2g"
+    maxHeapSize = '2g'
 }
 
 def mains = [
@@ -79,7 +79,7 @@ mains.each { className ->
     tasks.register(getTaskNameFromClass(className), JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
         mainClass = className
-        environment "CHEMAXON_HOME", file('cxn_home').getAbsolutePath()
+        environment 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
         group 'example'
     }
 }
@@ -92,5 +92,5 @@ tasks.register('runAllExamples') {
 }
 
 static def getTaskNameFromClass(String className) {
-    return "run${className.split('\\.')[-1]}"
+    "run${className.split('\\.')[-1]}"
 }
