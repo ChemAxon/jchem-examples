@@ -10,7 +10,7 @@ Find sources in the `src` folder. If you want to compile and test, just run `gra
 
 Set up your license key as described [here](https://docs.chemaxon.com/display/docs/licensing_license-server-configuration.md) (making sure to copy the `license-manager.properties` file created in your user directory to the `cxn_home` folder in this project)
 
-or
+or (DEPRECATED, key usage is preferred)
 
 copy all requested licenses (provided to you by your sales contact) to the `cxn_home` folder in this project and name the file as `license.cxl`.  
 
@@ -23,7 +23,7 @@ The following licenses are needed to access all the examples:
 
 # Running an example
 
-To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home˛` folder.
+To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home` folder.
 
 * On Linux, type `./gradlew <task_name>`
 * On Windows, type `gradlew <task_name>`
