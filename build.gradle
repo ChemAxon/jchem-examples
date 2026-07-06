@@ -32,11 +32,11 @@ repositories {
     maven {
         credentials {
             //set this in gradle.properties
-            username = chemaxonUser
+            username = chemaxonRepositoryUser
             //set this in gradle.properties
-            password = chemaxonPassword
+            password = chemaxonRepositoryPassword
         }
-        url = chemaxonRepository
+        url = "${chemaxonRepositoryUrl}/libs-release"
     }
 }
 
