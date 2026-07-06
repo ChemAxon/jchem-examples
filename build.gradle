@@ -91,20 +91,6 @@ tasks.register('runAllExamples') {
     }
 }
 
-def findCxlFiles(File file) {
-    def result = []
-    if (file.isDirectory()) {
-        file.listFiles().each { File f ->
-            if (f.isDirectory()) {
-                result.addAll(findCxlFiles(f));
-            } else if (f.getName().endsWith('.cxl')) {
-                result.add(f);
-            }
-        }
-    }
-    return result
-}
-
 static def getTaskNameFromClass(String className) {
     return "run${className.split('\\.')[-1]}"
 }
