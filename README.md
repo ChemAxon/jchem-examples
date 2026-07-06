@@ -2,7 +2,7 @@
 
 # About
 
-This project contains sources to give code examples how to use Chemaxon [JChem Base](https://chemaxon.com/products/jchem-engines) to search and store molecules.
+This project contains sources to give code examples how to use Chemaxon [JChem Base](https://www.certara.com/jchem-engines/) to search and store molecules.
 
 Find sources in the `src` folder. If you want to compile and test, just run `gradlew build`. For this you have to set `chemaxonRepositoryUser` and `chemaxonRepositoryPassword` in `gradle.properties`.
 
