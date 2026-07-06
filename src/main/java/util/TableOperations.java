@@ -1,4 +1,4 @@
-/*  Copyright 2018 ChemAxon Ltd.
+/*  Copyright 1998-2026 Chemaxon
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import chemaxon.jchem.util.ConnectionHandler;
  * There are mandatory parameters for creating a database table: open connection handler, name
  * of the table to create, and table type.
  *
- * @author JChem Base team, ChemAxon Ltd.
+ * @author JChem Base team, Chemaxon
  */
 public final class TableOperations {
 

@@ -1,4 +1,4 @@
-/*  Copyright 2018 ChemAxon Ltd.
+/*  Copyright 1998-2026 Chemaxon
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import chemaxon.struc.Molecule;
  * <li>comparing based on hash-code comparison</li>
  * </ul>
  *
- * @author JChem Base team, ChemAxon Ltd.
+ * @author JChem Base team, Chemaxon
  */
 public final class DuplicateSearchExample {
 
