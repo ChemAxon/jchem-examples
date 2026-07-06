@@ -6,8 +6,6 @@ This project contains sources to give code examples how to use Chemaxon [JChem B
 
 Find sources in the `src` folder. If you want to compile and test, just run `gradlew build`. For this you have to set `chemaxonUser` and `chemaxonPassword` in `gradle.properties`.
 
-You can find the original HTML files in `html` folder. 
-
 # Prerequisites
 
 Set up your license key as described [here](https://docs.chemaxon.com/display/docs/licensing_license-server-configuration.md) (making sure to copy the `license-manager.properties` file created in your user directory to the `cxn_home` folder in this project)
