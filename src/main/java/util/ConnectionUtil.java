@@ -1,4 +1,4 @@
-/*  Copyright 2018 ChemAxon Ltd.
+/*  Copyright 1998-2026 Chemaxon
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import chemaxon.jchem.util.internal.SettingsHandler;
  * Examples of connection settings can be found in the
  * <a href="http://www.chemaxon.com/jchem/doc/admin/JChemBaseFAQ.html#dburl">JChemBase FAQ</a>.
  *
- * @author JChem Base team, ChemAxon Ltd.
+ * @author JChem Base team, Chemaxon
  */
 public final class ConnectionUtil {
 

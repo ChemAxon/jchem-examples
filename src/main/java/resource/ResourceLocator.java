@@ -5,7 +5,7 @@ import java.net.URL;
 /**
  * Helper class to load resources placed in the package directory of this class.
  *
- * @author JChem Base team, ChemAxon Ltd.
+ * @author JChem Base team, Chemaxon
  */
 public final class ResourceLocator {
 
