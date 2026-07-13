@@ -1,32 +1,30 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class AsyncSearchExampleTest {
 
-public class AsyncSearchExampleTest {
+	private final PrintCollector pc = new PrintCollector();
 
-	private PrintCollector pc = new PrintCollector();
-
-	@Before
-	public void setOutput() {
-		AsyncSearchExample.out=pc.getOutStream();
+	@BeforeEach
+	void setOutput() {
+		AsyncSearchExample.out = pc.getOutStream();
 	}
 
 	@Test
-	public void returnsWithResult() {
-		AsyncSearchExample.main(new String[] {});
-		assertThat(pc.getOutputLines(), Matchers.hasItem(Matchers.endsWith(" hit(s) found.")));
+	void returnsWithResult() {
+		AsyncSearchExample.main(new String[]{});
+		assertThat(pc.getOutputLines()).anyMatch(line -> line.endsWith(" hit(s) found."));
 	}
 
-	@After
-	public void resetOutput() {
-		AsyncSearchExample.out=System.out;
+	@AfterEach
+	void resetOutput() {
+		AsyncSearchExample.out = System.out;
 	}
 
 }

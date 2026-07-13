@@ -1,18 +1,18 @@
-## IMPORTANT: This project can be compiled & run with Java 17 currently.
+## IMPORTANT: This project can be compiled & run with Java 21 currently.
 
 # About
 
-This project contains sources to give code examples how to use Chemaxon [JChem Base](https://chemaxon.com/products/jchem-engines) to search and store molecules.
+This project contains sources to give code examples how to use Chemaxon [JChem Base](https://www.certara.com/jchem-engines/) to search and store molecules.
 
-Find sources in the `src` folder. If you want to compile and test, just run `gradlew build`. For this you have to set `chemaxonUser` and `chemaxonPassword` in `gradle.properties`.
-
-You can find the original HTML files in `html` folder. 
+Find sources in the `src` folder. If you want to compile and test, just run `gradlew build`. For this you have to set `chemaxonRepositoryUser` and `chemaxonRepositoryPassword` in `gradle.properties`.
 
 # Prerequisites
 
-Copy all requested licenses (provided to you by your sales contact) to `cxn_home` folder in this project and name the file as `license.cxl`.
+Set up your license key as described [here](https://docs.chemaxon.com/display/docs/licensing_license-server-configuration.md) (making sure to copy the `license-manager.properties` file created in your user directory to the `cxn_home` folder in this project)
 
-Or set up your license key as described [here](https://docs.chemaxon.com/display/docs/licensing_license-server-configuration.md).
+or (DEPRECATED, key usage is preferred)
+
+copy all requested licenses (provided to you by your sales contact) to the `cxn_home` folder in this project and name the file as `license.cxl`.  
 
 The following licenses are needed to access all the examples:
 * JChem Base
@@ -23,7 +23,7 @@ The following licenses are needed to access all the examples:
 
 # Running an example
 
-To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home˛` folder.
+To try out the examples you must set your access in gradle properties as described above and must copy the corresponding license to `cxn_home` folder.
 
 * On Linux, type `./gradlew <task_name>`
 * On Windows, type `gradlew <task_name>`

@@ -1,99 +1,72 @@
 package search;
 
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class DuplicateSearchExampleTest {
 
-public class DuplicateSearchExampleTest {
+    private static final Pattern isDuplicateMatcher = Pattern.compile("(\\d+)( is duplicate of )(\\d+)");
 
-	private static final Pattern isDuplicateMatcher = Pattern.compile("(\\d+)( is duplicate of )(\\d+)");
+    private final PrintCollector printCollector = new PrintCollector();
 
-	private PrintCollector printCollector = new PrintCollector();
+    @BeforeEach
+    void setPrintStreams() {
+        DuplicateSearchExample.out = printCollector.getOutStream();
+        DuplicateSearchExample.err = printCollector.getErrorStream();
+    }
 
-	@Before
-	public void setPrintStreams() {
-		DuplicateSearchExample.out = printCollector.getOutStream();
-		DuplicateSearchExample.err = printCollector.getErrorStream();
-	}
+    @Test
+    void testMatches() {
+        DuplicateSearchExample.main(new String[]{});
+        final List<String> lines = printCollector.getOutputLines();
+        final List<IdPair> idPairs = lines.stream()
+                .map(String::trim)
+                .filter(s -> isDuplicateMatcher.matcher(s).matches())
+                .map(this::convertLine)
+                .toList();
+        assertThat(idPairs)
+                .as("we expect 6 matches").hasSize(6)
+                .as("All predefined pairs shuld be found").contains(
+                        new IdPair(669, 665),
+                        new IdPair(792, 197),
+                        new IdPair(958, 815),
+                        new IdPair(669, 665),
+                        new IdPair(792, 197),
+                        new IdPair(958, 815)
+                );
+        assertThat(printCollector.getErrorLines()).as("we don't expect any errors").isEmpty();
+    }
 
-	@Test
-	public void testMatches() throws Exception {
-		DuplicateSearchExample.main(new String[] {});
-		List<String> lines = printCollector.getOutputLines();
-		List<IdPair> idPairs = lines.stream().map(String::trim).filter(s -> isDuplicateMatcher.matcher(s).matches())
-				.map(this::convertLine).collect(Collectors.toList());
-		assertThat("we expect 6 matches", idPairs, hasSize(6));
-		assertThat("All predefined pairs shuld be found", idPairs, hasItems(new IdPair(669, 665), new IdPair(792, 197),
-				new IdPair(958, 815), new IdPair(669, 665), new IdPair(792, 197), new IdPair(958, 815)));
-		assertThat("we don't expect any errors", printCollector.getErrorLines(), hasSize(0));
-	}
+    private IdPair convertLine(final String line) {
+        final Matcher matcher = isDuplicateMatcher.matcher(line);
+        if (!matcher.matches()) {
+            throw new IllegalStateException("Can not work with: " + line);
+        }
+        final int id1 = Integer.parseInt(matcher.group(1));
+        final int id2 = Integer.parseInt(matcher.group(3));
+        return new IdPair(id1, id2);
+    }
 
-	private IdPair convertLine(String line) {
-		Matcher matcher = isDuplicateMatcher.matcher(line);
-		if (!matcher.matches()) {
-			throw new IllegalStateException("Can not work with: " + line);
-		}
-		int id1 = Integer.parseInt(matcher.group(1));
-		int id2 = Integer.parseInt(matcher.group(3));
-		return new IdPair(id1, id2);
-	}
+    @AfterEach
+    void resetPrintStreams() {
+        DuplicateSearchExample.out = System.out;
+        DuplicateSearchExample.err = System.err;
+    }
 
-	@After
-	public void resetPrintStreams() {
-		DuplicateSearchExample.out = System.out;
-		DuplicateSearchExample.err = System.err;
-	}
+    private record IdPair(int first, int second) {
 
-	private static class IdPair {
-		private final int first;
-		private final int second;
+        @Override
+        public String toString() {
+            return "IdPair [first=" + first + ", second=" + second + "]";
+        }
 
-		public IdPair(int first, int second) {
-			this.first = first;
-			this.second = second;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + first;
-			result = prime * result + second;
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			IdPair other = (IdPair) obj;
-			if (first != other.first)
-				return false;
-			if (second != other.second)
-				return false;
-			return true;
-		}
-
-		@Override
-		public String toString() {
-			return "IdPair [first=" + first + ", second=" + second + "]";
-		}
-
-	}
+    }
 
 }

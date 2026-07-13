@@ -1,12 +1,14 @@
 package search.hitdisplay;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RotateDatabaseHitsExampleTest {
+import static org.assertj.core.api.Assertions.assertThatCode;
 
-	@Test
-	public void canRun() {
-		RotateDatabaseHitsExample.main(new String[] { "hideDisplay" });
-	}
-	
+class RotateDatabaseHitsExampleTest {
+
+    @Test
+    void canRun() {
+        assertThatCode(() -> RotateDatabaseHitsExample.main(new String[]{"hideDisplay"})).doesNotThrowAnyException();
+    }
+
 }

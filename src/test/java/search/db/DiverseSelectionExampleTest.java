@@ -1,44 +1,42 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import chemaxon.jchem.version.JChemVersionInfo;
+import search.testutil.PrintCollector;
 
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
-import com.chemaxon.version.VersionInfo;
 
-public class DiverseSelectionExampleTest {
+class DiverseSelectionExampleTest {
 
-	private PrintCollector pc = new PrintCollector();
+    private final PrintCollector pc = new PrintCollector();
 
-	@Before
-	public void changeOutputStream() {
-		DiverseSelectionExample.out = pc.getOutStream();
-	}
+    @BeforeEach
+    void changeOutputStream() {
+        DiverseSelectionExample.out = pc.getOutStream();
+    }
 
 	@Test
-	public void diverseSelectTets() {
+	void diverseSelectTets() {
 		DiverseSelectionExample.main(null);
-		List<String> outputLines = pc.getOutputLines();
+		final List<String> outputLines = pc.getOutputLines();
 
-		String[] expectedRepresentatives = VersionInfo.getJChemTableVersion() >= 23050000
-				? new String[] { "S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O" }
-				: new String[] { "C[N+](C)(C)CC1=CC=CC=C1", "CC(C)CCCC(C)C1CCC2C3CC(Br)C4(Br)CC(Cl)CCC4(C)C3CCC12C" };
-		int expectedRepresentativeCount = VersionInfo.getJChemTableVersion() >= 23050000 ? 8 : 10;
+        final String[] expectedRepresentatives = JChemVersionInfo.getJChemTableVersion() >= 23050000
+                ? new String[]{"S(SC1=NC2=C(S1)C=CC=C2)C1=NC2=CC=CC=C2S1", "NC(=O)NNC(=O)NNC(N)=O"}
+                : new String[]{"C[N+](C)(C)CC1=CC=CC=C1", "CC(C)CCCC(C)C1CCC2C3CC(Br)C4(Br)CC(Cl)CCC4(C)C3CCC12C"};
+        final int expectedRepresentativeCount = JChemVersionInfo.getJChemTableVersion() >= 23050000 ? 8 : 10;
 
-		for (String expectedRepresentative : expectedRepresentatives) {
-			assertThat(outputLines, Matchers.hasItem("New representative found: " + expectedRepresentative));
-		}
-		assertThat(outputLines, Matchers.hasItem("Number of representatives: " + expectedRepresentativeCount));
-	}
+        for (final String expectedRepresentative : expectedRepresentatives) {
+            assertThat(outputLines).contains("New representative found: " + expectedRepresentative);
+        }
+        assertThat(outputLines).contains("Number of representatives: " + expectedRepresentativeCount);
+    }
 
-	@After
-	public void resetOutputStream() {
-		DiverseSelectionExample.out = System.out;
-	}
+    @AfterEach
+    void resetOutputStream() {
+        DiverseSelectionExample.out = System.out;
+    }
 }

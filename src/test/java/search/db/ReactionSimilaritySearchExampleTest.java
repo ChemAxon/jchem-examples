@@ -1,50 +1,48 @@
 package search.db;
 
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class ReactionSimilaritySearchExampleTest {
 
-public class ReactionSimilaritySearchExampleTest {
+	private final PrintCollector pc = new PrintCollector();
 
-	private PrintCollector pc = new PrintCollector();
-
-	@Before
-	public void changeOutputStream() {
-		ReactionSimilaritySearchExample.out=pc.getOutStream();
+	@BeforeEach
+	void changeOutputStream() {
+		ReactionSimilaritySearchExample.out = pc.getOutStream();
 	}
 
 	@Test
-	public void searchReactantTanimotoReturnsWithResult() {
+	void searchReactantTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(2), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(2)).startsWith("Hit count: ");
 	}
 
 	@Test
-	public void searchProductTanimotoReturnsWithResult() {
+	void searchProductTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(7), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(7)).startsWith("Hit count: ");
 	}
 
 	@Test
-	public void searchCoarseReactionTanimotoReturnsWithResult() {
+	void searchCoarseReactionTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(12), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(12)).startsWith("Hit count: ");
 	}
 
 	@Test
-	public void searchMediumReactionTanimotoReturnsWithResult() {
+	void searchMediumReactionTanimotoReturnsWithResult() {
 		ReactionSimilaritySearchExample.main(null);
-		assertThat(pc.getOutputLines().get(17), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(17)).startsWith("Hit count: ");
 	}
 
-	@After
-	public void resetOutputStream() {
-		ReactionSimilaritySearchExample.out=System.out;
+	@AfterEach
+	void resetOutputStream() {
+		ReactionSimilaritySearchExample.out = System.out;
 	}
 
 }

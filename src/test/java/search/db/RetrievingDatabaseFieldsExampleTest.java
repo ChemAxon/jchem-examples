@@ -1,47 +1,45 @@
 package search.db;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class RetrievingDatabaseFieldsExampleTest {
 
-public class RetrievingDatabaseFieldsExampleTest {
+    private final PrintCollector pc = new PrintCollector();
 
-	private PrintCollector pc = new PrintCollector();
+    @BeforeEach
+    void changeOutputStream() {
+        RetrievingDatabaseFieldsExample.out = pc.getOutStream();
+    }
 
-	@Before
-	public void changeOutputStream() {
-		RetrievingDatabaseFieldsExample.out = pc.getOutStream();
-	}
+    @Test
+    void searchRetrievesFields() {
+        RetrievingDatabaseFieldsExample.main(null);
+        final List<String> lines = pc.getOutputLines();
+        final int idIdx = lines.indexOf("ID: 6");
+        assertThat(lines.subList(idIdx, idIdx + 3))
+                .as("ID, Formula, and Mass should appear consecutively")
+                .satisfiesExactly(
+                        line -> assertThat(line).isEqualTo("ID: 6"),
+                        line -> assertThat(line).isEqualTo("Formula: C20H10Br2O5"),
+                        line -> assertThat(line).startsWith("Mass: ")
+                );
+        assertThat(lines.stream().filter("ID: 6"::equals).count())
+                .as("ID: 6 should be found twice").isEqualTo(2);
+        assertThat(lines.stream().filter("Formula: C20H10Br2O5"::equals).count())
+                .as("C20H10Br2O5 formula should be found twice").isEqualTo(2);
+        assertThat(lines.stream().filter(line -> line.startsWith("Mass: ")).count())
+                .as("Mass should be found eight times").isEqualTo(8);
+    }
 
-	@Test
-	public void searchRetrievsFields() {
-		RetrievingDatabaseFieldsExample.main(null);
-		List<String> lines = pc.getOutputLines();
-		assertEquals("These should be found twice", 2, count(lines, "ID: 6"));
-		assertEquals("These should be found twice", 2, count(lines, "Formula: C20H10Br2O5"));
-		assertEquals("These should be found eight times", 8, count(lines, "Mass: "));
-	}
-
-	@After
-	public void resetOutputStream() {
-		RetrievingDatabaseFieldsExample.out = System.out;
-	}
-
-	private int count(List<String> lines, String string) {
-		int count = 0;
-		for(String l: lines) {
-			if(l.contains(string)) {
-				++count;
-			}
-		}
-		return count;
-	}
+    @AfterEach
+    void resetOutputStream() {
+        RetrievingDatabaseFieldsExample.out = System.out;
+    }
 
 }

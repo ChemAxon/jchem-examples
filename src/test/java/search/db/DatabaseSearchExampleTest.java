@@ -1,50 +1,48 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.startsWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class DatabaseSearchExampleTest {
 
-public class DatabaseSearchExampleTest {
+    private final PrintCollector pc = new PrintCollector();
 
-	private PrintCollector pc = new PrintCollector();
-
-	@Before
-	public void changeOutputStream() {
-		DatabaseSearchExample.out=pc.getOutStream();
+	@BeforeEach
+	void changeOutputStream() {
+		DatabaseSearchExample.out = pc.getOutStream();
 	}
 
 	@Test
-	public void searchCCNCCReturnsWithResult() {
+	void searchCCNCCReturnsWithResult() {
 		DatabaseSearchExample.main(null);
-		assertThat(pc.getOutputLines().get(1), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(1)).startsWith("Hit count: ");
 	}
 
 	@Test
-	public void searchCCNPlusCCReturnsWithResult() {
+	void searchCCNPlusCCReturnsWithResult() {
 		DatabaseSearchExample.main(null);
-		assertThat(pc.getOutputLines().get(5), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(5)).startsWith("Hit count: ");
 	}
 
 	@Test
-	public void searchCCNPlusCCWithChargeIgnoreReturnsWithResult() {
+	void searchCCNPlusCCWithChargeIgnoreReturnsWithResult() {
 		DatabaseSearchExample.main(null);
-		assertThat(pc.getOutputLines().get(9), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(9)).startsWith("Hit count: ");
 	}
 
 	@Test
-	public void searchCCNPlusCCWithChargeIgnoreAndForumlaQueryReturnsWithResult() {
+	void searchCCNPlusCCWithChargeIgnoreAndForumlaQueryReturnsWithResult() {
 		DatabaseSearchExample.main(null);
-		assertThat(pc.getOutputLines().get(13), startsWith("Hit count: "));
+		assertThat(pc.getOutputLines().get(13)).startsWith("Hit count: ");
 	}
 
-	@After
-	public void resetOutputStream() {
-		DatabaseSearchExample.out=System.out;
+	@AfterEach
+	void resetOutputStream() {
+		DatabaseSearchExample.out = System.out;
 	}
 
 }

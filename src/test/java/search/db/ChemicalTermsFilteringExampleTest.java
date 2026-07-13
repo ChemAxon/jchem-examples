@@ -1,36 +1,34 @@
 package search.db;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class ChemicalTermsFilteringExampleTest {
 
-public class ChemicalTermsFilteringExampleTest {
+    private final PrintCollector pc = new PrintCollector();
 
-	private PrintCollector pc = new PrintCollector();
-
-	@Before
-	public void changeOutputStream() {
-		ChemicalTermsFilteringExample.out = pc.getOutStream();
-	}
+    @BeforeEach
+    void changeOutputStream() {
+        ChemicalTermsFilteringExample.out = pc.getOutStream();
+    }
 
 	@Test
-	public void chemicalTermsFilteringTest() {
+	void chemicalTermsFilteringTest() {
 		ChemicalTermsFilteringExample.main(null);
 
-		List<String> outputLines = pc.getOutputLines();
-		assertTrue(outputLines.get(0).startsWith("Search has found "));
-        assertTrue(outputLines.get(1).startsWith("Search has found "));
+		final List<String> outputLines = pc.getOutputLines();
+		assertThat(outputLines.get(0)).startsWith("Search has found ");
+        assertThat(outputLines.get(1)).startsWith("Search has found ");
 	}
 
-    @After
-	public void resetOutputStream() {
-		ChemicalTermsFilteringExample.out = System.out;
-	}
+    @AfterEach
+    void resetOutputStream() {
+        ChemicalTermsFilteringExample.out = System.out;
+    }
 
 }

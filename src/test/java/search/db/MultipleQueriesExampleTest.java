@@ -1,33 +1,31 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class MultipleQueriesExampleTest {
 
-public class MultipleQueriesExampleTest {
+    private final PrintCollector pc = new PrintCollector();
 
-	private PrintCollector pc = new PrintCollector();
-
-	@Before
-	public void changeOutputStream() {
-		MultipleQueriesExample.out = pc.getOutStream();
-	}
+    @BeforeEach
+    void changeOutputStream() {
+        MultipleQueriesExample.out = pc.getOutStream();
+    }
 
 	@Test
-	public void searchWithMultipleQueriesTest() {
+	void searchWithMultipleQueriesTest() {
 		MultipleQueriesExample.main(null);
-		long queriesRun = pc.getOutputLines().stream().filter(line -> line.contains("Result count: ")).count();
-		assertThat(queriesRun, Matchers.is(2L));
+		final long queriesRun = pc.getOutputLines().stream().filter(line -> line.contains("Result count: ")).count();
+		assertThat(queriesRun).isEqualTo(2);
 	}
 
-	@After
-	public void resetOutputStream() {
-		MultipleQueriesExample.out = System.out;
-	}
+    @AfterEach
+    void resetOutputStream() {
+        MultipleQueriesExample.out = System.out;
+    }
 
 }

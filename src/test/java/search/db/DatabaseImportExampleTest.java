@@ -1,31 +1,28 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class DatabaseImportExampleTest {
+    private final PrintCollector pc = new PrintCollector();
 
-public class DatabaseImportExampleTest {
-	private PrintCollector pc = new PrintCollector();
+    @BeforeEach
+    void changeOutputStream() {
+        DatabaseImportExample.out = pc.getOutStream();
+    }
 
-	@Before
-	public void changeOutputStream() {
-		DatabaseImportExample.out = pc.getOutStream();
-	}
+    @Test
+    void canImport1000Molecules() {
+        DatabaseImportExample.main(null);
+        assertThat(pc.getOutputLines()).contains("1000 structures imported");
+    }
 
-	@Test
-	public void canImport1000Molecules() {
-		DatabaseImportExample.main(null);
-		assertThat(pc.getOutputLines(),
-				Matchers.hasItem("1000 structures imported"));
-	}
-
-	@After
-	public void resetOutputStream() {
-		DatabaseImportExample.out = System.out;
-	}
+    @AfterEach
+    void resetOutputStream() {
+        DatabaseImportExample.out = System.out;
+    }
 }

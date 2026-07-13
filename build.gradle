@@ -1,4 +1,4 @@
-/*  Copyright 2018 ChemAxon Ltd.
+/*  Copyright 1998-2026 Chemaxon
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,35 +20,37 @@ plugins {
 def version = project.hasProperty('release') ? project.getProperty('release') : '+'
 
 dependencies {
-    implementation "com.chemaxon:jchem-main:${version}"
+    implementation "com.chemaxon:chemaxon-jchem-db:${version}"
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.hamcrest:hamcrest:3.0'
-    testImplementation 'org.mockito:mockito-core:5.20.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.0.3'
+    testImplementation 'org.junit.platform:junit-platform-launcher:6.0.3'
+    testImplementation 'org.assertj:assertj-core:4.0.0-M1'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
 }
 
 repositories {
     maven {
         credentials {
             //set this in gradle.properties
-            username = chemaxonUser
+            username = chemaxonRepositoryUser
             //set this in gradle.properties
-            password = chemaxonPassword
+            password = chemaxonRepositoryPassword
         }
-        url = chemaxonRepository
+        url = chemaxonRepositoryUrl
     }
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
 
 test {
+    useJUnitPlatform()
     environment 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
-    maxHeapSize = "2g"
+    maxHeapSize = '2g'
 }
 
 def mains = [
@@ -77,7 +79,7 @@ mains.each { className ->
     tasks.register(getTaskNameFromClass(className), JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
         mainClass = className
-        environment "CHEMAXON_HOME", file('cxn_home').getAbsolutePath()
+        environment 'CHEMAXON_HOME', file('cxn_home').getAbsolutePath()
         group 'example'
     }
 }
@@ -89,20 +91,6 @@ tasks.register('runAllExamples') {
     }
 }
 
-def findCxlFiles(File file) {
-    def result = []
-    if (file.isDirectory()) {
-        file.listFiles().each { File f ->
-            if (f.isDirectory()) {
-                result.addAll(findCxlFiles(f));
-            } else if (f.getName().endsWith('.cxl')) {
-                result.add(f);
-            }
-        }
-    }
-    return result
-}
-
 static def getTaskNameFromClass(String className) {
-    return "run${className.split('\\.')[-1]}"
+    "run${className.split('\\.')[-1]}"
 }

@@ -1,52 +1,50 @@
 package search.db;
 
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import search.testutil.PrintCollector;
 
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.chemaxon.test.helper.PrintCollector;
+class SimilaritySearchExampleTest {
+    private final PrintCollector pc = new PrintCollector();
 
-public class SimilaritySearchExampleTest {
-	private PrintCollector pc = new PrintCollector();
-
-	@Before
-	public void changeOutputStream() {
-		SimilaritySearchExample.out=pc.getOutStream();
-	}
-
-	@Test
-	public void chemicalHashedFingerprintReturnsWithResults() {
-		SimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(1), Matchers.is("Results using chemical hashed fingerprint:"));
-        assertThat(pc.getOutputLines().get(2), Matchers.startsWith("Hit count: "));
+    @BeforeEach
+    void changeOutputStream() {
+        SimilaritySearchExample.out = pc.getOutStream();
     }
 
     @Test
-    public void pharmacophoreReturnsWithResults() {
+    void chemicalHashedFingerprintReturnsWithResults() {
         SimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(5), Matchers.is("Results using descriptor: Pharmacophore"));
-        assertThat(pc.getOutputLines().get(6), Matchers.startsWith("Hit count: "));
+        assertThat(pc.getOutputLines().get(1)).isEqualTo("Results using chemical hashed fingerprint:");
+        assertThat(pc.getOutputLines().get(2)).startsWith("Hit count: ");
     }
 
     @Test
-    public void hDonorReturnsWithResults() {
+    void pharmacophoreReturnsWithResults() {
         SimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(9), Matchers.is("Results using descriptor: HDonor"));
-        assertThat(pc.getOutputLines().get(10), Matchers.startsWith("Hit count: "));
+        assertThat(pc.getOutputLines().get(5)).isEqualTo("Results using descriptor: Pharmacophore");
+        assertThat(pc.getOutputLines().get(6)).startsWith("Hit count: ");
     }
 
     @Test
-    public void hAcceptorReturnsWithResults() {
+    void hDonorReturnsWithResults() {
         SimilaritySearchExample.main(null);
-        assertThat(pc.getOutputLines().get(13), Matchers.is("Results using descriptor: HAcceptor"));
-        assertThat(pc.getOutputLines().get(14), Matchers.startsWith("Hit count: "));
+        assertThat(pc.getOutputLines().get(9)).isEqualTo("Results using descriptor: HDonor");
+        assertThat(pc.getOutputLines().get(10)).startsWith("Hit count: ");
     }
 
-    @After
-	public void resetOutputStream() {
-		SimilaritySearchExample.out=System.out;
-	}
+    @Test
+    void hAcceptorReturnsWithResults() {
+        SimilaritySearchExample.main(null);
+        assertThat(pc.getOutputLines().get(13)).isEqualTo("Results using descriptor: HAcceptor");
+        assertThat(pc.getOutputLines().get(14)).startsWith("Hit count: ");
+    }
+
+    @AfterEach
+    void resetOutputStream() {
+        SimilaritySearchExample.out = System.out;
+    }
 }
